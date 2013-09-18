@@ -1,6 +1,22 @@
+//Get user custom configuration
+function loadCustomUserConfiguration {
+	/*var data = {
+		action: 'load_user_config'
+	};
+	jQuery.post(ajaxurl, data, function(response) {
+		if(response) {
+			//change_status(txt_deleting_model_sucess);
+			jQuery("#modelo-carregado-"+qualmodelo).remove();
+			alert(response);
+		} else {
+			//change_status(txt_save_error);
+		}
+	});*/
+}
+
 //Funtions to save pomodoros
 function savepomo () {
-	change_status(txt_salving_progress);	
+	//change_status(txt_salving_progress);	
 	
 	var postcat=getRadioCheckedValue("cat_vl");
 	var privornot=getRadioCheckedValue("priv_vl");
@@ -27,7 +43,7 @@ function savepomo () {
 
 function delete_model(qualmodelo) {
 	//PHP deletar post qualmodelo
-	change_status(txt_deleting_model);
+	//change_status(txt_deleting_model);
 	var data = {
 		action: 'save_modelnow',
 		post_para_deletar: qualmodelo

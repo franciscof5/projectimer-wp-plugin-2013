@@ -1,15 +1,25 @@
 //Configurantion vars, will be seted by user in future
 var pomodoros_to_big_rest=4;
 
-var focusTime = 150;
+//var focusTime = 150000;
 var restTime = 300;
 var intervalTime = 1800;
 
 //Session control vars
 var actualCicle = 1;
 var is_focus_time = true;
-var secondsRemaing = focusTime;
+//var secondsRemaing = focusTime;
 var is_countdown_active = false;
+
+//What about declate functions up here?
+function action_button(){};
+
+
+window.onload=function() {
+	//check_if_already_has_time_active();
+	startClock();
+}
+
 
 //There only one button at the page, all the actions (trigglers) start here
 function action_button() {
@@ -19,19 +29,40 @@ function action_button() {
 		interrupt();
 	} else {
 		//The user clicked on Pomodoro or Rest button
-		start_clock();
+		startClock();
 		//The end of the big rest, the indicators light has to reset
 		//if(pomodoro_actual==1)
 		//turn_off_pomodoros_indicators();
 	}
 }
 
-/**/
 
 //Make the code more legible
-function start_clock() {
+function startClock() {
 	//alert('com');
-	is_countdown_active = setInterval('count()', 10);
+	//is_countdown_active = setInterval('count()', 1000);
+	var div = $('#my-div');
+	var leftValue = 0;
+	var delay = (1000 / 30);
+	var now, before = new Date();
+
+	is_countdown_active = setInterval(function() {
+		now = new Date();
+		var elapsedTime = (now.getTime() - before.getTime());
+		if(elapsedTime > delay) {
+		    //Recover the motion lost while inactive.
+		    //secondsRemaing--;
+		    leftValue += Math.floor(elapsedTime/delay);
+		    secondsRemaing-=Math.floor(elapsedTime/delay);
+		} else {
+		    secondsRemaing--;
+		}
+		secondsRemaing--;
+		alert(secondsRemaing);
+		count();
+		div.css("left", leftValue);
+		before = new Date();    
+	}, delay);
 	//active_sound.play();
 	//Chage button to "interrupt"
 	//change_button(textInterrupt, "#0F0F0F");
@@ -58,6 +89,7 @@ function interrupt() {
 function stop_clock() {
 	window.clearInterval(is_countdown_active);
 	is_countdown_active=false;
+	//TODO Deletar draft
 	//is_interrupt_button = false;
 	//pomodoro_completed_sound.play();
 }
@@ -69,8 +101,8 @@ var mitten = 200;
 var backColor = 'rgba(50,50,50,.4)';
 var alpha = 0.9;
 
-var ccanvas = document.getElementById('myCanvas');
-ccanvas.width = ccanvas.width;
+//var ccanvas = document.getElementById('myCanvas');
+//ccanvas.width = ccanvas.width;
 //change_status(canvas.width);
 
 var shadow ={
@@ -88,7 +120,7 @@ var hourSetup = {
 	counter:0,
 	old:0,
 }
-var minSetup = {
+var focusSetup = {
 	radie:140,
 	//radie = 140*400/canvas.width,
 	lineWidth:35,
@@ -118,14 +150,22 @@ var milliSetup = {
 
 var backgroundCheck = false;
 
-
-var count=function(){
+var count=function() {
 	var canvas = document.getElementById('myCanvas');
 	canvas.width = canvas.width;
 	mitten = canvas.width/2;
 	
   	var ctx = canvas.getContext('2d');
-	change_status(minSetup.radie);
+	varvara = (((secondsRemaing/focusTime)-1)*2);
+	
+	//secondsRemaing--;
+	change_status(secondsRemaing);
+	
+	if(secondsRemaing==0)
+	interrupt();
+	
+	
+	//focusSetup.radie = 200;
 	/*jQuery("body").click(function() {
 	 	if(!backgroundCheck){
 			backgroundCheck = true;
@@ -145,8 +185,8 @@ var count=function(){
 		update(secSetup.radie,backColor,secSetup.back,0,2,ctx);
 		update(secSetup.radie,backColor,secSetup.lineWidth,0,2,ctx);
 
-		update(minSetup.radie,backColor,minSetup.back,0,2,ctx);
-		update(minSetup.radie,backColor,minSetup.lineWidth,0,2,ctx);
+		update(focusSetup.radie,backColor,focusSetup.back,0,2,ctx);
+		update(focusSetup.radie,backColor,focusSetup.lineWidth,0,2,ctx);
 
 		update(hourSetup.radie,backColor,hourSetup.back,0,2,ctx);
 		update(hourSetup.radie,backColor,hourSetup.lineWidth,0,2,ctx);
@@ -169,8 +209,8 @@ var count=function(){
 	var minCount = (2/60)*minuter;
 	var secCount = (2/60)*sekunder;
 	var milliCount = (2/1000)*milliSekunder;*/
-	secondsRemaing--;
-	update(minSetup.radie,minSetup.color,minSetup.lineWidth,(secondsRemaing/focusTime)*2,0,ctx);
+	
+	update(focusSetup.radie,focusSetup.color,focusSetup.lineWidth,varvara,0,ctx);
 	
 	
 	//change_status(secondsRemaing/focusTime);
@@ -178,12 +218,12 @@ var count=function(){
 	
 	//check(milliCount,milliSetup,ctx);
 	//check(secCount,secSetup,ctx);
-	//check(minCount,minSetup,ctx);
+	//check(minCount,focusSetup,ctx);
 	//check(hourCount,hourSetup,ctx);
 	
 	/*milliSetup.old = milliCount-0.01;
 	secSetup.old = secCount-0.01;
-	minSetup.old = minCount-0.01;
+	focusSetup.old = minCount-0.01;
 	hourSetup.old = hourCount-0.01;*/
 }
 /*var check=function(count, setup, ctx){
@@ -217,6 +257,11 @@ var update=function(radie,color,lineWidth,firstCount,secondCount,ctx){
 	ctx.stroke();
 }
 	
-
-			
-
+/*
+soundManager.url = templateDir+'/pomodoro/soundmanager2.swf';
+soundManager.onready(function() {
+	// Ready to use; soundManager.createSound() etc. can now be called.
+	active_sound = soundManager.createSound({id: 'mySound2',url: templateDir+'/pomodoro/sounds/crank-2.mp3',});
+	pomodoro_completed_sound = soundManager.createSound({id:'mySound3',url: templateDir+'/pomodoro/sounds/telephone-ring-1.mp3',});
+});			
+*/
