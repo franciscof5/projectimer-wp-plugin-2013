@@ -91,7 +91,7 @@ function projectimer_CheckActivity() {
 			//projectimer_loadScripts();
 	} else {
 		//MESMA QUERY MAS DELETANDO TODOS OS DRAFTS
-		$query = new WP_Query( array('author=' => get_current_user_id(), 'post_status' => 'draft' ));
+		/*$query = new WP_Query( array('author=' => get_current_user_id(), 'post_status' => 'draft' ));
 		if($query->have_posts()) {
 			while ( $query->have_posts() ) {
 				$query->the_post();
@@ -99,7 +99,7 @@ function projectimer_CheckActivity() {
 				//wp_delete_post();
 			}
 		}
-		die;
+		die;*/
 	}
 	
 	//var_dump($query);

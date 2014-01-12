@@ -1,14 +1,14 @@
 //Configurantion vars, will be seted by user in future
 var pomodoros_to_big_rest=4;
 
-//var focusTime = 150000;
+var focusTime = 150000;
 var restTime = 300;
 var intervalTime = 1800;
 
 //Session control vars
 var actualCicle = 1;
 var is_focus_time = true;
-//var secondsRemaing = focusTime;
+var secondsRemaing = focusTime;
 var is_countdown_active = false;
 
 //What about declate functions up here?
@@ -23,7 +23,7 @@ window.onload=function() {
 
 //There only one button at the page, all the actions (trigglers) start here
 function action_button() {
-	//alert("aoshd");
+	//change_status("button pushed, start all");
 	if(is_countdown_active) {
 		//The user clicked on Interrupt button -> Check if the timmer (countdown_clock()) are running
 		interrupt();
@@ -39,7 +39,8 @@ function action_button() {
 
 //Make the code more legible
 function startClock() {
-	//alert('com');
+	//interval_clock = setInterval('countdown_clock()', intervalMiliseconds);
+	//change_status('startClock');
 	is_countdown_active = setInterval('count()', 1000);
 	/*var div = $('#my-div');
 	var leftValue = 0;
@@ -68,10 +69,10 @@ function startClock() {
 	//change_button(textInterrupt, "#0F0F0F");
 	//change_status(txt_started_countdown);
 	//
-	//interval_clock = setInterval('countdown_clock()', intervalMiliseconds);
+	
 }
 function interrupt() {
-	//alert('int');
+	//change_status('int');
 	
 	
 	//pomodoro_completed_sound.play();
@@ -150,7 +151,9 @@ var milliSetup = {
 
 var backgroundCheck = false;
 
-var count=function() {
+//var count=function() { //is there any reason why these was wrote that way?
+function count() {
+	change_status("Abra alas");
 	var canvas = document.getElementById('myCanvas');
 	canvas.width = canvas.width;
 	mitten = canvas.width/2;
@@ -158,13 +161,13 @@ var count=function() {
   	var ctx = canvas.getContext('2d');
 	varvara = (((secondsRemaing/focusTime)-1)*2);
 	
-	//secondsRemaing--;
+	secondsRemaing--;
 	change_status(secondsRemaing);
 	
 	if(secondsRemaing==0)
 	interrupt();
 	
-	
+	jQuery("#div_status").html(secondsRemaing);
 	//focusSetup.radie = 200;
 	/*jQuery("body").click(function() {
 	 	if(!backgroundCheck){
