@@ -3,7 +3,7 @@ var pomodoros_to_big_rest=4;
 
 var focusTime = 150000;
 var restTime = 300;
-var intervalTime = 18;
+var intervalTime = 1800;
 
 //Session control vars
 var actualCicle = 1;
@@ -11,19 +11,104 @@ var is_focus_time = true;
 var secondsRemaing = focusTime;
 var is_countdown_active = false;
 
+//Others, in development
+var backgroundCheck = false;
+
 //What about declate functions up here?
+function count(){};
+function action_button(){};
+function stop_clock(){};
+function interrupt(){};
+function startClock(){};
 function action_button(){};
 
-
+//Trigger, basically to check if is there another cycle runnig
 window.onload=function() {
 	//check_if_already_has_time_active();
 	startClock();
 }
 
+//Probably the most important function in these file, called to make changes on the screens //var count=function() { //is there any reason why these was wrote that way?
+function count() {
+	change_status("count() + " + secondsRemaing);
+	var canvas = document.getElementById('myCanvas');
+	canvas.width = canvas.width;
+	mitten = canvas.width/2;
+	
+  	var ctx = canvas.getContext('2d');
+	varvara = (((secondsRemaing/focusTime)-1)*2);
+	
+	secondsRemaing--;
+	
+	if(secondsRemaing==0)
+	interrupt();
+	
+	jQuery("#div_status").html(secondsRemaing);
+	//focusSetup.radie = 200;
+	/*jQuery("body").click(function() {
+	 	if(!backgroundCheck){
+			backgroundCheck = true;
+		}
+		else{
+			backgroundCheck = false;
+		}
+	});*/
+	jQuery("body").click(function() {
+		action_button();
+	});
+	//----BACKGROUND
+	var background=function(){
+		update(milliSetup.radie,backColor,milliSetup.back,0,2,ctx);
+		update(milliSetup.radie,backColor,milliSetup.lineWidth,0,2,ctx);
+
+		update(secSetup.radie,backColor,secSetup.back,0,2,ctx);
+		update(secSetup.radie,backColor,secSetup.lineWidth,0,2,ctx);
+
+		update(focusSetup.radie,backColor,focusSetup.back,0,2,ctx);
+		update(focusSetup.radie,backColor,focusSetup.lineWidth,0,2,ctx);
+
+		update(hourSetup.radie,backColor,hourSetup.back,0,2,ctx);
+		update(hourSetup.radie,backColor,hourSetup.lineWidth,0,2,ctx);
+	}
+	
+	if (backgroundCheck){
+		background();
+	}
+	
+	//-----FOREGROUND
+	/*var d = new Date();
+	var milliSekunder = d.getMilliseconds();
+	var sekunder = (d.getSeconds()+((d.getMilliseconds()/1000)));
+	var minuter = (d.getMinutes()+(sekunder/60));
+	var timmar = (d.getHours()+(minuter/60));
+	if(timmar>12){
+		timmar = timmar-12;
+	}
+	var hourCount = (2/12)*timmar;
+	var minCount = (2/60)*minuter;
+	var secCount = (2/60)*sekunder;
+	var milliCount = (2/1000)*milliSekunder;*/
+	
+	update(focusSetup.radie,focusSetup.color,focusSetup.lineWidth,varvara,0,ctx);
+	
+	
+	//change_status(secondsRemaing/focusTime);
+	
+	
+	//check(milliCount,milliSetup,ctx);
+	//check(secCount,secSetup,ctx);
+	//check(minCount,focusSetup,ctx);
+	//check(hourCount,hourSetup,ctx);
+	
+	/*milliSetup.old = milliCount-0.01;
+	secSetup.old = secCount-0.01;
+	focusSetup.old = minCount-0.01;
+	hourSetup.old = hourCount-0.01;*/
+}
 
 //There only one button at the page, all the actions (trigglers) start here
 function action_button() {
-	//change_status("button pushed, start all");
+	change_status("action_button() + is_countdown_active:" + is_countdown_active);
 	if(is_countdown_active) {
 		//The user clicked on Interrupt button -> Check if the timmer (countdown_clock()) are running
 		interrupt();
@@ -40,7 +125,7 @@ function action_button() {
 //Make the code more legible
 function startClock() {
 	//interval_clock = setInterval('countdown_clock()', intervalMiliseconds);
-	//change_status('startClock');
+	change_status('startClock()');
 	is_countdown_active = setInterval('count()', 1000);
 	/*var div = $('#my-div');
 	var leftValue = 0;
@@ -72,9 +157,7 @@ function startClock() {
 	
 }
 function interrupt() {
-	//change_status('int');
-	
-	
+	change_status('interrupt()');
 	//pomodoro_completed_sound.play();
 	//change_status(txt_interrupted_countdowns);
 	stop_clock();
@@ -149,86 +232,7 @@ var milliSetup = {
 	old:0,
 }
 
-var backgroundCheck = false;
 
-//var count=function() { //is there any reason why these was wrote that way?
-function count() {
-	change_status("Abra alas");
-	var canvas = document.getElementById('myCanvas');
-	canvas.width = canvas.width;
-	mitten = canvas.width/2;
-	
-  	var ctx = canvas.getContext('2d');
-	varvara = (((secondsRemaing/focusTime)-1)*2);
-	
-	secondsRemaing--;
-	change_status(secondsRemaing);
-	
-	if(secondsRemaing==0)
-	interrupt();
-	
-	jQuery("#div_status").html(secondsRemaing);
-	//focusSetup.radie = 200;
-	/*jQuery("body").click(function() {
-	 	if(!backgroundCheck){
-			backgroundCheck = true;
-		}
-		else{
-			backgroundCheck = false;
-		}
-	});*/
-	jQuery("body").click(function() {
-		action_button();
-	});
-	//----BACKGROUND
-	var background=function(){
-		update(milliSetup.radie,backColor,milliSetup.back,0,2,ctx);
-		update(milliSetup.radie,backColor,milliSetup.lineWidth,0,2,ctx);
-
-		update(secSetup.radie,backColor,secSetup.back,0,2,ctx);
-		update(secSetup.radie,backColor,secSetup.lineWidth,0,2,ctx);
-
-		update(focusSetup.radie,backColor,focusSetup.back,0,2,ctx);
-		update(focusSetup.radie,backColor,focusSetup.lineWidth,0,2,ctx);
-
-		update(hourSetup.radie,backColor,hourSetup.back,0,2,ctx);
-		update(hourSetup.radie,backColor,hourSetup.lineWidth,0,2,ctx);
-	}
-	
-	if (backgroundCheck){
-		background();
-	}
-	
-	//-----FOREGROUND
-	/*var d = new Date();
-	var milliSekunder = d.getMilliseconds();
-	var sekunder = (d.getSeconds()+((d.getMilliseconds()/1000)));
-	var minuter = (d.getMinutes()+(sekunder/60));
-	var timmar = (d.getHours()+(minuter/60));
-	if(timmar>12){
-		timmar = timmar-12;
-	}
-	var hourCount = (2/12)*timmar;
-	var minCount = (2/60)*minuter;
-	var secCount = (2/60)*sekunder;
-	var milliCount = (2/1000)*milliSekunder;*/
-	
-	update(focusSetup.radie,focusSetup.color,focusSetup.lineWidth,varvara,0,ctx);
-	
-	
-	//change_status(secondsRemaing/focusTime);
-	
-	
-	//check(milliCount,milliSetup,ctx);
-	//check(secCount,secSetup,ctx);
-	//check(minCount,focusSetup,ctx);
-	//check(hourCount,hourSetup,ctx);
-	
-	/*milliSetup.old = milliCount-0.01;
-	secSetup.old = secCount-0.01;
-	focusSetup.old = minCount-0.01;
-	hourSetup.old = hourCount-0.01;*/
-}
 /*var check=function(count, setup, ctx){
 	if (count<setup.old){
 		setup.counter++

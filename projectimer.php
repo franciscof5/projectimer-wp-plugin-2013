@@ -10,21 +10,69 @@
  */
 
 /* INIT */
-add_action('init', 'projectimer_loadScripts');
-add_action('init', 'projectimer_CheckActivity');
+if ( ! is_admin() ) {
+	add_action('init', 'projectimer_loadScripts');
+	add_action('init', 'projectimer_CheckActivity');
+	/* TEMPLATE TAGS */
+	add_action( 'projectimer_showClock', 'projectimer_showClock' );
+	add_action( 'projectimer_showTaskForm', 'projectimer_showTaskForm' );
+	//create more painels, widgets!!!! like graphics and control related things, to user make their own custom page
 
-/* TEMPLATE TAGS */
-add_action( 'projectimer_showClock', 'projectimer_showClock' );
-add_action( 'projectimer_showTaskForm', 'projectimer_showTaskForm' );
+	/* AJAX */
+	add_action('wp_ajax_save_modelnow', 'save_modelnow');
+	add_action('wp_ajax_nopriv_save_modelnow', 'save_modelnow');
+	add_action('wp_ajax_save_progress', 'save_progress');
+	add_action('wp_ajax_nopriv_save_progress', 'save_progress');
+}
 
-/* AJAX */
-add_action('wp_ajax_save_modelnow', 'save_modelnow');
-add_action('wp_ajax_nopriv_save_modelnow', 'save_modelnow');
-add_action('wp_ajax_save_progress', 'save_progress');
-add_action('wp_ajax_nopriv_save_progress', 'save_progress');
+
+
 //add_action('wp_ajax_load_user_config', 'load_user_config');
 //add_action('wp_ajax_nopriv_load_user_config', 'load_user_config');
 
+//Rename POSTS to CYCLE
+function edit_admin_menus() {  
+    global $menu;  
+    $menu[5][0] = 'Ciclos'; // Change Posts to Pomodoros
+} 
+
+function my_remove_menu_pages() {
+	//is_author() if (!is_admin() ) { - if(!current_user_can('administrator')) { if ($user_level < 5) {
+	get_currentuserinfo();
+	if(!current_user_can('administrator')) {
+		remove_menu_page('link-manager.php');
+		remove_menu_page('themes.php');
+		remove_menu_page('index.php');
+		remove_menu_page('tools.php');
+		remove_menu_page('profile.php');
+		remove_menu_page('upload.php');
+		remove_menu_page('post.php');
+		remove_menu_page('post-new.php');
+		remove_menu_page('edit-comments.php');
+		remove_menu_page('admin.php');
+		remove_menu_page('edit-comments.php');
+		remove_submenu_page( 'edit.php', 'post-new.php' );
+		remove_submenu_page( 'tools.php', 'wp-cumulus.php' );
+		
+		 remove_meta_box('linktargetdiv', 'link', 'normal');
+		  remove_meta_box('linkxfndiv', 'link', 'normal');
+		  remove_meta_box('linkadvanceddiv', 'link', 'normal');
+		  remove_meta_box('postexcerpt', 'post', 'normal');
+		  remove_meta_box('trackbacksdiv', 'post', 'normal');
+		  remove_meta_box('commentstatusdiv', 'post', 'normal');
+		  remove_meta_box('postcustom', 'post', 'normal');
+		  remove_meta_box('commentstatusdiv', 'post', 'normal');
+		  remove_meta_box('commentsdiv', 'post', 'normal');
+		  remove_meta_box('revisionsdiv', 'post', 'normal');
+		  remove_meta_box('authordiv', 'post', 'normal');
+		  remove_meta_box('sqpt-meta-tags', 'post', 'normal');
+		  remove_meta_box('submitdiv', 'post', 'normal');
+		  remove_meta_box('avhec_catgroupdiv', 'post', 'normal');
+		  remove_meta_box('categorydiv', 'post', 'normal');
+	}
+}
+add_action( 'admin_menu', 'edit_admin_menus' ); 
+add_action( 'admin_menu', 'my_remove_menu_pages' );
 
 //projectimer_CheckActivity();
 /* INITS */
@@ -41,8 +89,9 @@ function projectimer_loadScripts() {
 	wp_register_style('clockcss', plugins_url('/css/clock.css', __FILE__) );
 	wp_enqueue_style('clockcss');
 	wp_enqueue_script( 'jquery' );
-	update_user_meta(get_current_user_id(), "focusTime", 150000);
 	
+	//TODO use that concept showed bellow, setting on user_meta
+	update_user_meta(get_current_user_id(), "focusTime", 150000);
 }
 
 
