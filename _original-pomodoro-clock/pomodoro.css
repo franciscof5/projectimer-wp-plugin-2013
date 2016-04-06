@@ -1,0 +1,105 @@
+@charset "utf-8";
+/**/
+* {list-style: none;}
+
+/*tips*/
+#div_status {border:3px solid #000;text-align: center;}
+
+#seta_esq {float:left;} #seta_dir{float:right;}
+
+#botao_dicas {width:100%;}
+
+#dicas li {line-height:0;color:transparent;padding:0;display:none; }
+
+#dica_1,#dica_2,#dica_3,#dica_4,#dica_5,#dica_6,#dica_7,#dica_8,#dica_9,#dica_10 {line-height:0px;}
+
+/*#pomodoro-painel {width:290px;margin:30px auto;} retirado daqui*/
+/**/
+#projetos {height:30px;text-align:center;width:270px;background:#000; padding:0px 10px; line-height:30px;color:#FFF; font-weight:bold;font-size:14px;}
+#projetos div{width:100%; height:30px;}
+
+/*Estatistics*/
+.hidden_mouse_over {background:#eee;}
+.hidden_mouse_over li {line-height:0px;color:transparent;}
+.hidden_mouse_over:hover li {line-height:20px;color:#000;}
+/*
+#projetos:hover {height:120px;}
+
+#lista-projetos {height:30px;}
+#lista-projetos:hover {height:60px;}*/
+
+/**/
+#pomodoro-relogio {padding:10px;height:220px;width:270px;background:#EEE;}
+
+#action_button_id {background-color:#063;/*margin:5px 0px 10px 100px;*/margin:5px 0 10px 10px;height:30px;width:242px;}
+
+.pomoindi {background:url("pomodoro-indicator.png");height:30px;width:30px;/*position:absolute;*/float:left;right:370px;margin:10px auto;border:2px solid transparent;}
+
+#pomolist {margin:0 auto; width:140px}
+#pomoindi1 {top:90px;}
+#pomoindi2 {top:120px;}
+#pomoindi3 {top:150px;}
+#pomoindi4 {top:180px;}
+/**/
+
+#relogio{
+	position:relative;
+	top: 0px;
+	left:0px;
+}
+
+#front{
+	position:absolute;
+	top:0px;
+}
+
+
+
+#upperHalf, #upperHalfBack{
+	vertical-align:bottom;
+}
+
+#lowerHalf, #lowerHalfBack{
+	vertical-align:top;
+	margin-left:-1px;
+}
+
+#upperHalf img{
+	position:relative;
+	height:64px;
+	vertical-align:bottom;
+	visibility:visible;
+}
+
+#lowerHalf img{
+	position:relative;
+	height:64px;
+	vertical-align:top;
+	visibility:visible;
+}
+
+	
+#lowerHalfBack img{
+	position:relative;
+	vertical-align:top;
+}
+
+#upperHalfBack img{
+	position:relative;
+	vertical-align:bottom;
+}
+
+#hoursUp, #hoursDown, #hoursUpBack, #hoursDownBack{
+	width:125px;
+}
+
+#minutesUpLeft, #minutesUpRight, #minutesDownLeft, #minutesDownRight,
+#minutesUpLeftBack, #minutesUpRightBack, #minutesDownLeftBack, #minutesDownRightBack,
+#secondsUpLeft, #secondsUpRight, #secondsDownLeft, #secondsDownRight,
+#secondsUpLeftBack, #secondsUpRightBack, #secondsDownLeftBack, #secondsDownRightBack{
+	width:64px;
+}
+	
+
+
+	
