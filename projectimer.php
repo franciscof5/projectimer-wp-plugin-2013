@@ -9,6 +9,10 @@
  * License: Not licensed at all
  */
 
+require_once dirname( __FILE__ ) . '/php/required_plugins.php';
+#require_once( dirname( __FILE__ ) . '/projectimer-ajax.php' );
+#require_once( dirname( __FILE__ ) . '/projectimer-template-tags.php' );
+
 /* INIT */
 if ( ! is_admin() ) {
 	add_action('init', 'projectimer_loadScripts');
@@ -25,7 +29,27 @@ if ( ! is_admin() ) {
 	//add_action('wp_login', 'add_usermeta_to_prevent_multiple_sessions', 10, 2);
 }
 
+add_action('wp_logout','go_home');
+function go_home(){
+	wp_redirect( network_home_url( "/teams") );
+	exit();
+}
+
 /* */
+//add_action('init', 'projectimer_check_required_pages_exists');
+
+function projectimer_check_required_pages_exists () {
+	// Create post object
+	$my_post = array(
+	  'post_title'    => 'focus',
+	  'post_author'   => 1,
+	);
+	 
+	// Insert the post into the database
+	wp_insert_post( $my_post );
+}
+
+//
 add_action( 'show_user_profile', 'my_extra_user_fields' );
 add_action( 'edit_user_profile', 'my_extra_user_fields' );
 
@@ -75,8 +99,7 @@ function plugin_projectimer_options_page() {
 	</form></div>
 <?php 
 }
-require( dirname( __FILE__ ) . '/projectimer-ajax.php' );
-require( dirname( __FILE__ ) . '/projectimer-template-tags.php' );
+
 /* INITS */
 function projectimer_loadScripts() {	
 	//LOADED AFTER CHECK ACTIVIVY
@@ -107,7 +130,7 @@ function projectimer_loadScripts() {
 /* AJAX */
 add_action('wp_ajax_projectimer_save_modelnow', 'projectimer_save_modelnow');
 add_action('wp_ajax_projectimer_update_user_meta', 'projectimer_update_user_meta');
-add_action('wp_ajax_projectimer_load_user_settings', 'projectimer_load_user_settings');
+#add_action('wp_ajax_projectimer_load_user_settings', 'projectimer_load_user_settings');
 add_action('wp_ajax_projectimer_add_activie', 'projectimer_add_activie');
 add_action('wp_ajax_projectimer_update_cycle_status', 'projectimer_update_cycle_status');
 add_action('wp_ajax_projectimer_schedule_cycle', 'projectimer_schedule_cycle');
