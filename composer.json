@@ -1,5 +1,5 @@
 {
-	"name": "f5sites/projectimer",
+	"name": "f5sites/projectimer-plugin",
 	"description": "WordPress F5 Sites DEV projects",
 	"type": "wordpress-plugin",
 	"authors": [
