@@ -5,7 +5,8 @@
 	"authors": [
 		{
 			"name": "Francisco Matelli Matulovic",
-			"email": "francisco@f5sites.com"
+			"email": "francisco@f5sites.com",
+			"homepage": "http://franciscomat.com"
 		}
 	],
 	"require": {
