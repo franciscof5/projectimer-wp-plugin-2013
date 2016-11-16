@@ -1,0 +1,901 @@
+/*@import url("fonts/radioland_regular_macroman/stylesheet.css");*/
+@media (max-width: 2030px) {
+	#content_column, #activity_sidebar {
+		display:block;
+		width:38%;
+	}
+	#default_sidebar {
+		display:block;
+		width:24%;
+	}
+	#whats-new-form, #item-body .activity-item {
+		width: 25%;
+	}
+}
+
+@media (max-width: 930px) {
+	#default_sidebar {
+		display:none;
+	}
+	#content_column, #activity_sidebar {
+		width:50%;
+	}
+	#content_column, #activity_sidebar {
+		/*min-height: 920px;*/
+	}
+	#whats-new-form, #item-body .activity-item {
+		width: 33% !important;
+	}
+
+}
+
+@media (max-width: 590px) {
+	#header-right-buttons {
+		background-color: #666;
+		width: 100%;
+	}
+	#header-right-buttons button {
+		min-width:40%;
+		}
+	#default_sidebar {
+		display: none;
+	}
+	.btn {
+		width: 30%;
+		float: left;
+	}
+	#task_form .nav-tabs .glyphicon {
+		display: none;
+	}
+	#task_form .nav > li > a {
+		padding: 10px 7px;
+	}
+	#whats-new-form, #item-body .activity-item {
+		width: 50% !important;
+	}
+}
+@media (max-width: 390px) {
+	#content_column {
+		width:100%;
+	}
+	.contem-icone {
+		display:none;
+	}
+	#activity_sidebar {
+		display:none;
+	}
+	#header-right-buttons button {
+		display:none;
+	}
+	#content_column {
+		/*min-height: 780px;*/
+	}
+	#whats-new-form, #item-body .activity-item {
+		width: 100% !important;
+	}
+}
+
+
+#closed_team_warning {
+	background-color: #F99;
+	font-size: 20px;
+	text-align: center;
+	height: 200px;
+	line-height: 50px;
+	padding: 50px;
+}
+
+#content_column, #activity_sidebar, #default_sidebar {
+	padding:0
+}
+
+#default_sidebar {
+	/*background-color: #DEDEDE;*/
+	background-color: #222;
+	padding: 10px;	
+	overflow-x: hidden;
+	overflow-y: scroll;
+}
+
+#default_sidebar .widgettitle {
+	font-size: 20px;
+	margin:-5px 0 10px 0;
+	color: #DEDEDE;
+}
+
+#default_sidebar .avatar {
+	margin-right: 10px;
+}
+
+#default_sidebar #members-list-options {
+	display: none;
+}
+
+#default_sidebar .item-title {
+	font-size: 16px;
+	font-family: Lobster;
+
+}
+#default_sidebar .item-title a {
+	color:#555 !important;
+}
+.navbar {
+    border-radius: 0 !important;
+    margin-bottom: 0 !important;
+}
+.navbar-brand {
+	font-family: Lobster;
+}
+.navbar .avatar {
+	height: 25px;
+	width: 25px;
+	margin-right: 5px;
+	font-size: 8px;
+}
+
+ul {
+	margin: 0;
+	padding: 0;
+}
+
+.vcard {
+	width: 100%;
+	float: left;
+	height: 60px;
+	border-bottom: 2px dashed #eaeaea;
+	padding-top: 5px;
+	padding: 5px;
+
+}
+.vcard:hover {
+	background-color: #FFF;
+	border-radius: 10px;
+}
+/*#members-list:first-child {
+	border-top: 2px dashed #eaeaea !important;
+	background-color: #09d;
+}TODO: make it work*/
+
+ .activity-item {
+	color: #FFF;
+	height: 80px;
+	border: 1px dotted #FFF;
+	padding-left: 80px;
+	width: 25%;
+    float: left;
+    overflow: hidden;
+    position: relative;
+}
+ .activity-item a {
+	color: #FFF;
+}
+ .activity-item a:hover {
+ 	text-decoration: none;
+ }
+ .time-since {
+	position: absolute;
+	font-size: 10px;
+	color:#CCC;
+	right: 10px;
+	bottom: 10px;
+}
+ .activity-item .activity_title {
+	margin-top: -10px;
+	display: block;
+	color:#FFF;
+	font-family: Lobster;
+}
+
+span.activity, div#message p {
+    color: #999;
+    display: inline-block;
+    font-size: 11px;
+    font-weight: normal;
+    margin-top: 8px;
+    text-decoration: none;
+}
+#icone-foc {background:url("images/icones-topo.png"); background-position: -280px 40px; height:40px; width:40px;float:left;margin: -10px 0 0 -10px;}
+
+#offline_sign {
+	display: none;
+    border-radius: 5px;
+    font-weight: 600;
+    margin: 10px;
+    padding: 2px 5px;
+    position: absolute;
+    right: 10px;
+    text-align: center;
+    top: 10px;
+	
+}
+#offline_sign:hover span {
+	color: #F99;
+}
+#offline_sign span {
+ color: #FFF;
+}
+
+#offline_sign #offline_text {
+	display: none;
+}
+#offline_sign:hover #offline_text {
+	/*display: inline;*/
+}
+#clock-container {
+	margin-top: 60px;
+	margin-bottom: -70px;
+}
+#action_button {
+	padding: 15px;
+	margin: 15px auto;
+	display: block;
+	border-radius: 150px;
+	width:130px;
+	height: 130px;
+	border: 0px dotted #4C4C4C;
+	background: #4b8394;
+}
+#clock-label {
+	color: #FFF;
+	font-size: 26px;
+	font-weight: 600;
+	margin: 0 auto;
+	position: relative;
+	text-align: center;
+	top: -102px;
+	pointer-events: none;
+}
+#action_button:hover {
+	background:#114884;
+}
+#action_button:before {
+	height: 16px;
+	content: ".";
+	width: 94px;
+	background: #222;
+	display: block;
+	position: absolute;
+	margin-top: -97px;
+	border-radius: 10px;
+	/*border: 9px solid #4C4C4C;*/
+}
+#action_button:after {
+	height: 170px;
+	background: #222;
+	content: ".";
+	display: block;
+	position: absolute;
+	width: 170px;
+	border-radius: 170px;
+	z-index: -2;
+	margin-top: -76px;
+	/*right: 208px;*/
+	margin-left: -35px;
+}
+
+#action_button:hover:before {
+	margin-top: -93px;
+}
+ 
+#community_info span:hover  { 
+	color: #222 !important;
+}
+#div_status_label,
+#focus_timetotaln_color,
+#restlost_timetotaln_color,
+#session_info span,
+#community_info span,
+#session_current_cycle span,
+#update_status_label {
+	background-color: transparent;
+	pointer-events: initial;
+}
+#session_current_cycle span:hover,
+#restlost_timetotaln_color:hover,
+#focus_timetotaln_color:hover,
+#update_status_label:hover,
+#div_status_label:hover  {
+	background-color: #222;
+	color: #FFF;
+}
+
+/*#update_status_icon {
+	pointer-events: none;
+}
+/*#clock-container:hover #ponto_button span  { 
+	background-color:#222;
+}*/
+#ponto_button, #session_current_cycle span {
+	background-color:transparent;
+}
+#ponto_button:hover  {
+	background-color:#222;
+}
+
+#session_button_container {
+	color: #990000;
+	display: block;
+	font-size: 14px;
+	margin-bottom: 0;
+	position: absolute;
+	text-align: center;
+	top: 66px;
+	width: 100%;
+	padding: 0;
+}
+
+#div_status {
+	color: #FFF;
+	display: block;
+	font-size: 12px;
+	margin-bottom: 0;
+	position: relative;
+	text-align: center;
+	top: -107px;
+	pointer-events: none;
+}
+
+#session_current_cycle {
+	display: block;
+	font-size: 12px;
+	margin-left: -90px;
+	position: relative;
+	text-align: center;
+	top: -166px;
+	pointer-events: none;
+}
+
+#update_status {
+	display: block;
+	/*font-size: 12px;*/
+	heigth: 20px;
+	margin-left: 93px;
+	position: relative;
+	text-align: center;
+	top: -148px;
+	pointer-events: none;
+}
+
+#session_info {
+	color: #ccc;
+	font-size: 10px;
+	margin-left: -12px;
+	padding-left: 20px;
+	position: absolute;
+	text-align: center;
+	top: 90px;
+	width: 100%;
+}
+#community_info {
+	color: #ccc;
+	display: block;
+	font-size: 10px;
+	position: absolute;
+	text-align: center;
+	top: 150px;
+	width: 100%;
+}
+/**/
+#activity_sidebar {
+	height: 640px;
+	overflow-y: scroll;
+	overflow-x: hidden;
+}
+#header-right-buttons {
+	float: right !important;
+	padding:2px;
+}
+#header-right-buttons .btn {
+	float: right;
+	margin-right: 8px;
+}
+
+.button_close {
+	border-radius: 7px;
+	box-shadow: none;
+	font: bold 131% sans-serif;
+	padding: 0px 6px 2px;
+	position: absolute;
+	right: 0;
+	top: 0;
+	color: #999;
+}
+#loginlogbox {
+	display:none;
+	width: 300px;
+	position: absolute;
+	background: #F0F0F0;
+	border: solid 2px #DDD;
+	z-index: 20;
+	/*left: 1070px;height: 210px;*/
+	right: 20%;
+	top: 65px;
+	border-radius: 10px;
+	padding: 30px;
+	opacity: 0.95;
+	filter:alpha(opacity=95); /* For IE8 and earlier */
+}
+#loginlogbox p label {
+	color: #999;
+	font-weight: bold;
+	display:block;
+}
+#loginlogbox ul {padding:0}
+#loginlogbox input[type="text"],
+#loginlogbox input[type="password"] {width:160px;}
+
+#projectimer_settingsbox {
+	display:none;
+	width: 420px;
+	position: absolute;
+	background: #FFFFFF;
+	border: solid 2px #DDD;
+	z-index: 20;
+	/*left: 1070px;*/
+	right:28%;
+	top: 65px;
+	border-radius: 10px;
+	padding: 30px;
+	opacity: 0.95;
+	filter:alpha(opacity=95); /* For IE8 and earlier */
+}
+
+#loading-message {
+	position: absolute;
+	width: 100%;
+	height: 120%; /*TODO: fix bug;*/
+	background-color: #000;
+	z-index: 999;
+}
+#loading-message p {
+	/*
+	top: 50%;
+	right: 50%;
+	position: relative;*/
+	position: absolute;
+	top: 20%;
+	margin: 0 auto;
+	width: 100%;
+	text-align: center;
+	color: #FFF;
+	font-family: 'lobster';
+	font-size: 420%;
+}
+.activity-avatar {
+	/*padding: 6px 5px 0 5px;*/
+	padding: 0 5px 0 5px;
+	position: absolute;
+	margin-top: -3px;
+	left: 2px;
+}
+.activity-avatar img {
+	border-radius:500px; 
+	/*margin-right:10px;*/
+}
+#recent-activities {
+	padding:0;
+}
+#recent-activities li {
+	width: 100%;
+	background: #333;
+	margin: 0 !important;
+	padding: 5px 5px 0 70px;
+	float: left;
+	border-bottom: dashed #777 1px;
+	overflow: hidden;
+	height: 54px;
+	position: relative;
+}
+#recent-activities .activity_title {
+	margin-top: -5px !important;
+}
+#recent-activities p {
+	z-index: 99;
+}
+#recent-activities .avatar_projectimer_clock {
+	margin-top:-10px;
+}
+#recent-activities:before {
+	content: ".";
+	height: 1026px;
+	width: 630px;
+	background-color: rgba(0,0,0,0.35);
+	display: block;
+	position: absolute;
+	z-index: 2;
+}
+/*.activity-avatar:before {
+#recent-activities li:beforeeee {
+	content: ".";*/
+.avatar {
+	z-index: 5;
+	background-color:#CCC;
+}
+.avatar_projectimer_clock {
+	width: 60px;
+	border-radius: 100px;
+	background: #4C4C4C;
+	display: block;
+	height: 60px;
+	padding:2px 0 0 5px;
+	margin-bottom: 8px;
+}
+.avatar_projectimer_clock:before {
+	content: ".";
+	width: 26px;
+	height: 5px;
+	position: absolute;
+	display: block;
+	background: #4C4C4C;
+	margin-top: -8px;
+	margin-left: 12px;
+	border-radius: 5px;
+	z-index: -1;
+}
+.activity_update {
+	background-color: #222;
+}
+.activity_update a:first-child {
+	font-size: 16px;
+	font-family: Lobster;
+	display: inline-block;
+}
+.activity_update .activity-inner p {
+	padding-top: 18px;
+}
+.activity_update .activity-inner a {
+	font-family: inherit;
+	font-size: 12px;
+}
+.activity_update .time-since {
+	color: #666 !important;
+	top: 34px;
+}
+.activity_update a,.activity_update p {
+	display: block;
+}
+.projectimer_stop {
+	background-color: #843534 !important;
+	cursor: pointer;
+}
+.projectimer_start {
+	background-color: #114884 !important;
+	cursor: pointer;
+}
+.projectimer_start:hover {
+	background-color: #337ab7 !important;
+	cursor: pointer;
+}
+.projectimer_stop:hover, .projectimer_complete:hover {
+	cursor: pointer;
+}
+.projectimer_complete {
+	background-color: #5CB85C !important;
+}
+
+#recent-activities p {
+	color:#BBB;
+	width:100%;
+	/*padding-left:65px;
+	overflow:hidden;*/
+	white-space:nowrap;
+	position: absolute;
+}
+/*#recent-activities span {
+	display: block;
+	margin-bottom: -5px;
+}*/
+/*#recent-activities a:first-child {*/
+#recent-activities li:hover .activity_title, #recent-activities li:hover p, #recent-activities li:hover a {
+	color: #FFF !important;
+}
+
+#recent-activities li:hover {
+	z-index: 10;
+	
+}
+#recent-activities li:hover .activity-header{
+	font-weight: 600;
+}
+#recent-activities li:hover .time-since {
+	/*font-weight: 100;*/
+}
+#recent-activities .activity_title {
+	font-family: Lobster;
+	font-size: 20px;
+	margin-top: -6px;
+	margin-bottom: -4px;
+	color: #CCC;
+	/*display: block;*/
+	
+}
+
+#recent-activities a {
+	/*font-family: Lobster;*/
+	color:#BBB;
+}
+#recent-activities .time-since {
+	font-size: 10px;
+	position: absolute;
+	right: 81px;
+	text-align: right;
+	bottom: -10px;
+	color:#333;
+}
+/*.buttonClose:hover {
+	background: #FFF;
+	color: #093;
+}*/
+#task_form {
+	padding: 0px 12px 6px 6px;
+}
+#task_form .nav-tabs  {
+	padding-left: 8px;
+	margin-bottom: -7px;
+}
+#tab-task {
+	padding: 0 26px;
+}
+/**/
+#task_form .nav-tabs > li.active > a, .nav-tabs > li.active  {
+	border-width: 6px !important;
+}
+#task_form .tab-pane {
+	background-color: #FFF;
+	border-radius: 5px;
+	border: 7px solid #ddd;
+}
+
+#save_task_model {
+	/*color:#FFF !important;*/
+	float:right;
+	border-radius:10px !important;
+	top:-20px;
+	font-size:12px;
+	margin-top: 15px;
+	margin-right: 10px;
+}
+
+#login_modal label {
+	display: block;
+	margin: 10px 0;
+}
+#login_modal #loginform {
+	width: 250px;
+	margin: 0 auto;
+}
+/*#login_modal #loginform, #login_modal #loginform input {
+	text-align: center;
+}*/
+.popover {
+	min-width: 200px;
+}
+
+.glyinfo {
+	float: right;
+	font-size: 10px;
+}
+.glyinfo:hover {
+	color:#286090;
+}
+
+
+.progress {
+    background-color: #f5f5f5;
+    border-radius: 4px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) inset;
+    height: 54px !important;
+    left: 0;
+    margin-bottom: 20px;
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    margin:0;
+    z-index: 1;
+}
+.my-account .activity-content, .activity-avatar {
+	z-index: 11;
+}
+.load-more {
+	position: relative;
+	width: 80%;
+	clear: both;
+	left: 10%;
+	top: 10px;
+	background: #CCC;
+	text-align: center;
+	margin: 20px;
+	padding: 10px 0;
+}
+.load-more a {
+	color: #222;
+}
+/*
+ul.activity-list > li:first-child {
+    padding-top: 20px;
+}
+ul.item-list li.activity-item {
+    width: 25%;
+    float: left;
+    border: 0;
+}
+ul.item-list li.load-more {
+	position: relative;
+	width: 80%;
+	height: 20px;
+	clear: both;
+	left: 10%;
+	top: 10px;
+}*
+
+ .activity-item {
+	color: #FFF;
+	height: 80px;
+	border: 1px dotted #FFF;
+	padding: 0px 0 0 80px;
+	width: 25%;
+    float: left;
+    overflow: hidden;
+}
+ .activity-item a {
+	color: #FFF;
+}
+ .activity-item .time-since {
+	position: absolute;
+	font-size: 10px;
+	color:#CCC;
+	right: 10px;
+	bottom: 10px;
+}
+ .activity-item .activity_title {
+	/*argin-top: -10px;*
+	display: block;
+	color:#FFF;
+	font-family: Lobster;
+}*/
+
+
+
+.my-account .widget {
+	display: none; /*HACK*/
+}
+/*PAGE MEMEBERS*/
+.activity-comments, .activity-meta {
+	display: none;
+}
+
+.item-list-tabs {
+	display: none;
+}
+
+#members-list {
+	padding:0;
+}
+
+#item-body, #item-nav {
+	clear: both;
+	padding-top: 10px;	
+}
+
+#item-body .activity-item {
+	padding-top: 16px;
+}
+
+#item-body .activity-header p {
+	white-space: nowrap;
+	overflow: hidden;
+}
+#item-body .activity_update .activity-header p {
+	color: #222;
+}
+#item-body .activity_update .activity-inner  {
+	margin-top: -30px;
+}
+#item-body .activity_update .time-since {
+	margin-top: 30px;
+}
+#item-body .activity_update .activity-content {
+	margin-top: -10px;
+}
+#item-body .activity_title {
+	margin-top: 0 !important;
+}
+
+#item-header-avatar { 
+	padding-left: 20px;
+}
+#item-header-content {
+	padding-left: 180px;
+}
+
+#item-header .activity-content {
+	margin-top:10px !important;
+}
+
+#whats-new-form {
+	/*display: none;*/
+	border: 1px dotted #fff;
+	position: relative;
+	width: 25%;
+	height: 84px;
+	background-color: #222;
+	padding: 10px;
+}
+#whats-new-form textarea {
+	width: 70%;
+	float: right;
+	height: 40px;
+}
+#whats-new-form #aw-whats-new-submit {
+	height: 22px;
+	line-height: 16px;
+	background-color: #222;
+	color: #FFF;
+	border:0;
+	text-decoration: underline;
+}
+#whats-new-form .activity-greeting, #whats-new-form label {
+	display: none;
+}
+#whats-new-form #whats-new-options {
+	position: absolute;
+	right: 10px;
+	bottom: 10px;
+}
+
+.alertify-logs a {
+	color: #FFF !important;
+}
+
+.disabled {
+	pointer-events: none;
+	cursor: default;
+	opacity: 0.6;
+}
+
+
+#offline_sign_triangle {
+	
+	position: absolute;
+	top: -3px;
+	right: 3px;
+}
+#offline_sign_triangle, #offline_sign_triangle:after, #offline_sign_triangle:before {
+	background-color: #222 !important;
+}
+
+/**
+ * How to make 3-corner-rounded triangle in CSS (SO)
+ * http://stackoverflow.com/q/14446677/1397351
+ */
+.triangle {
+	position: relative;
+	background-color: orange;
+	text-align: left;
+}
+.triangle:before,
+.triangle:after {
+	content: '';
+	position: absolute;
+	background-color: inherit;
+}
+.triangle,
+.triangle:before,
+.triangle:after {
+	/*width:  2em;
+	height: 2em;*/
+	width: 1.3em;
+	height: 1.3em;
+	border-top-right-radius: 30%;
+}
+
+.triangle {
+	transform: rotate(-60deg) skewX(-30deg) scale(1,.866);
+}
+.triangle:before {
+	transform: rotate(-135deg) skewX(-45deg) scale(1.414,.707) translate(0,-50%);
+}
+.triangle:after {
+	transform: rotate(135deg) skewY(-45deg) scale(.707,1.414) translate(50%);
+}

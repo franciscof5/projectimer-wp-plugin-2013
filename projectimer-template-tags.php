@@ -1,68 +1,528 @@
 <?php
-//francisco matelli 2015-02-07
-function projectimer_show_clock_simplist () {
+//francisco matelli: 2015-02-07
+//francisco refactored: 2016-11-12
+
+// ENVIROMENT (AJAX - HTML - JSON)
+function projectimer_show_clock_simplist() {
 	?>
-	<div id="clock">
-		<button onclick="action_button_press()" id="action_button" tabindex="1" disabled="disabled" />
-			<div id="clock-label"><?php echo get_user_meta(get_current_user_id(),"focus_time", true); ?>:00</div>
-		</button>
+	<div id="offline_sign" class="">
+		<div id="offline_sign_triangle" class="triangle"></div>
+		<span id="offline_sign_icon" class="glyphicon glyphicon-ban-circle" aria-hidden="true"  data-toggle="popover" data-title="No server connection..." data-content="<?php _e("You have no internet connection or are working offline, local data and cache will be used untill next time online syncronization.", "plugin-projectimer"); ?>" data-placement="bottom"></span>
 	</div>
-	<div id="div_status">&nbsp;</div>
+
+	<div id="clock-container">
+		<button id="action_button" tabindex="1" disabled="disabled" /></button>
+	
+		<div id="clock-label"><?php echo get_user_meta(get_current_user_id(),"focus_time", true); ?>:00</div>
+	
+		<div id="div_status" data-toggle="popover" data-content="Status" data-title="<?php _e("Status (click to hide)", "plugin-projectimer"); ?>" data-placement="bottom"><span id="div_status_label" class="label label-default" onclick="div_status_press()">loading...</span></div>
+	
+		<div id="update_status" >
+			<span id="update_status_label" class="label label-default" onclick="communication_press()" data-toggle="popover" data-title="<?php _e("Status: Online (PRO)", "plugin-projectimer"); ?>" data-content="<?php _e("Click to become offline to prevent your actitivy from showing on the feed. Become a PRO user to unlock this feature", "plugin-projectimer"); ?>" data-alternative-title="<?php _e("Status: Offline (PRO)", "plugin-projectimer"); ?>" data-alternative-content="<?php _e("Click to stay online again", "plugin-projectimer"); ?>" data-placement="top">
+				<span id="update_status_icon" class="glyphicon glyphicon-cloud-download download-alt" aria-hidden="true"></span>
+			</span>
+		</div>
+		
+		<div id="session_current_cycle">
+			<span class="label label-default" data-toggle="popover" data-title="<?php _e("Consecutive Cycles (PRO)", "plugin-projectimer"); ?>" data-content="<?php _e("How many consecutive cycles without stop. After 4 cycles we set a big rest but PRO users can click anytime to take a big rest", "plugin-projectimer"); ?>" data-placement="top" >0</span>
+		</div>
+	</div>
+	<br style="clear:both" >
+	<?php
+	// glyphicons: refresh, info-sign, cloud-download, transfer, floppy-disk, cloud, asterisk
+}
+
+// TASK FORM
+function projectimer_display_task_tabs() {
+	?>
+	<div id="task_form">
+	  <!-- Nav tabs -->
+	  <ul class="nav nav-tabs" role="tablist" id="task_tabsett">
+		<li role="presentation" class="active"><a href="#tab-task" aria-controls="tab-task" role="tab" data-toggle="tab"><span class="glyphicon glyphicon-play" aria-hidden="true"></span> Task</a></li>
+		<li role="presentation"><a href="#tab-model" aria-controls="tab-model" role="tab" data-toggle="tab"  class="disabled"><span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span> Models</a></li>
+		<li role="presentation"><a href="#tab-completed" aria-controls="tab-completed" role="tab" data-toggle="tab"  class="disabled"><span class="glyphicon glyphicon-tags" aria-hidden="true"></span> Tags</a></li>
+
+	  </ul>
+
+	  <!-- Tab panes -->
+	  <div class="tab-content">
+		<div role="tabpanel" class="tab-pane active" id="tab-task"><?php projectimer_tab_task_form(); ?></div>
+		<div role="tabpanel" class="tab-pane" id="tab-model"><?php projectimer_tab_task_model_form(); ?></div>
+		<div role="tabpanel" class="tab-pane" id="tab-completed"><?php projectimer_tab_task_completed_form(); ?></div>
+	  </div>
+	</div>
+	<?php
+	#projectimer_show_task_trash
+}
+
+function projectimer_tab_task_form () {
+	wp_enqueue_style("select2css");
+	wp_enqueue_script("select2js");
+	?>
+	<div class="row">
+		<h3 style="float:left;">
+			<?php _e("Task Clipboard", "plugin-projectimer"); ?><span class="glyphicon glyphicon-info-sign glyinfo" aria-hidden="true" data-toggle="popover" data-title="<?php _e("The Projectimer Way", "plugin-projectimer"); ?>" data-content="<?php _e("The form below is optional, it was designed to help you boost you productivity by making you thinking before or while acting.", "plugin-projectimer"); ?>" data-placement="right"></span>
+		</h3>
+		<button id="save_task_model" class="btn btn-default" onclick="save_model()"><span class="glyphicon glyphicon-save" aria-hidden="true"></span> <?php _e("SAVE", "plugin-projectimer"); ?></button>
+	</div>
+	<div class="row">
+		<form name="task_form_current_task">
+			<div class="form-group row">
+				<label for="title_box" class="col-sm-4 col-form-label">
+					<span class="glyphicon glyphicon-paste" aria-hidden="true"></span> 
+					<?php _e("Title", "plugin-projectimer"); ?>
+					<span class="glyphicon glyphicon-info-sign glyinfo" aria-hidden="true" data-toggle="popover" data-title="<?php _e("Task Title", "plugin-projectimer"); ?>" data-content="<?php _e("We recommend to use task title to better organize work, but you dont need to fill that field.", "plugin-projectimer"); ?>" data-placement="right"></span>
+				</label>
+				<div class="col-sm-8">
+					<input type="text" class="form-control" id="title_box" placeholder="task title">
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<label for="tags_box" class="col-sm-4 col-form-label">
+					<span class="glyphicon glyphicon-tags" aria-hidden="true"></span> 
+					<?php _e("Tags", "plugin-projectimer"); ?>  
+					<span class="glyphicon glyphicon-info-sign glyinfo" aria-hidden="true" data-toggle="popover" data-title="<?php _e("Project Tags (PRO)", "plugin-projectimer"); ?>" data-content="<?php _e("Use you creativity, tags can be used to track time for clients, projects, milestones, study, and whetever you need. All tags are shared with team members.", "plugin-projectimer"); ?>" data-placement="right"></span>
+				</label>
+				<div class="col-sm-8">
+					<select id="tags_box" class="js-example-tags form-control" multiple="multiple" placeholder="Does not work, use data-placeholder with js trick"  data-placeholder="project1, project2...">
+					
+					</select>
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<label for="description_box" class="col-sm-4 col-form-label">
+					<span class="glyphicon glyphicon-text-background" aria-hidden="true"></span>
+					<?php _e("Desc", "plugin-projectimer"); ?>
+					<span class="glyphicon glyphicon-info-sign glyinfo" aria-hidden="true" data-toggle="popover" data-title="<?php _e("Task Description", "plugin-projectimer"); ?>" data-content="<?php _e("Add extra task details not covered by the form, e.g. give team detailed orientation or to take notes during task execution", "plugin-projectimer"); ?>" data-placement="right"></span>
+				</label>
+				<div class="col-sm-8">
+					<input type="text" class="form-control" id="description_box" placeholder="description...">
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<label for="type_box" class="col-sm-4">
+					<span class="glyphicon glyphicon-paperclip folder-open" aria-hidden="true"></span>
+					<?php _e("Type", "plugin-projectimer"); ?>
+					<span class="glyphicon glyphicon-info-sign glyinfo" aria-hidden="true" data-toggle="popover" data-title="<?php _e("Task Type", "plugin-projectimer"); ?>" data-content="<?php _e("This can be used to isolate and track different time usages for you projectimer", "plugin-projectimer"); ?>" data-placement="right"></span>
+				</label>
+				<div class="col-sm-8">
+					<div class="btn-group btn-group-justified" data-toggle="buttons">
+					  <label class="btn btn-default warning">
+						<input type="radio" name="type_box" value="study" autocomplete="off"> <?php _e("Study", "plugin-projectimer"); ?>
+					  </label>
+					  <label class="btn btn-default info">
+						<input type="radio" name="type_box" value="work" autocomplete="off"> <?php _e("Work", "plugin-projectimer"); ?>
+					  </label>
+					  <label class="btn btn-default success">
+						<input type="radio" name="type_box" value="personal" autocomplete="off"> <?php _e("Personal", "plugin-projectimer"); ?>
+					  </label>
+					</div>
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<label for="planned_box" class="col-sm-4">
+					<span class="glyphicon glyphicon-sort-by-order" aria-hidden="true"></span>
+					<?php _e("Plan", "plugin-projectimer"); ?>
+					<span class="glyphicon glyphicon-info-sign glyinfo" aria-hidden="true" data-toggle="popover" data-title="<?php _e("Planned Task", "plugin-projectimer"); ?>" data-content="<?php _e("The task you are doing can be part of a bigger or formal plan, but if it was not planned early it's more like improvisation", "plugin-projectimer"); ?>" data-placement="right"></span>
+				</label>
+				<div class="col-sm-8">
+					<div class="btn-group btn-group-justified" data-toggle="buttons">
+						<label class="btn btn-default">
+							<input type="radio" name="planned_box" value="planned" autocomplete="off"> <?php _e("Planned", "plugin-projectimer"); ?>
+						</label>
+						<label class="btn btn-default">
+							<input type="radio" name="planned_box" value="improvisation" autocomplete="off"> <?php _e("Improvisation", "plugin-projectimer"); ?>
+						</label>
+					</div>
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<label for="virtual_box" class="col-sm-4">
+					<span class="glyphicon glyphicon-globe hand-right" aria-hidden="true"></span>
+					<?php _e("Virtual", "plugin-projectimer"); ?>
+					<span class="glyphicon glyphicon-info-sign glyinfo" aria-hidden="true" data-toggle="popover" data-title="<?php _e("Outside Computer", "plugin-projectimer"); ?>" data-content="<?php _e("If you are using Projectimer to run tasks outside computer, with no use of mouse, keyboard or screen at all, like folding clothes or cleaning office select Real", "plugin-projectimer"); ?>" data-placement="right"></span>
+				</label>
+				<div class="col-sm-8">
+					<div class="btn-group btn-group-justified" data-toggle="buttons">
+						<label class="btn btn-default">
+							<input type="radio" name="virtual_box" value="virtual" autocomplete="off"> <?php _e("Virtual", "plugin-projectimer"); ?>
+						</label>
+						<label class="btn btn-default">
+							<input type="radio" name="virtual_box" value="real" autocomplete="off"> <?php _e("Real", "plugin-projectimer"); ?>
+						</label>
+					</div>
+				</div>
+
+				<!--ADD MOOD: HAPPY, PRESSIONATED, TENSUS, CALM, CONFIDENT, ANGRY-->
+
+			</form>
+		</div>
+	</div>
+	<?php 
+}
+
+function projectimer_tab_task_model_form () {
+	?>
+	<h3>Model Task</h3>
+	<p>Need to swicth quicly between tasks? save a model task and use it anytime you want.</p>
+	
+	<div>
+	<table  id="table-task-models" class="table table-striped">
+		<thead> 
+		<tr> 
+			<th>Task</th> 
+			<th>Projects</th> 
+			<th>Use</th> 
+			<th>Complete</th> 
+		</tr> 
+		</thead>
+	<?php
+	$args = array(
+			  "post_type" => "projectimer_focus",
+			  "post_status" => "pending",
+			  "author"   => get_current_user_id(),
+			  //"orderby"   => "title",
+			  "order"     => "ASC",
+			  "posts_per_page" => -1,
+			);
+	$the_query = new WP_Query( $args );
+	
+	while ( $the_query->have_posts() ) : $the_query->the_post();
+		$counter = $post->ID;
+		#echo '<ul id="modelo-carregado-'.$counter.'">';
+		echo "<tr>";
+		echo "<td>";
+		#the_title("<input type='text' value='","' disabled=disabled id=bxtitle$counter /><br />");
+		the_title();
+		echo "</td>";
+		echo "<td>";
+		#echo "<input type='text' value='".get_the_content()."' disabled=disabled id=bxcontent$counter /><br />";
+		//http://stackoverflow.com/questions/2809567/showing-tags-in-wordpress-without-link
+		$posttags = get_the_tags();
+		  if ($posttags) {
+			foreach($posttags as $tag) {
+			#echo "<input type='text' value='".$tag->name."' disabled=disabled  id=bxtag$counter />";
+			echo $tag->name;
+			}
+		}
+		echo "</td>";
+		echo "<td>";
+		echo "<input type='button' class='btn' value='use' onclick='load_model($counter)'>";
+		echo "</td>";
+		echo "<td>";
+		echo "<input type='button' class='btn' value='complete' onclick='delete_model($counter)'></p>";
+		echo "</td>";
+		echo '</tr>';
+		
+	endwhile;
+	// Reset Post Data
+	wp_reset_postdata();
+	?>
+	
+	
+	<?php
+	#wp_get_current_user();
+	#if(current_user_can('administrator')) {
+	#echo '</div>';
+	#}
+	?>
+	</table>
+	</div>
 
 	<?php
 }
 
-function projectimer_show_setting_box () {
-	if(is_user_logged_in()) {
-		$focus_time = get_user_meta(get_current_user_id(), "focus_time", true);
-
-		if(!$focus_time) $focus_time=25;
-		$rest_time = round($focus_time/5);
-		$cycle_time = $focus_time + $rest_time;
+function projectimer_tab_task_completed_form() {
 	?>
-	<!--h3>
-	Tempo do pomodoro:</h3>
-	<sub>Recomendamos aos usuários não mudarem o tempo dos pomodoros, se esforce para se adaptar aos 25 minutos que vale a pena</sub-->
-	<h2 style="margin-top:0"><?php _e("User settings", "plugin-projectimer"); ?></h2>
+	<h3>Completed Models</h3>
+	<p>Se what you did and maybe restore an old task back to live.</p>
 	
-	<p>
-		<label><?php _e("Clockwise", "plugin-projectimer"); ?></label><br />
-		<input type="radio" name="clockwise" value="countdown" selected="selected">Countdown<br />
-		<input type="radio" name="clockwise" value="lap">Free lap<br />
-		<br />
-		<?php _e("Countdown or lap", "plugin-projectimer"); ?>
-	</p>
-	<div id="countdown_box" class="setting_panel">
-		<p>
-			<label><?php _e("Adjust time focusing on work/study"); ?></label><br />
-			<button id="down_minutes" onclick="change_minutes(-1)">-</button>
-			<button id="up_minutes" onclick="change_minutes(+1)">+</button>
-		</p>
-		<p>
-			<label><?php _e("Focus time", "plugin-projectimer"); ?></label><br />
-			<button id="" disabled="disabled"><span id="focus_time_minutes"><?php echo $focus_time; ?></span>:00</button>
-		</p>
-		<p>
-			<label><?php _e("Rest time", "plugin-projectimer"); ?></label><br />
-			<button id="" disabled="disabled"><span id="rest_time_minutes"><?php echo $rest_time; ?></span>:00</button>
-		</p>
-		<p>
-			<label><?php _e("Cycle time", "plugin-projectimer"); ?></label><br />
-			<button id="" disabled="disabled"><span id="cycle_time_minutes"><?php echo $cycle_time; ?></span>:00</button>
-		</p>
+	<div id="contem-modelos">
+	<table class="table table-striped">
+		<thead> 
+		<tr> 
+			<th>Task</th> 
+			<th>Projects</th> 
+			<th>Restore</th> 
+			<th>Delete</th> 
+		</tr> 
+	</table>
 	</div>
-	<div id="countdown_box" class="setting_panel">
-		<p><?php _e("On countdown you determine your focus time during work, when you decide to stop the proportional rest time is loaded", "plugin-projectimer"); ?></p>
-	</div>
-	<p id="setting_message" style="background-color:#093;color:#FFF;font-weight:600;padding:3px 6px;">
+
+	<?php
+	$args = array(
+		'post_type' => "projectimer_focus",
+		'author'        =>  get_current_user_id(),
+		'post_status' => array("publish"),
+		'taxonomy' => 'post_tag',
+		'posts_per_page' => -1,
+
+	);
+	$terms = get_terms( $args );
+	
+	//var_dump($terms);
+	echo '<ul>';
+	 
+	foreach ( $terms as $term ) {
+	 
+		// The $term is an object, so we don't need to specify the $taxonomy.
+		$term_link = get_term_link( $term );
+		
+		// If there was an error, continue to the next term.
+		if ( is_wp_error( $term_link ) ) {
+			continue;
+		}
+	 
+		// We successfully got a link. Print it out.
+		echo '<li><a href="' . esc_url( $term_link ) . '">' . $term->name . '</a></li>';
+	}
+	 
+	echo '</ul>';
+}
+
+// used in ajax either
+function projectimer_display_recent_activities() { 
+	#require("activity/activity-loop.php");
+	/*?>
+	<ul id="recent-activities">
+	<?php if ( bp_has_activities( bp_ajax_querystring( 'activity' ) ) ) :
+	   while ( bp_activities() ) : bp_the_activity();
+		locate_template( array( 'activity/entry.php' ), true, false ); 
+	 
+	   endwhile;
+	endif; ?>
+	</ul>
+	<?php */ ?>
+	
+	<?php if ( bp_has_activities( bp_ajax_querystring( 'activity' ) ) ) : ?>
+		<ul id="recent-activities">
 		<?php 
+		$i=0;
+		while ( bp_activities() ) : bp_the_activity(); ?>
+		<?php 
+		$i++;
+		if($i<20){ 
+		do_action( 'bp_before_activity_entry' ); ?>
+
+		<li class="<?php bp_activity_css_class(); ?>" id="activity-<?php bp_activity_id(); ?>">
+			<div class="activity-avatar">
+				<a href="<?php bp_activity_user_link(); ?>">
+
+					<?php bp_activity_avatar(); ?>
+
+				</a>
+			</div>
+
+			<div class="activity-content">
+				<div class="activity-header">
+					<?php bp_activity_action(); ?>
+				</div>
+				<div class="activity-inner">
+					<?php bp_activity_content_body(); ?>
+				</div>
+			</div>
+		</li>
+		<?php } #locate_template( array( 'activity/entry.php' ), true, false ); ?>
+	 
+		<?php endwhile; ?>
+		</ul>
+	<?php endif; ?>	
+<?php } 
+
+
+// MODALS 
+function projectimer_display_login_modal() { ?>
+	<div class="modal fade" tabindex="-1" role="dialog" id="login_modal">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	        <h4 class="modal-title">Login</h4>
+	      </div>
+	      <div class="modal-body">
+	        	<?php if(is_user_logged_in()) { 
+					
+					do_action('projectimer_display_teams');
+
+					?>
+				<?php } else { ?>
+					<?php wp_login_form(); ?>
+					<div style="margin-top:-10px;">
+						<?php do_action( 'bp_after_sidebar_login_form' ); ?>
+					</div>
+				<?php } ?>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-default" data-dismiss="modal">CLOSE</button>
+	      </div>
+	    </div><!-- /.modal-content -->
+	  </div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+<?php } ?>
+
+<?php
+function projectimer_display_recent_activities_load_task_modal() {
+	?>
+	<div class="modal fade" tabindex="-1" role="dialog" id="loadtask_modal">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	        <h4 class="modal-title">Load a user task (PRO)</h4>
+	      </div>
+	      <div class="modal-body">
+	        <p>You are about to load a task from activity feed, it will replace your current task, if you want to preserve your current task just hit save model button before&hellip;</p>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-default" data-dismiss="modal">CLOSE</button>
+	        <button type="button" class="btn btn-primary"  onclick="save_model()"><span class="glyphicon glyphicon-save" aria-hidden="true" data-dismiss="modal"><?php _e("SAVE", "plugin-projectimer"); ?></button>
+	        <button type="button" class="btn btn-danger" id="erase_and_load"><span class="glyphicon glyphicon-save-file duplicate" aria-hidden="true" data-dismiss="modal"><?php _e("LOAD", "plugin-projectimer"); ?></button>
+	      </div>
+	    </div><!-- /.modal-content -->
+	  </div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+	<?php
+}
+
+function projectimer_display_settings_modal() { 
+	if(is_user_logged_in()) {
+	?>
+	<script type="text/javascript">
+	/*jQuery('#myTabs a').click(function (e) {
+		e.preventDefault()
+		jQuery(this).tab('show')
+	});*/
+	//jQuery("#projectimer_settingsbox_modal").on('shown.bs.modal', function(e) {
+		//alert(e.relatedTarget + "asdasd");
+		//jQuery('#tab-settings').tab('show');
+	    //var tab = e.relatedTarget.hash;
+	    //alert(tab);
+	    //jQuery('.nav-tabs a[href="'+tab+'"]').tab('show')
+	//});
+	jQuery(".open_settings_modal").click(function(){
+		//jQuery("#projectimer_settingsbox_modal").modal('toggle');
+		var tab = jQuery(this).attr("href");
+		//alert(tab);
+		jQuery('.nav-tabs a[href="'+tab+'"]').tab('show')
+		//var tab = e.relatedTarget.hash;
+	    //alert(tab);
+		//jQuery("#projectimer_settingsbox_modal")
+	});
+	</script>
+
+	<!-- Modal -->
+	<div class="modal fade" id="projectimer_settingsbox_modal" tabindex="-1" role="dialog" aria-labelledby="projectimer_settingsbox_modalLabel">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	        <!--h4 class="modal-title" id="projectimer_settingsbox_modalLabel">Settings</h4-->
+	         <div>
+			  <!-- Nav tabs -->
+			  <ul class="nav nav-tabs" role="tablist">
+				<li role="presentation">
+					<a href="#tab-settings" data-toggle="tab"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>  <?php _e("Settings", "projectimer-plugin"); ?></a></li>
+				<li role="presentation">
+					<a href="#tab-profile" data-toggle="tab"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>  <?php _e("Profile", "projectimer-plugin"); ?></a></li>  
+				<li role="presentation">
+					<a href="#tab-teams" data-toggle="tab"><span class="glyphicon glyphicon-network" aria-hidden="true"></span> <?php _e("Teams", "projectimer-plugin"); ?></a></li>
+				<li role="presentation">
+					<a href="#tab-notifications" data-toggle="tab"><span class="glyphicon glyphicon-bullhorn" aria-hidden="true"></span> <?php _e("Notifications", "projectimer-plugin"); ?></a></li>
+				<li role="presentation">
+					<a href="#tab-survey" data-toggle="tab"><span class="glyphicon glyphicon-table" aria-hidden="true"></span> <?php _e("Survey", "projectimer-plugin"); ?></a></li>    
+				<li role="presentation">
+					<a href="#tab-help" data-toggle="tab"><span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span> <?php _e("Help", "projectimer-plugin"); ?></a></li>
+			  </ul>
+
+			  <!-- Tab panes -->
+			  <div class="tab-content">
+				<div role="tabpanel" class="tab-pane" id="tab-settings">
+					<?php projectimer_display_projectimer_settings_form(); ?>
+				</div>
+				<div role="tabpanel" class="tab-pane" id="tab-profile">
+					<h3><?php _e("Profile", "plugin-projectimer"); ?></h3>
+					<p><?php
+					echo do_shortcode("[wppb-edit-profile]");
+					?></p>
+				</div>
+				<div role="tabpanel" class="tab-pane" id="tab-teams">
+					<?php do_action('projectimer_display_teams'); ?>
+					<h3>Teams</h3>
+					<p>Convide membros</p>
+					<iframe src="http://projectimer.com/f5sites/members/francisco/invite-anyone/" style="width: 100%; height: 200px;"></iframe>
+					<?php 
+						$wrapperPage = file_get_contents('http://projectimer.com/f5sites/members/francisco/invite-anyone/'); 
+						//@include("http://projectimer.com/f5sites/members/francisco/invite-anyone/");
+						//var_dump($wrapperPage);
+						//echo $wrapperPage;//the_widget('[invite-anyone]');
+						/*if ( function_exists( 'bp_update_option' ) ) {
+							$options = bp_get_option( 'invite_anyone' );
+						} else {
+							$options = get_option( 'invite_anyone' );
+						}apply_filters( 'invite_anyone_options', $options );*/
+					?>
+					<?php 
+						//$ra_network_privacy = new RA_Network_Privacy();
+						//$ra_network_privacy->network_privacy_options_page();
+					?>
+					</p>
+				</div>
+				<div role="tabpanel" class="tab-pane" id="tab-notifications">
+					<h3>Notifications</h3>
+					<p>
+					<?php 
+						echo do_shortcode('[bc_notifications]');
+					?>
+					</p>
+				</div>
+
+				<div role="tabpanel" class="tab-pane" id="tab-survey">
+					<h3>Tell us...</h3>
+					<p>how is your personal experience</p>
+					<p>We are implementing our first surveys... please come back in few hours</p>
+				</div>
+
+				<div role="tabpanel" class="tab-pane" id="tab-help">
+					<?php projectimer_show_help(); ?></div>
+			  </div>
+
+			</div>
+	      </div>
+	      <!--div class="modal-body">
+	        <?php //do_action( 'projectimer_display_settings_modal' ); ?>
+	      </div-->
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	        <!--button type="button" class="btn btn-primary">Save changes</button-->
+	      </div>
+	    </div>
+	  </div>
+	</div>
+
+	
+
+	
+	
+	<!--p id="setting_message" style="background-color:#093;color:#FFF;font-weight:600;padding:3px 6px;">
+		<?php 
+		/*
+		+++VOLUME
+		+++HIDE EVERTHING AND SHOW TIMER
 		if($focus_time==25) {
 			_e("You are using Pomodoro Technique oficial time", "plugin-projectimer");
 		} else {
 			_e("You are using custom settings.", "plugin-projectimer");
-		} ?>
-	</p>
-	<script type="text/javascript">
+		}*/ ?>
+	</p-->
+	<!--div id="projectimer_settingsbox">
+		<span class="button_close"><a href="#">X</a></span>
+	</div-->
+	<!--script type="text/javascript">
 		//document.getElementById("down_minutes").onclick = change_minutes(-1);
 		/* SETTINGS BOX */
 		
@@ -90,173 +550,325 @@ function projectimer_show_setting_box () {
 	}
 }
 
-function projectimer_show_clock_vintage () {
-	$pomoAtivoAgora = get_user_meta(get_current_user_id(), "pomodoroAtivo", true);
-	//'$base_directory = dirname( __FILE__ ) . "/images/original-clock";
-	$base_directory = plugin_dir_url( __FILE__ ) . "images/original-clock";
-	
-	//var_dump($stylesheet_directory);die;
-	echo $base_directory;
-	//echo '<img src="'.$base_directory.'/spacer.png" />';
-	echo 
-	'							
-	<form><input type="button" value="FOCAR!" onclick="action_button()" id="action_button_id" tabindex="1" /></form>
-	<div id="relogio">
-		<div id="back">
-		<div id="upperHalfBack">
-			<img src="'.$base_directory.'/spacer.png" />
-			<img id="minutesUpLeftBack" src="'.$base_directory.'/Double/Up/Left/0.png" class="asd" /><img id="minutesUpRightBack" src="'.$base_directory.'/Double/Up/Right/0.png"/>
-			<img id="secondsUpLeftBack" src="'.$base_directory.'/Double/Up/Left/0.png" /><img id="secondsUpRightBack" src="'.$base_directory.'/Double/Up/Right/0.png"/>
-		</div>
-		<div id="lowerHalfBack">
-			<img src="'.$base_directory.'/spacer.png" />
-			<img id="minutesDownLeftBack" src="'.$base_directory.'/Double/Down/Left/0.png" /><img id="minutesDownRightBack" src="'.$base_directory.'/Double/Down/Right/0.png" />
-			<img id="secondsDownLeftBack" src="'.$base_directory.'/Double/Down/Left/0.png" /><img id="secondsDownRightBack" src="'.$base_directory.'/Double/Down/Right/0.png" />
-		</div>
-		</div>
-		<div id="front">
-		<div id="upperHalf">
-			<img src="'.$base_directory.'/spacer.png" />
-			<img id="minutesUpLeft" src="'.$base_directory.'/Double/Up/Left/0.png" /><img id="minutesUpRight" src="'.$base_directory.'/Double/Up/Right/0.png"/>
-			<img id="secondsUpLeft" src="'.$base_directory.'/Double/Up/Left/0.png" /><img id="secondsUpRight" src="'.$base_directory.'/Double/Up/Right/0.png"/>
-		</div>
-		<div id="lowerHalf">
-			<img src="'.$base_directory.'/spacer.png" />
-			<img id="minutesDownLeft" src="'.$base_directory.'/Double/Down/Left/0.png" /><img id="minutesDownRight" src="'.$base_directory.'/Double/Down/Right/0.png" />
-			<img id="secondsDownLeft" src="'.$base_directory.'/Double/Down/Left/0.png" /><img id="secondsDownRight" src="'.$base_directory.'/Double/Down/Right/0.png" />
-		</div>
-		</div>
-	</div><!--fecha relogio-->
-	<input type="text" disabled="disabled" id="secondsRemaining_box">
-	<ul id="pomolist">
-		<li class="pomoindi" id="pomoindi1">&nbsp;</li>							
-		<li class="pomoindi" id="pomoindi2">&nbsp;</li>
-		<li class="pomoindi" id="pomoindi3">&nbsp;</li>
-		<li class="pomoindi" id="pomoindi4">&nbsp;</li>
-	</ul>
-	<button onclick="reset_pomodoro_session()" style="margin: 13px 0 0 17px;">0</button>
-	</div><!--fecha pomodoros painel-->
-	<br />
-	<div id="div_status" class="vintage_clock_status"><script>document.write(txt_mat_introducing)</script></div>
-	<img src="$stylesheet_directory/mascote_foca.png" />
-	<br />
-	<form name="pomopainel">
-		<label><script>document.write(txt_write_task_title)</script></label><br />
-		<input type="text" size="46" id="title_box" maxlength="70" tabindex="2" name="ti33"></input><br />
-		<label><script>document.write(txt_write_task_tags)</script></label>
-		<!--select id="tags_box" tabindex="3">
-			<option></option>
-			<option value="AL">Alabama</option>
-			<option value="WY">Wyoming</option>
-			<option value="AL">Alabama</option>
-			<option value="WY">Wyoming</option>
-		</select-->
-		<input type="text" size="46" id="tags_box" maxlength="20" tabindex="3"></input>
-		<br />
-		<label><script>document.write(txt_write_task_desc)</script></label>
-		<textarea rows="4" cols="34" id="description_box" tabindex="4"></textarea><br />
-		<input type="hidden" id="data_box">
-		<input type="hidden" id="status_box">
-		<input type="hidden" id="post_id_box">
-		<input type="hidden" id="pomodoroAtivoBox" value="$pomoAtivoAgora">
-		<br />
-		<label><script>document.write(txt_write_task_category)</script></label><br />
-		<ul>
-			<li><input type="radio" name="cat_vl" value="26">Estudo</li>
-			<li><input type="radio" name="cat_vl" value="27">Trabalho</li>
-			<li><input type="radio" name="cat_vl" value="28">Pessoal</li>
-		</ul>
-		<label><script>document.write(txt_write_task_privacy)</script></label><br />
-		<ul>
-			<li><input type="radio" name="priv_vl" value="publish" CHECKED>Público - todos podem ver.</li>
-			<li><input type="radio" name="priv_vl" value="private" >Privado - somente você pode ver. </li>
-		</ul>
-	</form>
-	<input type="button" value="Guardar tarefa modelo" onclick="save_model()" id="botao-salvar-modelo" />';
-	/*
-	<h3>Tarefas modelo</h3>
-	<p>Ficou mais fácil recomeçar uma tarefa, salve a tarefa como um modelo e reutilize quantas vezes quiser. Confira sua lista de modelos:</p>
-	
-	<div id="contem-modelos">';
-	
-	$args = array(
-              "post_type" => "post",
-              "post_status" => "pending",
-              "author"   => get_current_user_id(),
-              //"orderby"   => "title",
-              "order"     => "ASC",
-              "posts_per_page" => 14,
-            );
-	$the_query = new WP_Query( $args );
-	
-	while ( $the_query->have_posts() ) : $the_query->the_post();
-		$counter = $post->ID;
-		echo '<ul id="modelo-carregado-'.$counter.'">';
-		the_title("<input type='text' value='","' disabled=disabled id=bxtitle$counter /><br />");
 
-		echo "<input type='text' value='".get_the_content()."' disabled=disabled id=bxcontent$counter /><br />";
-		//http://stackoverflow.com/questions/2809567/showing-tags-in-wordpress-without-link
-		$posttags = get_the_tags();
-		  if ($posttags) {
-		    foreach($posttags as $tag) {
-			echo "<input type='text' value='".$tag->name."' disabled=disabled  id=bxtag$counter />";
-		    }
-		}
-		echo "<p><input type='button' value='usar modelo' onclick='load_model($counter)'>&nbsp; <input type='button' value='arquivar' onclick='delete_model($counter)'></p>";
-		echo '</li>';
-		echo '</ul>';
-		
-	endwhile;
-	// Reset Post Data
-	wp_reset_postdata();
-	?>
-	
-	
+// MODAL inners parts 
+function projectimer_display_projectimer_settings_form() { ?>
+	<h3><?php _e("Profile", "plugin-projectimer"); ?></h3>
+	<?php  #echo "<p>'".bp_profile_field_data( 'field=User Bio' )."'</p>"; ?>
 	<?php
-	get_currentuserinfo();
-	if(current_user_can('administrator')) {
-	echo '</div>';
-	}
+	$focus_time = get_user_meta(get_current_user_id(), "focus_time", true);
+	if(!$focus_time) $focus_time=25;
+	$rest_time = round($focus_time/5);
+	$cycle_time = $focus_time + $rest_time;
 	?>
+	<h3><?php _e("Clock", "plugin-projectimer"); ?></h3>
+	<p><?php _e("You can adjust your focus time and the rest time will be proportional", "plugin-projectimer"); ?></p>
+	<div id="countdown_box" class="setting_panel">
+	<table class="table table-striped">
+		<thead>
+			<tr>
+				<td><?php _e("Adjust", "projectimer-plugin"); ?></td>
+				<td><?php _e("Focus", "projectimer-plugin"); ?></td>
+				<td><?php _e("Rest", "projectimer-plugin"); ?></td>
+				<td><?php _e("Total", "projectimer-plugin"); ?></td>
+			</tr> 
+		</thead>
+		<tbody>
+			<tr> 
+				<td>
+					<button id="down_minutes" onclick="change_minutes(-1)">-</button>
+					<button id="up_minutes" onclick="change_minutes(+1)">+</button>
+				</td>
+				<td>
+					<button id="" disabled="disabled"><span id="focus_time_minutes"><?php echo $focus_time; ?></span>:00</button>
+				</td>
+				<td>
+					<button id="" disabled="disabled"><span id="rest_time_minutes"><?php echo $rest_time; ?></span>:00</button>
+				</td>
+				<td>
+					<button id="" disabled="disabled"><span id="cycle_time_minutes"><?php echo $cycle_time; ?></span>:00</button>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	<p><?php _e("Time direction", "projectimer-plugin"); ?>:<?php _e("Counterclockwise only for now", "projectimer-plugin"); ?></p>
+	</div>
+	<h3><?php _e("Language", "projectimer-plugin"); ?></h3>
 
-	<?php */
+	<h3><?php _e("Download Timesheet (PRO)", "projectimer-plugin"); ?></h3>
+	<p><?php _e("Download a .csv detailed timesheet compatible with LibreOffice Calc and Microsoft Excel (select a template)", "projectimer-plugin"); ?></p>
+	<button id="download_csv" onclick="download_csv()" class="btn btn-primary"><span class="glyphicon glyphicon-download" aria-hidden="true"></span> <?php _e("DOWNLOAD TIMESHEET", "projectimer-plugin"); ?></button>
+	<h3><?php _e("Erase site data (PRO)", "projectimer-plugin"); ?></h3>
+	<p><?php _e("Simple and fast way to delete all time and reset site", "projectimer-plugin"); ?></p>
+	<button id="download_csv" onclick="download_csv()" class="btn btn-danger"><span class="glyphicon glyphicon-erase" aria-hidden="true"></span> <?php _e("ERASE SITE DATA", "projectimer-plugin"); ?></button>
+	<?php //_e("Direction", "plugin-projectimer"); Clockwise Counterclockwise ?>
+<?php }
+
+function projectimer_display_teams() {
+	if(is_user_logged_in()) { ?>
+		<?php
+		$blogs = get_blogs_of_user(get_current_user_id());
+
+		if ( !empty($blogs) ) { ?>
+			<h3><?php _e( 'My Teams' ) ?></h3>
+			<?php
+				if(count($blogs)<=1) {
+					_e('You are member of no teams, try join one', 'projectimer-root');
+				} else {
+					_e('You are member of:', 'projectimer-root');
+				}
+			?>
+			<ul>
+				<?php 
+				//
+				foreach ( $blogs as $blog ) {
+					//var_dump($blog);
+					$home_url = get_home_url( $blog->userblog_id );
+					//
+					if($blog->userblog_id>1) {
+						echo '<li><a href="' . esc_url( $home_url ) . '">' . $blog->blogname . '</a></li>';
+					}
+				} ?>
+			</ul>
+		<?php } ?>
+		<h3>Joining Teams</h3>
+		<p>To enter in a private team you must have the link or get an invite by email.</p>
+		<p>You can ask to join in <a href="/teams/" alt="See public teams">public teams</a>
+		<h3>Creating Teams</h3>
+		<p>Every user can have one free public Team and we also offer a Team PRO plan for private teams. Go on and <a href="/wp-signup.php">create you own team</a>.</p>
+	<?php } else { ?>
+		<?php wp_login_form(); ?>
+		<div style="margin-top:-10px;">
+			<?php do_action( 'bp_after_sidebar_login_form' ); ?>
+		</div>
+	<?php }
 }
 
-function projectimer_show_clock_futuristic () {
+
+function projectimer_show_help() { ?>
+	<h1>Help</h1>
+	<p>We are implementing a FAQ section and a billing support system.</p>
+	<h3>Thanks to/Credits</h3>
+	<p>Open Source Community, Internet people, Collaborative and Shared Knowledge accrrooss World!</p>
+	<h4>Sponsors</h4>
+	<p>Many thanks to Sponsors F5 Sites for hosting and Francisco Mat for development, f5source, cursoWP.</p>
+	<h4>Technology</h4>
+	<p>Our services and products run open based on open source</p>
+	<p>Server</p>
+	<p>Linux, Ubuntu, CentOS RHEL7, Apache, MySQL, MariaDB, WordPress, Firefox</p>
+	<h4>Manufactures</h4>
+	<p>Samsung</p>
+	<h4>Languages</h4>
+	<p>PHP, HTML, CSS, JavaSript, jQuery (jQuery.colors, jQuery.offline, jquery-tmpl)</p>
+	<p>Composer libraries, Google Calendar API</p>
+	<p>Javascripts Libraries (select2, json.js)</p>
+	<h4>WordPress and Buddypress</h4>
+	<p>Plugins: Buddypress, Bp Multi Activi</p> 
+	Invite Anyone,
+	<p>CEO and Lead Developer: Francisco Matelli Matulovic</p>
+<?php }
+
+
+// THEME ELEMENTS (app (projectimer-theme, sistema-pomodoros...))
+function projectimer_show_header_navbar() { ?>
+	<nav class="navbar navbar-inverse">
+	  <div class="container-fluid">
+	    <!-- Brand and toggle get grouped for better mobile display -->
+	    <div class="navbar-header">
+	      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+	        <span class="sr-only">Toggle navigation</span>
+	        <span class="icon-bar"></span>
+	        <span class="icon-bar"></span>
+	        <span class="icon-bar"></span>
+	      </button>
+	      <a class="navbar-brand" href="<?php bloginfo('url'); ?>">
+	      	<?php bloginfo("name"); ?>
+		  </a>
+	    </div>
+
+	    <!-- Collect the nav links, forms, and other content for toggling -->
+	    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+	      <ul class="nav navbar-nav">
+	        <li class="active">
+	        	<a title="<?php _e("Focus", "projectimer-theme"); ?>" href="<?php bloginfo('url'); ?>/focus/" alt="Focalizador">
+					<span id="icone-foc">&nbsp;</span>
+					<?php _e("Focus", "projectimer-theme"); ?>
+				</a>
+	        </li>
+	        <!--li>
+	        	<a href="#">Linka</a>
+	        </li-->
+	        <!--li class="dropdown">
+	          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+	          <ul class="dropdown-menu">
+	            <li><a href="#">Action</a></li>
+	            <li><a href="#">Another action</a></li>
+	            <li><a href="#">Something else here</a></li>
+	            <li role="separator" class="divider"></li>
+	            <li><a href="#">Separated link</a></li>
+	            <li role="separator" class="divider"></li>
+	            <li><a href="#">One more separated link</a></li>
+	          </ul>
+	        </li-->
+	      </ul>
+	      <!--form class="navbar-form navbar-left">
+	        <div class="form-group">
+	          <input type="text" class="form-control" placeholder="Search">
+	        </div>
+	        <button type="submit" class="btn btn-default">Submit</button>
+	      </form-->
+
+	      <ul class="nav navbar-nav navbar-right" id="account-menu">
+	        <li><a href="/teams" alt="Projectimer.com Teams">Teams</a></li>
+	        <?php if ( is_user_logged_in() ) { ?> 
+	        <li class="dropdown">
+	          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+	          		<?php 
+	          		global $current_user;
+	          		$user_id = $current_user->ID; 
+	          		bp_activity_avatar( 'user_id=' . $user_id, 30 ); 
+	          		//get_avatar($user_id, 30);
+	          		?> 
+	          		<?php  wp_get_current_user(); echo $current_user->user_firstname;  ?> <span class="caret"></span></a>
+
+	          <ul class="dropdown-menu">
+	            <li>
+	           		<a href="#tab-settings" title="<?php _e("Settings", "projectimer-plugin"); ?>" class="open_settings_modal" data-toggle="modal" data-target="#projectimer_settingsbox_modal"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>  <?php _e("Settings", "projectimer-plugin"); ?> </a></li>
+	            <li>
+	            	<a href="#tab-teams" class="open_settings_modal" data-toggle="modal" data-target="#projectimer_settingsbox_modal"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> <?php _e("Teams", "projectimer-plugin"); ?></a></li>
+	            <li>
+	            	<a href="#tab-notifications" class="open_settings_modal" data-toggle="modal" data-target="#projectimer_settingsbox_modal"><span class="glyphicon glyphicon-bullhorn" aria-hidden="true"></span> <?php _e("Notifications", "projectimer-plugin"); ?></a></li>
+	            <li>
+	            	<a href="#tab-help" class="open_settings_modal" data-toggle="modal" data-target="#projectimer_settingsbox_modal"><span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span> <?php _e("Help", "projectimer-plugin"); ?></a></li>
+	            <li role="separator" class="divider"></li>
+	            <li>
+	            	<a title="<?php _e("Logout", "projectimer-plugin"); ?>" href="<?php echo wp_logout_url(); ?>" ><span class="glyphicon glyphicon-off" aria-hidden="true"></span> <?php _e("Logout", "projectimer-plugin"); ?></a>
+	            </li>
+	          </ul>
+	        </li>
+	        <?php } else { ?> 
+	        	<li>
+	            	
+	            	<a title="<?php _e("Create an account", "projectimer-plugin"); ?>" href="/register" role="button"><span class="glyphicon glyphicon-bullhorn" aria-hidden="true"></span><?php _e("Sign-up", "projectimer-plugin"); ?></a>
+	            <li>
+	            <li>
+	            	<a title="<?php _e("Login", "projectimer-plugin"); ?>" id="button_login" class="open_settings_modal" data-toggle="modal" data-target="#login_modal" tabindex="1" role="button" href="#"><span class="glyphicon glyphicon-bullhorn" aria-hidden="true"></span> <?php _e("Login", "projectimer-plugin"); ?></a>
+	            <li>
+	        <?php } ?>
+	      </ul>
+	    </div><!-- /.navbar-collapse -->
+	  </div><!-- /.container-fluid -->
+	</nav>
+	<?php
+}
+
+
+// THEME ELEMENTS (focalizador-raiz (main site))
+function projectimer_main_show_header_buttons() { ?>
+	<script type="text/javascript">
+	jQuery().ready(function() {
+		jQuery("#settings_button").click(function(){
+			jQuery("#projectimer_settingsbox").toggle("slow");
+		});
+		jQuery( ".button_close" ).click(function() {
+			jQuery( this ).parent().hide("slow");
+		});
+		jQuery( "#button_login" ).click(function() {
+			//jQuery( "#loginlogbox" ).toggle("slow");
+			jQuery('#login_modal').modal('show');
+		});
+	});
+	</script>
+	<div id="header-right-buttons">
+		<?php do_action('icl_language_selector'); ?>
+		<?php if ( !is_user_logged_in() ) { ?> 
+			<a title="<?php _e("Create an account", "projectimer-plugin"); ?>" href="/register" class="btn btn-default" role="button"><?php _e("Sign-up", "projectimer-plugin"); ?></a>
+			<a title="<?php _e("Login", "projectimer-plugin"); ?>" id="button_login" tabindex="1" class="btn btn-default" role="button" href="#"><?php _e("Login", "projectimer-plugin"); ?></a>
+		<?php } else { ?> 
+			<a title="<?php _e("Logout", "projectimer-plugin"); ?>" href="<?php echo wp_logout_url(); ?>" class="btn btn-default" role="button"><?php _e("Logout", "projectimer-plugin"); ?></a>
+			<button id="button_login"  class="btn btn-default"><?php global $current_user; wp_get_current_user(); echo $current_user->user_firstname;  ?> Teams</button>
+			
+		<?php } 
+		//TODO: TOUR IDEIA - VOCE SABIA QUE O POMODOROS.COM.BR É FEITO COM POMODOROS.COM.BR - Aqui todos os colaboradores e fornecedores utilizam o sistema. Nós fazemos o pomodoros usando o pomodoros. Perguntamos para Francisco Matelli, programador do sistema, como era usar a ferramenta. "Do ponto de vista técnico é muito interessante, levando em conta que é uma aplicaćão na nuvem, enquanto estamos programando melhorias para a nova versão, usamos a versão antiga. Depois que a versão na nuvem é atualizada, basta atualizar o navegador e comećamos a trabalhar com a última versão do sistema. O grande segredo, e também grande dificuldade, é fazer essa transićão ser imperceptível para o usuário, não se pode perder nenhuma informaćão durante essas atualizaćões. Por isso que temos sempre duas versões do sistema rolando. Temos até uma terceira versão, porém não posso falar sobre esse projeto nesse momento."
+		//<!--a title="Como usar o site Pomodoros.com.br!" href="#"><button>Tour</button></a-->
+		?>
+	</div>
+<?php }
+
+function projectimer_main_show_header_popups() { ?>
+	<div id="loginlogbox">
+		<span class="button_close"><a href="#">X</a></span>
+		<?php
+		if(is_user_logged_in()) { 
+		
+		do_action('projectimer_display_teams');
+
+		?>
+	<?php } else { ?>
+		<?php wp_login_form(); ?>
+		<div style="margin-top:-10px;">
+			<?php do_action( 'bp_after_sidebar_login_form' ); ?>
+		</div>
+	<?php } ?>
+	</div>
+	<?php 
+}
+
+
+/* UNDER DEVELOPMENT (currently in tests or not stable) */
+function projectimer_show_clock_pro() {
+	?>
+	<div id="clock-container">
+		<button onclick="action_button_press()" id="action_button" tabindex="1" disabled="disabled" /></button>
+	
+		<div id="clock-label"><?php echo get_user_meta(get_current_user_id(),"focus_time", true); ?>:00</div>
+	
+		<div id="div_status" onclick="action_button_press()"><span id="div_status_label" class="label label-default">loading...</span></div>
+	
+		<div id="update_status" onclick="communication_press()">
+			<span class="label label-default">
+				<span id="update_status_icon" class="glyphicon glyphicon-cloud-download download-alt" aria-hidden="true"></span>
+			</span>
+		</div>
+		
+		<div id="session_current_cycle">
+			<span class="label label-default">0</span>
+		</div>
+		
+		<div id="session_info">
+			<!--span id="cyclesn">0</span> 
+			<span id="restsn">0</span--> 
+			<span class="label label-default" id="focus_timetotaln_color">
+				<span class="glyphicon glyphicon-time" id="focus_timetotaln_icon"></span><span id="focus_timetotaln">00:00</span>
+			</span>
+			<span class="label label-default" id="restlost_timetotaln_color">
+				<span class="glyphicon glyphicon-time" id="restlost_timetotaln_icon"></span><span id="restlost_timetotaln">00:00</span>
+			</span>
+		</div>
+	
+		<div id="community_info" onclick="action_button_press()">
+			<span class="label label-default">
+				<span id="community_timetotaln"><span class="glyphicon glyphicon-globe"></span>12:50</span>
+			</span>
+			<br />
+			<span class="label label-default">
+				<span id="daily_ranking"><span class="glyphicon glyphicon-object-align-right" style="transform:rotate 180 deg;"></span>5/8</span>
+			</span>
+		</div>
+	
+		<span id="session_button_container" class="btn"><span id="ponto_button" onclick="ponto_button_press()" class="label label-default"><span class="glyphicon glyphicon-play"></span></span></span>
+	</div>
+	<br style="clear:both" >
+	<?php
+	// glyphicons: refresh, info-sign, cloud-download, transfer, floppy-disk, cloud, asterisk
+}
+
+function projectimer_show_clock_futuristic() {
 	//TODO: passar width e height por parametro
 	echo 
 	'<div id="shadow"></div>
 	<canvas width="50%" height="50%" id="myCanvas"></canvas>
-	<div id="shine"></div>
-	<input type="button" value="focus" onclick="action_button()" id="action_button_id" />
-	<div id="div_status" style="background:#FFF;">Teste</div>';
-}
-
-function projectimer_show_task_form () {
-	?>
-	<form name="pomopainel">
-		<label><?php _e("Task", "plugin-projectimer"); ?></label><br />
-		<input type="text" size="46" id="title_box" maxlength="70"></input><br />
-		<label><?php _e("Project", "plugin-projectimer"); ?></label>
-		<textarea rows="4" cols="34" id="description_box"></textarea><br />
-		<label><?php _e("Description", "plugin-projectimer"); ?></label>
-		<input type="text" size="46" id="tags_box" maxlength="20"></input><br />
-		
-		<br />
-		<label><?php _e("Task", "plugin-projectimer"); ?></label><br />
-		<ul>
-			<li><input type="radio" name="cat_vl" value="" selected="selected"><?php _e("Not selected", "plugin-projectimer"); ?></li>
-			<li><input type="radio" name="cat_vl" value="26"><?php _e("Study", "plugin-projectimer"); ?></li>
-			<li><input type="radio" name="cat_vl" value="27"><?php _e("Work", "plugin-projectimer"); ?></li>
-			<li><input type="radio" name="cat_vl" value="28"><?php _e("Personal", "plugin-projectimer"); ?></li>
-		</ul>
-		<p>You can change privacy on user settings.</p>
-		<!--label><?php _e("Privacity", "plugin-projectimer"); ?></label><br />
-		<ul>
-			<li><input type="radio" name="priv_vl" value="publish" CHECKED><?php _e("Public - everyone can see", "plugin-projectimer"); ?></li>
-			<li><input type="radio" name="priv_vl" value="private" ><?php _e("Private - only you can see", "plugin-projectimer"); ?></li>
-		</ul-->
-		
-	</form>
-	<?php
+	<div id="shine"></div>';
+	#echo '<input type="button" value="focus" onclick="action_button()" id="action_button_id" /><div id="div_status" style="background:#FFF;">Teste</div>';
+	wp_enqueue_script("canvas-draw");
 }

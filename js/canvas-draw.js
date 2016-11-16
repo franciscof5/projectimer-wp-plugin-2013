@@ -4,11 +4,11 @@ var mitten = 200;
 var backColor = 'rgba(50,50,50,.4)';
 var alpha = 0.9;
 
-//var ccanvas = document.getElementById('myCanvas');
-//ccanvas.width = ccanvas.width;
+var canvas = document.getElementById('myCanvas');
+canvas.width = canvas.width;
 //change_status(canvas.width);
-
-var shadow ={
+canvas_update_on_every_count();
+var shadow = {
 	color:"rgba(0,0,0,1)",
 	offsetX:1,
 	offsetY:0,
@@ -23,6 +23,7 @@ var hourSetup = {
 	counter:0,
 	old:0,
 }
+
 var focusSetup = {
 	radie:140,
 	//radie = 140*400/canvas.width,
@@ -83,10 +84,10 @@ function canvas_update_on_every_count () {
 	mitten = canvas.width/2;
 	
   	var ctx = canvas.getContext('2d');
-	varvara = (((secondsRemaing/focusTime)-1)*2);//make the count stops after reach 360 degrees
-	jQuery("body").click(function() {
-		action_button();
-	});
+	//varvara = (((secondsRemaing/focusTime)-1)*2);//make the count stops after reach 360 degrees
+	//jQuery("body").click(function() {
+	//	action_button();
+	//});
 	//----BACKGROUND
 	var background=function(){
 		update_canvas(milliSetup.radie,backColor,milliSetup.back,0,2,ctx);
@@ -107,7 +108,7 @@ function canvas_update_on_every_count () {
 	}
 	
 	//-----FOREGROUND
-	/*var d = new Date();
+	var d = new Date();
 	var milliSekunder = d.getMilliseconds();
 	var sekunder = (d.getSeconds()+((d.getMilliseconds()/1000)));
 	var minuter = (d.getMinutes()+(sekunder/60));
@@ -118,7 +119,7 @@ function canvas_update_on_every_count () {
 	var hourCount = (2/12)*timmar;
 	var minCount = (2/60)*minuter;
 	var secCount = (2/60)*sekunder;
-	var milliCount = (2/1000)*milliSekunder;*/
+	var milliCount = (2/1000)*milliSekunder;
 	
 	update_canvas(focusSetup.radie,focusSetup.color,focusSetup.lineWidth,varvara,0,ctx);
 	

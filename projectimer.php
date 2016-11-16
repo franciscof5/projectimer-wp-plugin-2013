@@ -3,55 +3,195 @@
  * Plugin Name: Projectimer
  * Plugin URI: http://projectimer.com
  * Description: A timer management focused on projects
- * Version: 0.1
+ * Version: 0.2
  * Author: Francisco Matelli
  * Author URI: http://franciscomatelli.com
  * License: Not licensed at all
  */
 
-require_once dirname( __FILE__ ) . '/php/required_plugins.php';
-#require_once( dirname( __FILE__ ) . '/projectimer-ajax.php' );
-#require_once( dirname( __FILE__ ) . '/projectimer-template-tags.php' );
+#date_default_timezone_set('America/Sao_Paulo');
+
+require_once( dirname( __FILE__ ) . '/required_plugins/required_plugins.php' );
+require_once( dirname( __FILE__ ) . '/projectimer-ajax.php' );
+require_once( dirname( __FILE__ ) . '/projectimer-template-tags.php' );
 
 /* INIT */
 if ( ! is_admin() ) {
+	//FRONT-END ONLY, not wp-admin screen
 	add_action('init', 'projectimer_loadScripts');
-	//add_action('init', 'projectimer_CheckActivity');
-	//add_action('init', 'projectimer_loadScripts');
 	
-	/* TEMPLATE TAGS */
-	add_action( 'projectimer_show_clock_simplist', 'projectimer_show_clock_simplist' );
-	add_action( 'projectimer_show_task_form', 'projectimer_show_task_form' );
-	add_action( 'projectimer_show_setting_box', 'projectimer_show_setting_box');
-	//create more painels, widgets!!!! like graphics and control related things, to user make their own custom page
-
 	//prevent multiple sessions from same user
 	//add_action('wp_login', 'add_usermeta_to_prevent_multiple_sessions', 10, 2);
 }
-
-add_action('wp_logout','go_home');
-function go_home(){
-	wp_redirect( network_home_url( "/teams") );
-	exit();
-}
-
-/* */
-//add_action('init', 'projectimer_check_required_pages_exists');
-
-function projectimer_check_required_pages_exists () {
-	// Create post object
-	$my_post = array(
-	  'post_title'    => 'focus',
-	  'post_author'   => 1,
-	);
-	 
-	// Insert the post into the database
-	wp_insert_post( $my_post );
-}
-
 //
+add_action( 'init', 'createPostType' );
+add_action( 'publish_projectimer_focus', 'publish_projectimer_focus_callback' );
+//add_action( 'trash_projectimer_focus', 'trash_post_callback' );
+//add_action( 'future_to_publish_projectimer_focus', 'publish_projectimer_focus_callback');
+//add_action( 'future_to_publish', 'publish_projectimer_focus_callback');
+add_action( 'wp_logout','go_home');
+add_action( 'admin_menu', 'plugin_admin_add_page');
 add_action( 'show_user_profile', 'my_extra_user_fields' );
 add_action( 'edit_user_profile', 'my_extra_user_fields' );
+add_action( 'personal_options_update', 'save_my_extra_user_fields' );
+add_action( 'edit_user_profile_update', 'save_my_extra_user_fields' );
+//AJAX
+add_action( 'wp_ajax_projectimer_update_user_meta', 'projectimer_update_user_meta');
+add_action( 'wp_ajax_projectimer_load_user_settings', 'projectimer_load_user_settings');
+add_action( 'wp_ajax_projectimer_add_activie', 'projectimer_add_activie');
+add_action( 'wp_ajax_projectimer_update_cycle', 'projectimer_update_cycle');
+add_action( 'wp_ajax_projectimer_schedule_cycle', 'projectimer_schedule_cycle');
+add_action( 'wp_ajax_projectimer_update_cycle_status', 'projectimer_update_cycle_status');
+add_action( 'wp_ajax_projectimer_update_recent_activities', 'projectimer_update_recent_activities');
+add_action( 'wp_ajax_projectimer_load_currentask_clipboard', 'projectimer_load_currentask_clipboard');
+
+add_action( 'wp_ajax_projectimer_update_currentask_clipboard', 'projectimer_update_currentask_clipboard');
+
+
+/* TEMPLATE TAGS */
+add_action( 'projectimer_show_clock_simplist', 'projectimer_show_clock_simplist' );
+add_action( 'projectimer_show_clock_futuristic', 'projectimer_show_clock_futuristic' );
+add_action( 'projectimer_show_task_form', 'projectimer_show_task_form' );
+add_action( 'projectimer_display_settings_modal', 'projectimer_display_settings_modal');
+add_action( 'projectimer_display_teams', 'projectimer_display_teams');
+add_action( 'projectimer_show_task_model_form', 'projectimer_show_task_model_form');
+add_action( 'projectimer_display_recent_activities', 'projectimer_display_recent_activities');
+add_action( 'projectimer_display_recent_activities_load_task_modal', 'projectimer_display_recent_activities_load_task_modal');
+add_action( 'projectimer_display_task_tabs', 'projectimer_display_task_tabs' );
+remove_filter('template_redirect', 'redirect_canonical');
+add_action( 'projectimer_show_header_navbar', 'projectimer_show_header_navbar');
+add_action( 'projectimer_display_login_modal', 'projectimer_display_login_modal' );
+add_action( 'projectimer_main_show_header_popups', 'projectimer_main_show_header_popups');
+add_action( 'projectimer_main_show_header_buttons', 'projectimer_main_show_header_buttons' );
+/* INITS */
+function projectimer_loadScripts() {	
+	//LOADED AFTER CHECK ACTIVIVY
+
+	//wp_register_script( 'tips', get_template_directory_uri() . '/pomodoro/tips.js', array(), '0.1', true );
+	//wp_register_script('projectimer-ajax-js', plugins_url('/js/projectimer-ajax.js', __FILE__) );
+	//wp_register_style('clockcss', plugins_url('/css/clock.css', __FILE__) );
+	//3rd	
+
+	//
+	//wp_register_script('soundmanager', plugins_url('/js/soundmanager2-nodebug-jsmin.js', __FILE__) );
+	// Localize the script with new data
+	//$dir = get_bloginfo("url");
+	//$dir = plugin_dir_path(__FILE__);
+	$dir = plugins_url("projectimer");
+	//load_plugin_textdomain( 'projectimer-plugin', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
+	//wp_localize_script( 'soundmanager', 'pluginDir', $dir );
+	//
+	wp_register_script('canvas-draw', plugins_url('/js/canvas-draw.js', __FILE__) );
+		
+	//
+	wp_register_script('select2js', plugins_url('/js/select2.full.min.js', __FILE__) );
+	wp_register_style('select2css', plugins_url('/css/select2.min.css', __FILE__) );
+	
+	//
+	wp_enqueue_script("jquery");
+	
+	//TODO: test 	jStorage http://stackoverflow.com/questions/2010892/storing-objects-in-html5-localstorage
+	wp_register_script('jstorage-js', plugins_url('/js/jstorage.js', __FILE__) );
+
+	//
+	wp_enqueue_script('alertify-js', plugins_url('/js/alertify.min.js', __FILE__) );
+	wp_enqueue_style('alertify-css', plugins_url('/css/alertify.core_and_default_merged.css', __FILE__) );
+	
+	//wp_enqueue_script('moment', plugins_url('/js/moment-timezone-with-data-2010-2020.min.js', __FILE__) );
+	
+	
+	//
+	wp_register_script('projectimer-js', plugins_url('/js/projectimer.js', __FILE__) );
+	#wp_enqueue_script('projectimer-user-settings', plugins_url('/js/projectimer-user-settings.js', __FILE__) );
+	wp_enqueue_style('projectimer-css', plugins_url('/css/projectimer-plugin.css', __FILE__) );
+	wp_localize_script( 'projectimer-js', 'pluginDir', $dir );
+	//enqueue the Heartbeat API
+	//TODO use that concept showed bellow, setting on user_meta
+	//update_user_meta(get_current_user_id(), "focusTime", 150000);
+	//echo  dirname( __FILE__  ) . '/locale';
+	//var_dump(load_plugin_textdomain('plugin-projectimer', false, dirname(plugin_basename(__FILE__). '/locale')));die;
+	//var_dump(load_plugin_textdomain('projectimer', false, dirname( __FILE__ ) . '/locale' ));die;
+}
+
+function publish_projectimer_focus_callback($post_id){
+	global $post;
+	//var_dump($post);
+	//echo "<hr />";
+	//var_dump();die;
+	//if ($post->post_type == 'projectimer_cycle') {
+	//update_post_meta($post_id, "post_duration", 200);
+	//projectimer_add_activie("Completed a Task", $post_author);
+	//file_put_contents('php://stderr', print_r("*************************************12312312312312", TRUE));
+	$site_url = basename(get_bloginfo('url'));
+	$post_author = get_post_field( 'post_author', $post_id );
+	$user_actual_page = get_user_meta($post_author, $site_url."-user_actual_page", true);
+	$user_last_heartbeat = get_user_meta($post_author, $site_url."-user_last_heartbeat", true);
+	
+	//apply_filters( 'the_date_gmt', $current_user_scheduled_cycle->post_date_gmt );
+	$d = get_post_field( 'post_date_gmt', $post_id );
+	$timeFirst  = $user_last_heartbeat;
+	$timeSecond = strtotime($d);
+	$seconds_last_hearbeat = $timeSecond - $timeFirst;
+	
+	//
+	//------------------->>>>>>>>>>>>>>>$last_post_published<user_focus_time
+	//
+	$vardump = " post_author: $post_author, user_actual_page: $user_actual_page, user_last_heartbeat: $user_last_heartbeat, seconds_last_hearbeat: $seconds_last_hearbeat, timeFirst: $timeFirst, timeSecond: $timeSecond, site_url: $site_url";
+	file_put_contents('php://stderr', print_r("*************************************".$vardump, TRUE));
+	if($user_actual_page=="focus" and $seconds_last_hearbeat<16) {
+		//if($user_actual_page=="focus") {
+		$titletask = get_post_field('post_title', $post_id);//get_the_title($post_id);
+		
+		if($titletask=="")
+			$titletask="Completed a task";
+		
+		$durationtask = get_post_meta($post_id, "post_duration", true);
+		$desc = "Completed ".$titletask." (".$durationtask." min)";
+		//$_POST["description"] = $desc;
+		if($durationtask>0 && $post_author) {
+			//$ps = get_post_field( 'post_status', $post_id );
+			//if($ps!="publish")
+				projectimer_add_activie($desc, "projectimer_complete", $post_author);
+			//file_put_contents('php://stderr', print_r("*************************************".$vardump, TRUE));
+			
+		}
+	} else {
+		$ps = get_post_field( 'post_status', $post_id );
+		if($ps!="trash")
+		$t = wp_trash_post($post_id);
+		if($t)
+		projectimer_add_activie("Left Projectimer focus", "projectimer_stop", $post_author);
+	}
+	//}
+}
+
+function trash_projectimer_focus_callback($post_id){
+	global $post;
+	//$user_actual_page = get_user_meta($post_author, "user_actual_page", true);
+	$post_author = get_post_field( 'post_author', $post_id );
+	$user_last_heartbeat = get_user_meta($post_author, "user_last_heartbeat", true);
+	$d = get_post_field( 'post_date_gmt', $post_id );
+	$timeFirst  = $user_last_heartbeat;
+	$timeSecond = strtotime($d);
+	$seconds_last_hearbeat = $timeSecond - $timeFirst;
+	if($seconds_last_hearbeat<0) {
+		projectimer_add_activie("Left Projectimer Focus", "projectimer_stop", $post_author);
+	}
+}
+
+function terms_clauses($clauses, $taxonomy, $args) {
+    global $wpdb;
+
+    if (isset($args['post_type']))
+    {
+        $clauses['join'] .= " INNER JOIN $wpdb->term_relationships AS r ON r.term_taxonomy_id = tt.term_taxonomy_id INNER JOIN $wpdb->posts AS p ON p.ID = r.object_id";
+        $clauses['where'] .= " AND p.post_type='{$args['post_type']}'"; 
+    }
+    return $clauses;
+}
+add_filter('terms_clauses', 'terms_clauses', 10, 3);
+
+function go_home(){wp_redirect( network_home_url( "/teams") );exit();}
 
 function my_extra_user_fields( $user ) { ?>
     <h3>Projectimer user settings</h3>
@@ -60,31 +200,142 @@ function my_extra_user_fields( $user ) { ?>
     if(!$focus_time) $focus_time = 25;
     ?>
     <table class="form-table">
-        <tr>
-            <th><label for="projectimer_user_focus_time">Cycle time</label></th>
-            <td>
-                <input id="focus_time" name="focus_time" type="text" value="<?php echo $focus_time ? $focus_time : '25';?>" />
-                <span class="description"><?php _e("Duration of work/study cycle."); ?></span>
-            </td>
-        </tr>
+   <tr>
+    <th><label for="projectimer_user_focus_time">Cycle time</label></th>
+    <td>
+   <input id="focus_time" name="focus_time" type="text" value="<?php echo $focus_time ? $focus_time : '25';?>" />
+   <span class="description"><?php _e("Duration of work/study cycle."); ?></span>
+    </td>
+   </tr>
     </table>
 <?php }
-add_action( 'personal_options_update', 'save_my_extra_user_fields' );
-add_action( 'edit_user_profile_update', 'save_my_extra_user_fields' );
 
-function save_my_extra_user_fields( $user_id ) 
-{
+function createPostType() {
+	if ( ! post_type_exists( "projectimer_focus" ) ) {
+		$labelFocus = array(
+			'name'  => __( 'Focus',' projectimer-plugin' ), 
+			'singular_name' => __( 'Focus',    ' projectimer-plugin' ),
+			'add_new'    => __( 'Add New', ' projectimer-plugin' ),
+			'add_new_item'  => __( 'Add New Focus',    ' projectimer-plugin' ),
+			'edit'  => __( 'Edit', ' projectimer-plugin' ),
+			'edit_item'  => __( 'Edit Focus', ' projectimer-plugin' ),
+			'new_item'   => __( 'New Focus', ' projectimer-plugin' ),
+			'view'  => __( 'View Focus', ' projectimer-plugin' ),
+			'view_item'  => __( 'View Focus', ' projectimer-plugin' ),
+			'search_items'  => __( 'Search Focus', ' projectimer-plugin' ),
+			'not_found'  => __( 'No Focus found', ' projectimer-plugin' ),
+			'not_found_in_trash' => __( 'No Focus found in Trash', ' projectimer-plugin' ),
+			'parent'     => __( 'Parent Focus',     ' projectimer-plugin' ),
+		);
+		
+		$postTypeFocusParams = array(
+			'labels'  => $labelFocus,
+			'singular_label'  => __( 'Focus', ' projectimer-plugin' ),
+			'public'  => true,
+			//'show_ui' => true,
+			'menu_icon' => WP_PLUGIN_URL.'/'.str_replace(basename( __FILE__),"",plugin_basename(__FILE__)) . '/images/projectimer-focus-icon.png',
+			'description' => 'Post type for Projectimer Plugin',
+			'menu_position'   => 20,
+			'can_export' => true,
+			'hierarchical'    => false,
+			'capability_type' => 'post',
+			'rewrite' => array( 'slug' => 'cycle', 'with_front' => false ),
+			'query_var'  => true,
+			'taxonomies' => array('post_tag'),
+			'supports'   => array( 'title', 'content', 'editor', 'author', 'thumbnail', 'comments', 'revisions', 'custom-fields' )
+		);
+
+		register_post_type("projectimer_focus", $postTypeFocusParams);
+	}
+	if ( ! post_type_exists( "projectimer_cycle" ) ) {
+		$labelsRest = array(
+			'name'  => __( 'Rest',' projectimer-plugin' ), 
+			'singular_name' => __( 'Rest',    ' projectimer-plugin' ),
+			'add_new'    => __( 'Add New', ' projectimer-plugin' ),
+			'add_new_item'  => __( 'Add New Rest',    ' projectimer-plugin' ),
+			'edit'  => __( 'Edit', ' projectimer-plugin' ),
+			'edit_item'  => __( 'Edit Rest', ' projectimer-plugin' ),
+			'new_item'   => __( 'New Rest', ' projectimer-plugin' ),
+			'view'  => __( 'View Rest', ' projectimer-plugin' ),
+			'view_item'  => __( 'View Rest', ' projectimer-plugin' ),
+			'search_items'  => __( 'Search Rest', ' projectimer-plugin' ),
+			'not_found'  => __( 'No Rest found', ' projectimer-plugin' ),
+			'not_found_in_trash' => __( 'No Rest found in Trash', ' projectimer-plugin' ),
+			'parent'     => __( 'Parent Rest',     ' projectimer-plugin' ),
+		);
+		
+		$postTypeRestParams = array(
+			'labels'  => $labelsRest,
+			'singular_label'  => __( 'Rest', ' projectimer-plugin' ),
+			'public'  => true,
+			//'show_ui' => true,
+			'menu_icon' => WP_PLUGIN_URL.'/'.str_replace(basename( __FILE__),"",plugin_basename(__FILE__)) . '/images/projectimer-rest-icon.png',
+			'description' => 'Post type for Projectimer Plugin',
+			'menu_position'   => 20,
+			'can_export' => true,
+			'hierarchical'    => false,
+			'capability_type' => 'post',
+			'rewrite' => array( 'slug' => 'cycle', 'with_front' => false ),
+			'query_var'  => true,
+			'taxonomies' => array('post_tag'),
+			'supports'   => array( 'title', 'content', 'editor', 'author', 'thumbnail', 'comments', 'revisions', 'custom-fields' )
+		);
+
+		register_post_type("projectimer_rest", $postTypeRestParams);
+	}
+	if ( ! post_type_exists( "projectimer_lost" ) ) {
+		$labelsLost = array(
+			'name'  => __( 'Lost',' projectimer-plugin' ), 
+			'singular_name' => __( 'Lost',    ' projectimer-plugin' ),
+			'add_new'    => __( 'Add New', ' projectimer-plugin' ),
+			'add_new_item'  => __( 'Add New Lost',    ' projectimer-plugin' ),
+			'edit'  => __( 'Edit', ' projectimer-plugin' ),
+			'edit_item'  => __( 'Edit Lost', ' projectimer-plugin' ),
+			'new_item'   => __( 'New Lost', ' projectimer-plugin' ),
+			'view'  => __( 'View Lost', ' projectimer-plugin' ),
+			'view_item'  => __( 'View Lost', ' projectimer-plugin' ),
+			'search_items'  => __( 'Search Lost', ' projectimer-plugin' ),
+			'not_found'  => __( 'No Lost found', ' projectimer-plugin' ),
+			'not_found_in_trash' => __( 'No Lost found in Trash', ' projectimer-plugin' ),
+			'parent'     => __( 'Parent Lost',     ' projectimer-plugin' ),
+		);
+		
+		$postTypeLostParams = array(
+			'labels'  => $labelsLost,
+			'singular_label'  => __( 'Lost', ' projectimer-plugin' ),
+			'public'  => true,
+			//'show_ui' => true,
+			'menu_icon' => WP_PLUGIN_URL.'/'.str_replace(basename( __FILE__),"",plugin_basename(__FILE__)) . '/images/projectimer-focus-icon.png',
+			'description' => 'Post type for Projectimer Plugin',
+			'menu_position'   => 20,
+			'can_export' => true,
+			'hierarchical'    => false,
+			'capability_type' => 'post',
+			'rewrite' => array( 'slug' => 'cycle', 'with_front' => false ),
+			'query_var'  => true,
+			'taxonomies' => array('post_tag'),
+			'supports'   => array( 'title', 'content', 'editor', 'author', 'thumbnail', 'comments', 'revisions', 'custom-fields' )
+		);
+
+		register_post_type("projectimer_lost", $postTypeLostParams);  
+	}
+}     
+
+
+
+function save_my_extra_user_fields( $user_id ) {
     if ( !current_user_can( 'edit_user', $user_id ) ) { return false; } else {
-        if(isset($_POST['cycle_time']) && $_POST['cycle_time'] != ""){
-            update_usermeta( $user_id, 'cycle_time', $_POST['cycle_time'] );
-        }
+   if(isset($_POST['cycle_time']) && $_POST['cycle_time'] != ""){
+    update_usermeta( $user_id, 'cycle_time', $_POST['cycle_time'] );
+   }
     }
 }
-/* OPTIONS PAGE ON WP-ADMIN */
-add_action('admin_menu', 'plugin_admin_add_page');
+
 function plugin_admin_add_page() {
 	add_options_page('Projectimer', 'Settings', 'manage_options', 'plugin-projectimer', 'plugin_projectimer_options_page');
+	//
 }
+
 // display the admin options page
 function plugin_projectimer_options_page() {
 ?>
@@ -100,40 +351,8 @@ function plugin_projectimer_options_page() {
 <?php 
 }
 
-/* INITS */
-function projectimer_loadScripts() {	
-	//LOADED AFTER CHECK ACTIVIVY
-	//wp_register_script( 'tips', get_template_directory_uri() . '/pomodoro/tips.js', array(), '0.1', true );
-	wp_register_script('soundmanager', plugins_url('/js/soundmanager2-nodebug-jsmin.js', __FILE__) );
-	wp_register_script('canvas-draw', plugins_url('/js/canvas-draw.js', __FILE__) );
-	wp_register_script('projectimer-js', plugins_url('/projectimer.js', __FILE__) );
-	wp_register_script('select2js', plugins_url('/js/select2.js', __FILE__) );
-	wp_register_style('select2css', plugins_url('/css/select2.css', __FILE__) );
-	wp_register_style('projectimer-css', plugins_url('/projectimer.css', __FILE__) );
-	
-	//wp_register_script('projectimer-ajax-js', plugins_url('/js/projectimer-ajax.js', __FILE__) );
-	//wp_register_style('clockcss', plugins_url('/css/clock.css', __FILE__) );
-	wp_enqueue_script("jquery");
-	wp_enqueue_script('heartbeat'); 
-	wp_enqueue_style('projectimer-css');
-	wp_enqueue_style('alertify-css', plugins_url('/css/alertify.core_and_default_merged.css', __FILE__) );
-	//wp_enqueue_script('moment', plugins_url('/js/moment-timezone-with-data-2010-2020.min.js', __FILE__) );
-	wp_enqueue_script('alertify-js', plugins_url('/js/alertify.min.js', __FILE__) );
-	wp_enqueue_script('projectimer-user-settings', plugins_url('/projectimer-user-settings.js', __FILE__) );
-	//enqueue the Heartbeat API
-	//TODO use that concept showed bellow, setting on user_meta
-	//update_user_meta(get_current_user_id(), "focusTime", 150000);
-	//echo  dirname( __FILE__  ) . '/locale';
-	//var_dump(load_plugin_textdomain('plugin-projectimer', false, dirname(plugin_basename(__FILE__). '/locale')));die;
-	//var_dump(load_plugin_textdomain('projectimer', false, dirname( __FILE__ ) . '/locale' ));die;
-}
-/* AJAX */
-add_action('wp_ajax_projectimer_save_modelnow', 'projectimer_save_modelnow');
-add_action('wp_ajax_projectimer_update_user_meta', 'projectimer_update_user_meta');
-#add_action('wp_ajax_projectimer_load_user_settings', 'projectimer_load_user_settings');
-add_action('wp_ajax_projectimer_add_activie', 'projectimer_add_activie');
-add_action('wp_ajax_projectimer_update_cycle_status', 'projectimer_update_cycle_status');
-add_action('wp_ajax_projectimer_schedule_cycle', 'projectimer_schedule_cycle');
+
+
 
 /*TODO: better security solution to prevent user from access wp-admin*/
 //Rename POSTS to CYCLE
@@ -141,6 +360,10 @@ function edit_admin_menus() {
     global $menu;  
     $menu[5][0] = 'Ciclos'; // Change Posts to Pomodoros
 } 
+
+
+
+
 
 function my_remove_menu_pages() {
 	//is_author() if (!is_admin() ) { - if(!current_user_can('administrator')) { if ($user_level < 5) {

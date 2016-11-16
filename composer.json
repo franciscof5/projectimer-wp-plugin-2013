@@ -1,0 +1,15 @@
+{
+	"name": "f5sites/projectimer",
+	"description": "WordPress F5 Sites DEV projects",
+	"type": "wordpress-plugin",
+	"authors": [
+		{
+			"name": "Francisco Matelli Matulovic",
+			"email": "francisco@f5sites.com"
+		}
+	],
+	"require": {
+    		"composer/installers": "~1.0",
+	        "php": ">=5.2.4"
+        }
+}
