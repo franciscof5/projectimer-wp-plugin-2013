@@ -1,4 +1,4 @@
-=== Projectimer Pro ===
+=== Projectimer Plugin ===
 
 Version: 2016.02
 
@@ -20,7 +20,7 @@ Donate link: http://franciscomat.com/donate/
 Text Domain: projectimer-plugin
 
 Plugin Name: Projectimer
-Plugin URI: http://f5sites.com/projectimer
+Plugin URI: http://f5sites.com/projectimer-plugin
 
 Description: Timer management suit plugin
 
