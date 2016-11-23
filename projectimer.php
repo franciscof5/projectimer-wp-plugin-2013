@@ -18,7 +18,7 @@ require_once( dirname( __FILE__ ) . '/projectimer-template-tags.php' );
 /* INIT */
 if ( ! is_admin() ) {
 	//FRONT-END ONLY, not wp-admin screen
-	add_action('init', 'projectimer_loadScripts');
+	add_action('init', 'projectimer_load_scripts');
 	
 	//prevent multiple sessions from same user
 	//add_action('wp_login', 'add_usermeta_to_prevent_multiple_sessions', 10, 2);
@@ -64,7 +64,7 @@ add_action( 'projectimer_display_login_modal', 'projectimer_display_login_modal'
 add_action( 'projectimer_main_show_header_popups', 'projectimer_main_show_header_popups');
 add_action( 'projectimer_main_show_header_buttons', 'projectimer_main_show_header_buttons' );
 /* INITS */
-function projectimer_loadScripts() {	
+function projectimer_load_scripts() {	
 	//LOADED AFTER CHECK ACTIVIVY
 
 	//wp_register_script( 'tips', get_template_directory_uri() . '/pomodoro/tips.js', array(), '0.1', true );
