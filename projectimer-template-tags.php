@@ -297,7 +297,9 @@ function projectimer_display_recent_activities() {
 	   endwhile;
 	endif; ?>
 	</ul>
-	<?php */ ?>
+	<?php */
+
+	if (function_exists('bp_has_activities')) { ?>
 	
 	<?php if ( bp_has_activities( bp_ajax_querystring( 'activity' ) ) ) : ?>
 		<ul id="recent-activities">
@@ -332,6 +334,7 @@ function projectimer_display_recent_activities() {
 		<?php endwhile; ?>
 		</ul>
 	<?php endif; ?>	
+	<?php } ?>
 <?php } 
 
 
@@ -366,6 +369,28 @@ function projectimer_display_login_modal() { ?>
 <?php } ?>
 
 <?php
+function projectimer_display_remove_user_modal() {
+	?>
+	<div class="modal fade" tabindex="-1" role="dialog" id="remove_user_modal">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	        <h4 class="modal-title">Remove a user from <?php bloginfo('blogname'); ?></h4>
+	      </div>
+	      <div class="modal-body">
+	        <p>You are about to remove user</p>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-default" data-dismiss="modal">CLOSE</button>
+	        <button type="button" class="btn btn-danger" id="button_remove_user"><span class="glyphicon glyphicon-remove" aria-hidden="true" data-dismiss="modal"><?php _e("REMOVE", "plugin-projectimer"); ?></button>
+	      </div>
+	    </div><!-- /.modal-content -->
+	  </div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+	<?php
+}
+
 function projectimer_display_recent_activities_load_task_modal() {
 	?>
 	<div class="modal fade" tabindex="-1" role="dialog" id="loadtask_modal">
@@ -446,7 +471,9 @@ function projectimer_display_settings_modal() {
 				</div>
 				<div role="tabpanel" class="tab-pane" id="tab-profile">
 					<h3><?php _e("Profile", "plugin-projectimer"); ?></h3>
+					<?php #bppp_progression_block(); ?>
 					<p><?php
+					wp_enqueue_style( 'wppb_stylesheetCOPY' );
 					echo do_shortcode("[wppb-edit-profile]");
 					?></p>
 				</div>
@@ -725,7 +752,8 @@ function projectimer_show_header_navbar() { ?>
 	          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
 	          		<?php 
 	          		global $current_user;
-	          		$user_id = $current_user->ID; 
+	          		$user_id = $current_user->ID;
+	          		if(function_exists('bp_activity_avatar'))
 	          		bp_activity_avatar( 'user_id=' . $user_id, 30 ); 
 	          		//get_avatar($user_id, 30);
 	          		?> 
@@ -813,7 +841,6 @@ function projectimer_main_show_header_popups() { ?>
 	</div>
 	<?php 
 }
-
 
 /* UNDER DEVELOPMENT (currently in tests or not stable) */
 function projectimer_show_clock_pro() {

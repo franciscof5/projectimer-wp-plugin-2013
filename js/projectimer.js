@@ -36,6 +36,8 @@ var tags_list;
 	var is_session_active = false;
 	var communicator; //if false = offline
 	var animatedinterval;
+	var clock_like_timestamp;
+	var original_document_title = document.title;
 }
 
 //OBJECTS
@@ -148,6 +150,7 @@ function add_click_action_on_interface_buttons() {
 		//jQuery( "#loginlogbox" ).toggle("slow");
 		jQuery('#login_modal').modal('show');
 	});
+
 	jQuery('#sales_phone').on('click', function(){
 		alertify.log("Finding best Sales number based in your location");
 		blink_animation(jQuery('#sales_phone'));
@@ -609,21 +612,32 @@ function start_count(timeleft) {
 		secondsRemaining=user_focus_time;
 	}
 	clearInterval(is_countdown_active);
+	
 	is_countdown_active = setInterval('count()', intervalMiliseconds);
 }
 
 function count() {
 	//
-	update_action_button_label(convertSeconds(secondsRemaining));
+	
 	
 	//varvara = intervalMiliseconds;
 	secondsRemaining--;
 	if(secondsRemaining==0)
 	complete_count();
 	
+	clock_like_timestamp = convertSeconds(secondsRemaining);
+	update_action_button_label(clock_like_timestamp);
+	document.title=clock_like_timestamp + " - " + jQuery("#title_box").attr("value");
+
+
+	//TODO:PREMIUM FEATURE if(is_session_active) {
+		//update_time_focus_label(clock_like_timestamp);
+		//""+convertSeconds(seconds_focus_time/60);
+		//console.log(clock_like_timestamp);
+	//}
+
 	seconds_focus_time++;
-	if(is_session_active)//TODO:PREMIUM FEATURE
-	update_time_focus_label(convertSeconds(seconds_focus_time/60));
+	
 }
 
 function start_count_time_lost() {
@@ -686,6 +700,7 @@ function rest_set() {
 //Just stop de contdown_clock function at certains moments
 function stop_count() {
 	console.log("stop_count()");
+	original_document_title=original_document_title;
 	
 	if(soundmanag)
 	end_sound.play();
@@ -1198,7 +1213,29 @@ function recent_activities_add_bootstrap_stripes() {
 	jQuery(".activity_update .activity-header p").html('<span class="activity_title">'+a1.html()+'</span>'+a2.html());
 	//jQuery(".time-since").html("Avenida Paulista, Sao Paulo - "+jQuery(".time-since").html());
 	//jQuery(".activity-item").wrap('<div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%"></div>');
+	jQuery( ".projectimer_remove_user" ).click(function() {
+		console.log("projectimer_remove_user()");
+		$targetid = jQuery(this).attr("data-userid");
 
+		//jQuery( "#loginlogbox" ).toggle("slow");
+		jQuery('#remove_user_modal').modal('show');
+		jQuery('#button_remove_user').click(function() {
+			var data = {
+				action: "projectimer_remove_user",
+				target_user_id: $targetid
+			}
+			jQuery.post(ajaxurl, data, function(response) {
+				console.log("response:" + response);
+				if(response) {
+					alertify.success("User removed from Team");
+				} else {
+					alertify.error("Cannot remover user from Team");
+				}
+			});
+			
+			jQuery('#remove_user_modal').modal('hide');
+		});
+	});
 }
 
 function load_current_task(id) {

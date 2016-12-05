@@ -4,14 +4,14 @@
  * Plugin URI: http://projectimer.com
  * Description: A timer management focused on projects
  * Version: 0.2
- * Author: Francisco Matelli
- * Author URI: http://franciscomatelli.com
+ * Author: Francisco Matelli Matulovic
+ * Author URI: http://franciscomat.com
  * License: Not licensed at all
  */
 
 #date_default_timezone_set('America/Sao_Paulo');
 
-require_once( dirname( __FILE__ ) . '/required_plugins/required_plugins.php' );
+#require_once( dirname( __FILE__ ) . '/required_plugins/required_plugins.php' );
 require_once( dirname( __FILE__ ) . '/projectimer-ajax.php' );
 require_once( dirname( __FILE__ ) . '/projectimer-template-tags.php' );
 
@@ -23,8 +23,54 @@ if ( ! is_admin() ) {
 	//prevent multiple sessions from same user
 	//add_action('wp_login', 'add_usermeta_to_prevent_multiple_sessions', 10, 2);
 }
+
+#add_filter("get_comment", "use_f5sites_comments");
+#function use_f5sites_comments() {
+	#global $wpdb;
+	#$wpdb->comments="f5sites_comments";
+	#$wpdb->commentmeta="f5sites_commentmeta";
+#}
+
+/*
+function use_f5sites_post_table_to_insert(  ) {
+
+	// If this is a revision, don't send the email.
+	#if ( wp_is_post_revision( $post_id ) )
+	#	return;
+
+	#$post_url = get_permalink( $post_id );
+	#$subject = 'A post has been updated';
+
+	#$message = "A post has been updated on your website:\n\n";
+	#if($post->post_type=="post") {
+		#global $wpdb;
+		#var_dump($wpdb);
+		#$wpdb->posts="f5sites_posts";
+		#$wpdb->postmeta="f5sites_postmeta";
+	#}
+	#$message .= $post->post_title . ": " . $post_url;
+
+	// Send email to admin.
+	#wp_mail( 'admin@example.com', $subject, $message );
+}
+add_action( 'wp_insert_post_data', 'use_f5sites_post_table_to_insert', 10, 3 );
+*/
+#add_filter( 'wp_insert_post_data' , 'use_f5sites_post_table_to_insert' , '99', 2 );
+/*
+function use_f5sites_post_table_to_insert( $data , $postarr ) {
+    // Change post title
+    if($postarr["post_type"]=="post") {
+    	var_dump($postarr["post_type"]);
+    }
+    
+    #global $wpdb;
+	#	$wpdb->posts="f5sites_posts";
+	#	$wpdb->postmeta="f5sites_postmeta";
+}*/
+
 //
 add_action( 'init', 'createPostType' );
+add_action( 'admin-init', 'wpcodex_set_capabilities' );
 add_action( 'publish_projectimer_focus', 'publish_projectimer_focus_callback' );
 //add_action( 'trash_projectimer_focus', 'trash_post_callback' );
 //add_action( 'future_to_publish_projectimer_focus', 'publish_projectimer_focus_callback');
@@ -46,6 +92,7 @@ add_action( 'wp_ajax_projectimer_update_recent_activities', 'projectimer_update_
 add_action( 'wp_ajax_projectimer_load_currentask_clipboard', 'projectimer_load_currentask_clipboard');
 
 add_action( 'wp_ajax_projectimer_update_currentask_clipboard', 'projectimer_update_currentask_clipboard');
+add_action( 'wp_ajax_projectimer_remove_user', 'projectimer_remove_user');
 
 
 /* TEMPLATE TAGS */
@@ -61,6 +108,7 @@ add_action( 'projectimer_display_task_tabs', 'projectimer_display_task_tabs' );
 remove_filter('template_redirect', 'redirect_canonical');
 add_action( 'projectimer_show_header_navbar', 'projectimer_show_header_navbar');
 add_action( 'projectimer_display_login_modal', 'projectimer_display_login_modal' );
+add_action( 'projectimer_display_remove_user_modal', 'projectimer_display_remove_user_modal' );
 add_action( 'projectimer_main_show_header_popups', 'projectimer_main_show_header_popups');
 add_action( 'projectimer_main_show_header_buttons', 'projectimer_main_show_header_buttons' );
 /* INITS */
@@ -77,7 +125,7 @@ function projectimer_load_scripts() {
 	// Localize the script with new data
 	//$dir = get_bloginfo("url");
 	//$dir = plugin_dir_path(__FILE__);
-	$dir = plugins_url("projectimer");
+	$dir = plugins_url("projectimer-plugin");
 	//load_plugin_textdomain( 'projectimer-plugin', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
 	//wp_localize_script( 'soundmanager', 'pluginDir', $dir );
 	//
@@ -99,7 +147,7 @@ function projectimer_load_scripts() {
 	
 	//wp_enqueue_script('moment', plugins_url('/js/moment-timezone-with-data-2010-2020.min.js', __FILE__) );
 	
-	
+	wp_register_style( 'wppb_stylesheetCOPY', plugins_url('/css/style-front-end.css', __FILE__) );
 	//
 	wp_register_script('projectimer-js', plugins_url('/js/projectimer.js', __FILE__) );
 	#wp_enqueue_script('projectimer-user-settings', plugins_url('/js/projectimer-user-settings.js', __FILE__) );
@@ -210,7 +258,116 @@ function my_extra_user_fields( $user ) { ?>
     </table>
 <?php }
 
+
+function wpcodex_set_capabilities() {
+
+    // Get the role object.
+    $administrator = get_role( 'administrator' );
+    
+    $caps_to_add = array(
+    	'edit_dashboard',
+    	'edit_pages',
+    	'edit_posts',
+        'list_users',
+        'publish_posts',
+        'remove_users',
+        #'read'
+    );
+    foreach ( $caps_to_add as $cap ) {
+    
+        // Remove the capability.
+        $administrator->add_cap( $cap );
+    }
+
+	// A list of capabilities to remove from editors.
+    $caps_to_remove = array(
+        'moderate_comments',
+        'manage_categories',
+        'manage_links',
+        'edit_others_posts',
+        'edit_others_pages',
+        'delete_posts',
+        'activate_plugins',
+        'delete_others_pages',
+        'delete_others_posts',
+        'delete_pages',
+        'delete_posts',
+        'delete_private_pages',
+        'delete_private_posts',
+        'delete_published_pages',
+        'delete_published_posts',
+        #'edit_dashboard',
+        'edit_others_pages',
+        'edit_others_posts',
+        #'edit_pages',
+        #'edit_posts',
+        'edit_private_pages',
+        'edit_private_posts',
+        'edit_published_pages',
+        'edit_published_posts',
+        'edit_theme_options',
+        'export',
+        'import',
+        #'list_users',
+        'manage_categories',
+        'manage_links',
+        'manage_options',
+        'moderate_comments',
+        'promote_users',
+        'publish_pages',
+        #'publish_posts',
+        'read_private_pages',
+        'read_private_posts',
+        #'read',
+        #'remove_users',
+        'switch_themes',
+        'upload_files',
+        'customize',
+        'delete_site',
+        'delete_posts',
+        'delete_published_posts',
+        'edit_posts',
+        'dit_published_posts ',
+        'delete_others_pages',
+        'delete_others_posts',
+        'delete_pages',
+        'delete_posts',
+        'delete_private_pages',
+        'delete_private_posts',
+        'delete_published_pages',
+        'delete_published_posts',
+        'edit_others_pages',
+        'edit_others_posts',
+        'edit_pages',
+        'edit_posts',
+        'edit_private_pages',
+        'edit_private_posts',
+        'edit_published_pages',
+        'edit_published_posts',
+        'manage_categories',
+        'manage_links',
+        'moderate_comments',
+        'publish_pages',
+        'publish_posts',
+        'read',
+        'read_private_pages',
+        'read_private_posts',
+        'unfiltered_html',
+        'upload_files'
+    );
+
+    foreach ( $caps_to_remove as $cap ) {
+    
+        // Remove the capability.
+        $administrator->remove_cap( $cap );
+    }
+
+}
+
+
+
 function createPostType() {
+	
 	if ( ! post_type_exists( "projectimer_focus" ) ) {
 		$labelFocus = array(
 			'name'  => __( 'Focus',' projectimer-plugin' ), 
@@ -356,7 +513,7 @@ function plugin_projectimer_options_page() {
 
 /*TODO: better security solution to prevent user from access wp-admin*/
 //Rename POSTS to CYCLE
-function edit_admin_menus() {  
+function projectimer_edit_admin_menus() {  
     global $menu;  
     $menu[5][0] = 'Ciclos'; // Change Posts to Pomodoros
 } 
@@ -365,7 +522,7 @@ function edit_admin_menus() {
 
 
 
-function my_remove_menu_pages() {
+function projectimer_remover_menu_pages() {
 	//is_author() if (!is_admin() ) { - if(!current_user_can('administrator')) { if ($user_level < 5) {
 	get_currentuserinfo();
 	if(!current_user_can('administrator')) {
@@ -401,8 +558,8 @@ function my_remove_menu_pages() {
 	}
 }
 //TA CONFLITANDO COM TUDO QUE EH TEMA ESSA PORRA
-//add_action( 'admin_menu', 'edit_admin_menus' ); 
-//add_action( 'admin_menu', 'my_remove_menu_pages' );
+//add_action( 'admin_menu', 'projectimer_edit_admin_menus' ); 
+//add_action( 'admin_menu', 'projectimer_remover_menu_pages' );
 
 
 /*

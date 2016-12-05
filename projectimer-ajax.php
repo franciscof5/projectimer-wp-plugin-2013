@@ -200,6 +200,13 @@ function projectimer_update_user_meta() {
 	die(); 
 }
 
+function projectimer_remove_user() {
+	$target = $_POST['target_user_id'];
+	$removed = remove_user_from_blog($target, get_current_blog_id());
+	return $removed;
+	die;
+}
+
 //
 function projectimer_schedule_cycle() {
 	//

@@ -2,7 +2,6 @@
 	"name": "f5sites/projectimer-plugin",
 	"description": "WordPress F5 Sites DEV projects",
 	"type": "wordpress-plugin",
-	"version": "2.0",
 	"authors": [
 		{
 			"name": "Francisco Matelli Matulovic",

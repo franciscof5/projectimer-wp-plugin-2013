@@ -80,7 +80,7 @@
 	background-color: #F99;
 	font-size: 20px;
 	text-align: center;
-	height: 200px;
+	height: 250px;
 	line-height: 50px;
 	padding: 50px;
 }
@@ -118,6 +118,49 @@
 }
 #default_sidebar .item-title a {
 	color:#555 !important;
+}
+#buddypress ul.item-list li .item .item-title {
+	max-height: 46px;
+}
+.vcard {
+	position: relative;
+}
+.projectimer_team_role {
+	position: absolute;
+	top: 8px;
+	right: 2px;
+	font-size: 8px;
+	padding: 1px 4px;
+	font-weight: 600;
+	border: 1px dotted #FFF;
+	color: #DDD;
+	background-color: #3A3;
+	border-radius: 5px;
+	line-height: 11px;
+}
+.projectimer_team_role:hover {
+	border: 1px solid #FFF;
+
+}
+.projectimer_remove_user {
+	position: absolute;
+	top: 8px;
+	right: 2px;
+	font-size: 12px;
+	padding: 2px;
+	font-weight: 600;
+	line-height: 10px;
+	border-radius: 5px;
+	
+	height: 18px;
+	background-color: #C33;
+	color: #633;
+
+	/*border: 2px dashed #3A3;border-radius: 5px;*/
+}
+.projectimer_remove_user:hover {
+	background-color: #F33;
+	color: #FFF;
 }
 .navbar {
     border-radius: 0 !important;

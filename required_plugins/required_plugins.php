@@ -76,11 +76,11 @@ function projectimer_plugin_register_required_plugins() {
 			'force_activation'   => true,
 		),
 		
-		array(
+		/*array(
 			'name'      => 'Network Privacy',
 			'slug'      => 'network-privacy',
 			'force_activation'   => true,
-		),
+		),*/
 		
 		array(
 			'name'      => 'Ranking Calendar',
@@ -88,7 +88,7 @@ function projectimer_plugin_register_required_plugins() {
 			'force_activation'   => true,
 		),
 		
-		array(
+		/*array(
 			'name'      => 'Buddypress',
 			'slug'      => 'buddypress',
 			'force_activation'   => true,
