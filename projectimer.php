@@ -75,7 +75,7 @@ add_action( 'publish_projectimer_focus', 'publish_projectimer_focus_callback' );
 //add_action( 'trash_projectimer_focus', 'trash_post_callback' );
 //add_action( 'future_to_publish_projectimer_focus', 'publish_projectimer_focus_callback');
 //add_action( 'future_to_publish', 'publish_projectimer_focus_callback');
-add_action( 'wp_logout','go_home');
+add_action( 'wp_logout','logout_redirect');
 add_action( 'admin_menu', 'plugin_admin_add_page');
 add_action( 'show_user_profile', 'my_extra_user_fields' );
 add_action( 'edit_user_profile', 'my_extra_user_fields' );
@@ -239,7 +239,7 @@ function terms_clauses($clauses, $taxonomy, $args) {
 }
 add_filter('terms_clauses', 'terms_clauses', 10, 3);
 
-function go_home(){wp_redirect( network_home_url( "/teams") );exit();}
+function lo(){wp_redirect( network_home_url( "/teams") );exit();}
 
 function my_extra_user_fields( $user ) { ?>
     <h3>Projectimer user settings</h3>

@@ -620,6 +620,10 @@ function projectimer_display_projectimer_settings_form() { ?>
 	</table>
 	<p><?php _e("Time direction", "projectimer-plugin"); ?>:<?php _e("Counterclockwise only for now", "projectimer-plugin"); ?></p>
 	</div>
+	<h3>Version:</h3>
+	<p>For old users and project history porpouses we kept the old versions:</p>
+	
+	<?php echo do_shortcode("[mdc_theme_swicher]"); ?>
 	<h3><?php _e("Language", "projectimer-plugin"); ?></h3>
 
 	<h3><?php _e("Download Timesheet (PRO)", "projectimer-plugin"); ?></h3>
