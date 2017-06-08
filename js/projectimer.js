@@ -1248,7 +1248,7 @@ function load_current_task(id) {
 		jQuery("#tab-task .btn-group button").removeClass("active");
 		jQuery(this).find("input").attr("checked", false);
 	});
-	jQuery('name=[task_form_current_task]').change(function() {
+	jQuery('name[task_form_current_task]').change(function() {
 		update_currentask_clipboard();
 	});
 	var data = {

@@ -26,7 +26,7 @@ function checkAlreadyAuthenticatedTrello() {
 	};
 
 	var error = function(errorMsg) {
-jQuery('#trello-container').html('<p>For load your Trello tasks and fully integrate please</p><button  type="button" class="btn btn-primary" onclick="askAuth()">Load Trello Cards and Boards</button>');
+	jQuery('#trello-container').html('<p>For load your Trello tasks and fully integrate please</p><button  type="button" class="btn btn-primary" onclick="askAuth()">Load Trello Boards</button>');
 	jQuery("#trello-status").html('<span class="label label-warning">Trello status: Not started</span><h4>More info</h4><small>Projectimer Trello integrations provides an easy and secure way to load your boards and cards, it also update and complete your tasks withouting leave our app, boards receive and update status when your timmer ends</small>');
 	//authenticationFailure();
 	};
@@ -34,6 +34,31 @@ jQuery('#trello-container').html('<p>For load your Trello tasks and fully integr
 	Trello.get('/member/me/boards', success, error);
 }
 checkAlreadyAuthenticatedTrello();
+var currentBoardIdLoading;
+function loadList(boardId) {
+  			//alert("boardId"+boardId);
+  			currentBoardIdLoading=boardId;
+  			Trello.get('/boards/'+boardId+'/lists', successList, errorList);
+  		}
+  		var successList = function(insideCards) {
+	  		jQuery("#trello-status").html('<span class="label label-success">Trello status: Card loaded</span>');
+			cardsInsideAppend = "";
+			jQuery.each(insideCards, function(i) { 
+				cardsInsideAppend += insideCards[i].name+"<br />";
+			});
+			//cardsInsideAppend = "<button class='btn btn-default'>Load "+boards_array[i].name+" Lists and Cards</button>";
+			//alert(cardsInsideAppend);
+			//alert(boardId);
+			alert(currentBoardIdLoading);
+			jQuery("#card_container"+currentBoardIdLoading).html(cardsInsideAppend);
+			//i_dirty_copy++;
+		};
+
+		var errorList = function(errorMsg) {
+			alertify.error("Problem read cards");
+		};
+  		//var varAppend = '<div class="panel-group" id="accordion"></div>';
+
 function getBoards() {
 	// Get all of the information about the boards you have access to
 	jQuery("#trello-status").html('<span class="label label-warning">Trello status: Attemping to get user boards</span>');
@@ -63,41 +88,29 @@ function getBoards() {
   		*/
   		var i_copy;
   		var i_dirty_copy = 0;
-  		var successList = function(insideCards) {
-	  	jQuery("#trello-status").html('<span class="label label-success">Trello status: Card loaded</span>');
-			cardsInsideAppend = "";
-			jQuery.each(insideCards, function(i) { 
-				cardsInsideAppend += insideCards[i].name+"<br />";
-			});
-			//alert(cardsInsideAppend);
-			jQuery("#card_container"+boards_array[i_dirty_copy]).html(cardsInsideAppend);
-			i_dirty_copy++;
-		};
-
-		var errorList = function(errorMsg) {
-			alertify.error("Problem read cards");
-		};
-  		//var varAppend = '<div class="panel-group" id="accordion"></div>';
   		boards_array = new Array();
+  		
+  		
   		jQuery("#trello-container").html('<div class="panel-group" id="accordion-boards"></div>');
   		//var varAppend;
   		jQuery.each(Boards, function(i) { 
-  			i_copy = i;
+  			//i_copy = i;
   			varAppend = '';
   			varAppend += '<div class="panel panel-default">';
   			varAppend += '<div class="panel-heading">';
-  			varAppend += '<h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion" href="#collapse'+i+'">'+Boards[i].name+'</a></h4>';
+  			varAppend += '<h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion" href="#collapse'+Boards[i].id+'">'+Boards[i].name+'</a></h4>';
   			varAppend += '</div>';
 
-  			varAppend += '<div id="collapse'+i+'" class="panel-collapse collapse">';
-  			varAppend += '<div class="panel-body" id="card_container'+Boards[i].id+'"></div>';
+  			varAppend += '<div id="collapse'+Boards[i].id+'" class="panel-collapse collapse">';
+  			loadBoardListsButton = Boards[i].name+"<br /><button class='btn btn-primary' onclick='loadList(\""+Boards[i].id+"\");'>Load Lists and Cards</button>";
+  			varAppend += '<div class="panel-body" id="card_container'+Boards[i].id+'">'+loadBoardListsButton+'</div>';
   			varAppend += '</div>';
   			varAppend += '</div>';
-  			boards_array.push(Boards[i].id);
+  			//boards_array.push(Boards[i].id);
   			jQuery("#accordion-boards").append(varAppend);
   			
   			//alert("i :"+i+"i_copy"+i_copy);
-  			Trello.get('/boards/'+Boards[i].id+'/cards', successList, errorList);
+  			
 
   		});
   		//varAppend += '</div>';
