@@ -303,11 +303,37 @@ function projectimer_tab_task_trello () {
 			overflow: scroll;
 		}
 	</style>
-	<h3><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> Trello</form> </h3>
+	<div class="row">
+		<h3 class="col-md-3">
+			<span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> Trello
+		</h3>
+		<?php /*
+		<span class="col-md-8" style="line-height: 60px;text-align: right;">
+			<strong>Tags</strong>
+			<input type="checkbox" name="title_filter" value="boards">Boards
+			<input type="checkbox" name="title_filter" value="lists">Lists
+		</span> */ ?>
+		<div class="col-md-3" style="padding-top:20px;font-weight:600;text-align: right;">autotag</div>
+		<div class="col-md-6" style="padding-top:14px">
+			<div class="btn-group btn-group-justified" data-toggle="buttons">
+				<!--form id="trello-title-tags"></form-->
+					<label class="btn btn-default active">
+						<input name="title_filter" value="boards" type="checkbox" checked class=""> Boards
+					</label>
+					<label class="btn btn-default active">
+						<input name="title_filter" value="lists" type="checkbox"  checked class=""> Lists
+					</label>
+				
+			</div>
+		</div>
+	</div>
+
 	<div id="trello-container">
 		receiving information from Trello server....
 	</div>
+
 	<hr />
+
 	<span id="trello-status" style="padding: 0">
 		<span class="label label-default">starting Projectimer Trello...</span>
 	</span>

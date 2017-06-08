@@ -1244,11 +1244,11 @@ function recent_activities_add_bootstrap_stripes() {
 function load_current_task(id) {
 	console.log("load_current_task()");
 	//update btn group
-	jQuery('.btn-group').click(function () {
-		jQuery(".btn-group button").removeClass("active");
+	jQuery('#tab-task .btn-group').click(function () {
+		jQuery("#tab-task .btn-group button").removeClass("active");
 		jQuery(this).find("input").attr("checked", false);
 	});
-	jQuery("#task_form").change(function() {
+	jQuery('name=[task_form_current_task]').change(function() {
 		update_currentask_clipboard();
 	});
 	var data = {
@@ -1326,8 +1326,8 @@ function load_task_object(task_object_received) {
 	//jQuery('#tags_box').append( '<option value="'+text_variable+'" selected=selected>'+text_variable+'</option>' );
 	//jQuery("#tags_box").insertBefore("<option value=asd selected>asd</option>");
 	//RESSSSSEEEEEEEEEEEEEEEEEETTTTTTTTTTTTTTTTTT BUTTONS BEFORE LOAD
-	jQuery(".btn-group input").attr("checked", "checked");
-	jQuery(".btn-group label").removeClass("active");
+	jQuery("#tab-task .btn-group input").attr("checked", "checked");
+	jQuery("#tab-task .btn-group label").removeClass("active");
 	//
 	blink_animation(jQuery("#description_box"), true);
 	jQuery("#description_box").attr("value", task_object_received['desc']);
