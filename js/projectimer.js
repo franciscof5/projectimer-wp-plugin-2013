@@ -115,13 +115,16 @@ jQuery( document ).ready(function($) {
 			jQuery("#user_device").html((platform.manufacturer || '') + platform.description);
 		});
 		//
+		/*
 		jQuery.get("http://ipinfo.io", function (response) {
 		    console.log("IP: " + response.ip);
 			console.log("Location: " + response.city + ", " + response.region);
 			console.log(JSON.stringify(response, null, 4));
 			jQuery("#user_location").html(response.city + ", " + response.region + ", " + response.country);
 		}, "jsonp");
+		*/
 		//
+		/*
 		jQuery.get("https://www.gstatic.com/firebasejs/3.6.0/firebase.js", function (response) {
 		    var config = {
 			    apiKey: "AIzaSyDvUC9hZ5nsVOg-wC5qu98g1SwoUnfpa7U",
@@ -135,8 +138,8 @@ jQuery( document ).ready(function($) {
 		    /*console.log("IP: " + response.ip);
 			console.log("Location: " + response.city + ", " + response.region);
 			console.log(JSON.stringify(response, null, 4));
-			jQuery("#user_location").html(response.city + ", " + response.region + ", " + response.country);*/
-		});	
+			jQuery("#user_location").html(response.city + ", " + response.region + ", " + response.country);*
+		});	*/
 	}
 	
 });

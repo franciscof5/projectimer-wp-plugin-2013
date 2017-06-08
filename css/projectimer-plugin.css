@@ -679,6 +679,9 @@ span.activity, div#message p {
 #tab-task {
 	padding: 0 26px;
 }
+#tab-trello {
+	padding: 0 10px;
+}
 /**/
 #task_form .nav-tabs > li.active > a, .nav-tabs > li.active  {
 	border-width: 6px !important;

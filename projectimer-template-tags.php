@@ -39,7 +39,8 @@ function projectimer_display_task_tabs() {
 	  <!-- Nav tabs -->
 	  <ul class="nav nav-tabs" role="tablist" id="task_tabsett">
 		<li role="presentation" class="active"><a href="#tab-task" aria-controls="tab-task" role="tab" data-toggle="tab"><span class="glyphicon glyphicon-play" aria-hidden="true"></span> Task</a></li>
-		<li role="presentation"><a href="#tab-model" aria-controls="tab-model" role="tab" data-toggle="tab"  class="disabled"><span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span> Models</a></li>
+		<li role="presentation"><a href="#tab-trello" aria-controls="tab-trello" role="tab" data-toggle="tab"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> Trello</a></li>
+		<!--li role="presentation"><a href="#tab-model" aria-controls="tab-model" role="tab" data-toggle="tab"  class="disabled"><span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span> Models</a></li-->
 		<li role="presentation"><a href="#tab-completed" aria-controls="tab-completed" role="tab" data-toggle="tab"  class="disabled"><span class="glyphicon glyphicon-tags" aria-hidden="true"></span> Tags</a></li>
 
 	  </ul>
@@ -47,7 +48,8 @@ function projectimer_display_task_tabs() {
 	  <!-- Tab panes -->
 	  <div class="tab-content">
 		<div role="tabpanel" class="tab-pane active" id="tab-task"><?php projectimer_tab_task_form(); ?></div>
-		<div role="tabpanel" class="tab-pane" id="tab-model"><?php projectimer_tab_task_model_form(); ?></div>
+		<div role="tabpanel" class="tab-pane" id="tab-trello"><?php projectimer_tab_task_trello(); ?></div>
+		<?php /* <!--div role="tabpanel" class="tab-pane" id="tab-model"><?php projectimer_tab_task_model_form(); ?></div-->*/ ?>
 		<div role="tabpanel" class="tab-pane" id="tab-completed"><?php projectimer_tab_task_completed_form(); ?></div>
 	  </div>
 	</div>
@@ -236,6 +238,151 @@ function projectimer_tab_task_model_form () {
 
 	<?php
 }
+
+function projectimer_tab_task_trello () {
+	//wp_enqueue_script("trello-client");
+	wp_enqueue_script("trello-projectimer");
+	//wp_enqueue_style('trello-css');
+	//<script src="https://api.trello.com/1/client.js?key=7d619e7c1a348e16048608ab36f0c083"></script>
+	//<script src="https://trello.com/1/client.js?key=7d619e7c1a348e16048608ab36f0c083"></script>
+	?> 
+	<!--TRELLO-->
+	<script src="https://trello.com/1/client.js?key=7d619e7c1a348e16048608ab36f0c083"></script>
+	
+	<style type="text/css">
+		/*#accordion-boards {
+			max-height: 440px;
+			overflow-y: scroll;
+		}*/
+		#trello-container {
+			max-height: 270px;
+			overflow-y: scroll;
+		}
+		.panel-group {
+			margin: 0 !important;
+			padding: 0 !important;
+		}
+		.accordion-wrapper {
+			display: block;
+			height: 150px;
+			max-height: 100%;
+		}
+
+		#accordion {
+			max-width: 36.125rem;
+			/*max-width: 36.125rem;
+			width: 100%*/
+			margin-left: 15px;
+		}
+
+		.panel-g-horizonta {
+			-webkit-backface-visibility: hidden;
+			-webkit-transform: translateX(-98%) rotate(-90deg);
+			-webkit-transform-origin: right top;
+			-moz-transform: translateX(-98%) rotate(-90deg);
+			-moz-transform-origin: right top;
+			-o-transform: translateX(-98%) rotate(-90deg);
+			-o-transform-origin: right top;
+			transform: translateX(-98%) rotate(-90deg);
+			transform-origin: right top;
+			/*margin-bottom: 15px;*/
+		}
+
+		.panel-b-horizontal {
+			-webkit-backface-visibility: hidden;
+			-webkit-transform: translateX(0%) rotate(90deg);
+			-webkit-transform-origin: left top;
+			-moz-transform: translateX(0%) rotate(90deg);
+			-moz-transform-origin: left top;
+			-o-transform: translateX(0%) rotate(90deg);
+			-o-transform-origin: left top;
+			transform: translateX(0%) rotate(90deg);
+			transform-origin: left top;
+			height: 20rem;
+			/*height: 86.2rem;*/
+			overflow: scroll;
+		}
+	</style>
+	<h3><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> Trello</form> </h3>
+	<div id="trello-container">
+		receiving information from Trello server....
+	</div>
+	<hr />
+	<span id="trello-status" style="padding: 0">
+		<span class="label label-default">starting Projectimer Trello...</span>
+	</span>
+	<br />
+	<?php /*
+	<div class="container-fluid" style="padding: 0">
+    <div class="row">
+        <div class="col-lg-12" style="padding: 0">
+            <div class="accordion-wrapper" style="margin: 0">
+                <div class="panel-g-horizonta" id="accordion" role="tablist" aria-multiselectable="true" style="margin: 0">
+                    <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="headingOne">
+                            <h4 class="panel-title">
+                    <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">Featured Story
+                    </a>
+                </h4>
+                        </div>
+                        <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                            <div class="panel-b-horizontal">
+                                <h4>Slide Title</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="headingTwo">
+                            <h4 class="panel-title">
+                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">About The Reins Act
+                </a>
+            </h4>
+                        </div>
+                        <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                            <div class="panel-b-horizontal">
+                                <h4>Slide Title</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="headingThree">
+                            <h4 class="panel-title">
+                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">Video
+                </a>
+            </h4>
+                        </div>
+                        <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+                            <div class="panel-b-horizontal">
+                                <h4>Slide Title</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="headingFour">
+                            <h4 class="panel-title">
+                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseFour">Photos
+                </a>
+            </h4>
+                        </div>
+                        <div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
+                            <div class="panel-b-horizontal">
+                                <h4>Slide Title</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    */ ?>
+	
+	<br style="clear: both" />
+	<?php //echo projectimer_trello_status(); 
+
+}
+
+
 
 function projectimer_tab_task_completed_form() {
 	?>
@@ -902,4 +1049,14 @@ function projectimer_show_clock_futuristic() {
 	<div id="shine"></div>';
 	#echo '<input type="button" value="focus" onclick="action_button()" id="action_button_id" /><div id="div_status" style="background:#FFF;">Teste</div>';
 	wp_enqueue_script("canvas-draw");
+}
+
+/* INTEGRATIONS */
+function projectimer_trello_status() {
+	//wp_enqueue_script('trello-js');
+	/*$key = 'yourkey';
+    $trello = new \Trello\Trello($key);
+    var_dump($trello->boards->get('4d5ea62fd76aa1136000000c'));
+	//wp_enqueue_script('trello-projectimer');
+	echo "You need to authorize Trello API";*/
 }

@@ -153,6 +153,13 @@ function projectimer_load_scripts() {
 	#wp_enqueue_script('projectimer-user-settings', plugins_url('/js/projectimer-user-settings.js', __FILE__) );
 	wp_enqueue_style('projectimer-css', plugins_url('/css/projectimer-plugin.css', __FILE__) );
 	wp_localize_script( 'projectimer-js', 'pluginDir', $dir );
+
+	//trello
+	//wp_register_script('trello-js', plugins_url('/js/trello.client.coffee', __FILE__) );
+	wp_register_style('trello-css', plugins_url('/css/trello.css', __FILE__) );
+	wp_register_script('trello-js', plugins_url('/js/trello.client.js', __FILE__) );
+	wp_register_script('trello-projectimer', plugins_url('/js/trello.projectimer.js', __FILE__) );
+	
 	//enqueue the Heartbeat API
 	//TODO use that concept showed bellow, setting on user_meta
 	//update_user_meta(get_current_user_id(), "focusTime", 150000);
