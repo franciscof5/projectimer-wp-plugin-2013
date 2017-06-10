@@ -264,12 +264,12 @@ function projectimer_tab_task_trello () {
 		}
 		.accordion-wrapper {
 			display: block;
-			height: 150px;
+			height: 20rem;
 			max-height: 100%;
 		}
 
 		#accordion {
-			max-width: 36.125rem;
+			max-width: 20rem;/*36.125rem;*/
 			/*max-width: 36.125rem;
 			width: 100%*/
 			margin-left: 15px;
@@ -291,16 +291,41 @@ function projectimer_tab_task_trello () {
 		.panel-b-horizontal {
 			-webkit-backface-visibility: hidden;
 			-webkit-transform: translateX(0%) rotate(90deg);
-			-webkit-transform-origin: left top;
+			/*-webkit-transform-origin: left top;*/
 			-moz-transform: translateX(0%) rotate(90deg);
-			-moz-transform-origin: left top;
+			/*-moz-transform-origin: left top;*/
 			-o-transform: translateX(0%) rotate(90deg);
-			-o-transform-origin: left top;
+			/*-o-transform-origin: left top;*/
+			
 			transform: translateX(0%) rotate(90deg);
 			transform-origin: left top;
-			height: 20rem;
-			/*height: 86.2rem;*/
+			/*width: 26rem;
+			/*height: 86.2rem;
+			overflow: scroll;*/
 			overflow: scroll;
+			/*margin-left: -80px;/*f5sites*/
+			position: relative;
+			left: 20rem;
+			/*width: 26rem;*/
+			min-height: 20rem;
+		}
+		.hresquema {
+			width: 16rem;
+
+		}
+		.pbginsideListList {
+			width: 18rem;
+			/*background: #093;*/
+			max-height: 18rem;
+    		max-width: 12rem;
+		}
+		.pbginsideListList li {
+			white-space: nowrap;
+		}
+
+		#accordion .panel-collapse {
+			/*width: 23rem;
+			/*background: #093;*/
 		}
 	</style>
 	<div class="row">
@@ -313,17 +338,21 @@ function projectimer_tab_task_trello () {
 			<input type="checkbox" name="title_filter" value="boards">Boards
 			<input type="checkbox" name="title_filter" value="lists">Lists
 		</span> */ ?>
-		<div class="col-md-3" style="padding-top:20px;font-weight:600;text-align: right;">autotag</div>
-		<div class="col-md-6" style="padding-top:14px">
-			<div class="btn-group btn-group-justified" data-toggle="buttons">
-				<!--form id="trello-title-tags"></form-->
-					<label class="btn btn-default active">
-						<input name="title_filter" value="boards" type="checkbox" checked class=""> Boards
-					</label>
-					<label class="btn btn-default active">
-						<input name="title_filter" value="lists" type="checkbox"  checked class=""> Lists
-					</label>
-				
+		<div id="trelloLoadOptions" class="col-md-9"> 
+			<div class="col-md-4" style="padding-top:20px;font-weight:600;text-align: right;">autotag</div>
+			<div class="col-md-8" style="padding-top:14px">
+				<div class="btn-group btn-group-justified" data-toggle="buttons">
+					<!--form id="trello-title-tags"></form-->
+						<label class="btn btn-default active">
+							<input name="auto_tag_trello" value="boards" type="checkbox" checked id="check-boards"> Boards
+						</label>
+						<label class="btn btn-default active">
+							<input name="auto_tag_trello" value="lists" type="checkbox"  checked id="check-lists"> Lists
+						</label>
+						<label class="btn btn-default active">
+							<input name="auto_tag_trello" value="labels" type="checkbox"  checked id="check-labels"> Labels
+						</label>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -331,79 +360,77 @@ function projectimer_tab_task_trello () {
 	<div id="trello-container">
 		receiving information from Trello server....
 	</div>
-
-	<hr />
-
+	<br />
 	<span id="trello-status" style="padding: 0">
 		<span class="label label-default">starting Projectimer Trello...</span>
 	</span>
-	<br />
+	<br /><small>Trello is a third-party integration provides by its API in a safe way. We use ',' as separator for tags, avoid it on titles.</small>
 	<?php /*
 	<div class="container-fluid" style="padding: 0">
-    <div class="row">
-        <div class="col-lg-12" style="padding: 0">
-            <div class="accordion-wrapper" style="margin: 0">
-                <div class="panel-g-horizonta" id="accordion" role="tablist" aria-multiselectable="true" style="margin: 0">
-                    <div class="panel panel-default">
-                        <div class="panel-heading" role="tab" id="headingOne">
-                            <h4 class="panel-title">
-                    <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">Featured Story
-                    </a>
-                </h4>
-                        </div>
-                        <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
-                            <div class="panel-b-horizontal">
-                                <h4>Slide Title</h4>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="panel panel-default">
-                        <div class="panel-heading" role="tab" id="headingTwo">
-                            <h4 class="panel-title">
-                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">About The Reins Act
-                </a>
-            </h4>
-                        </div>
-                        <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
-                            <div class="panel-b-horizontal">
-                                <h4>Slide Title</h4>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="panel panel-default">
-                        <div class="panel-heading" role="tab" id="headingThree">
-                            <h4 class="panel-title">
-                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">Video
-                </a>
-            </h4>
-                        </div>
-                        <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
-                            <div class="panel-b-horizontal">
-                                <h4>Slide Title</h4>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="panel panel-default">
-                        <div class="panel-heading" role="tab" id="headingFour">
-                            <h4 class="panel-title">
-                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseFour">Photos
-                </a>
-            </h4>
-                        </div>
-                        <div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
-                            <div class="panel-b-horizontal">
-                                <h4>Slide Title</h4>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    </div>
+	<div class="row">
+		<div class="col-lg-12" style="padding: 0">
+			<div class="accordion-wrapper" style="margin: 0">
+				<div class="panel-g-horizonta" id="accordion" role="tablist" aria-multiselectable="true" style="margin: 0">
+					<div class="panel panel-default">
+						<div class="panel-heading" role="tab" id="headingOne">
+							<h4 class="panel-title">
+								<a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">Featured Story
+								</a>
+							</h4>
+						</div>
+						<div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+							<div class="panel-b-horizontal">
+								<h4>Slide Title</h4>
+							</div>
+						</div>
+					</div>
+					<div class="panel panel-default">
+						<div class="panel-heading" role="tab" id="headingTwo">
+							<h4 class="panel-title">
+								<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">About The Reins Act
+								</a>
+							</h4>
+						</div>
+						<div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+							<div class="panel-b-horizontal">
+								<h4>Slide Title</h4>
+							</div>
+						</div>
+					</div>
+					<div class="panel panel-default">
+						<div class="panel-heading" role="tab" id="headingThree">
+							<h4 class="panel-title">
+								<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">Video
+								</a>
+							</h4>
+						</div>
+						<div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+							<div class="panel-b-horizontal">
+								<h4>Slide Title</h4>
+							</div>
+						</div>
+					</div>
+					<div class="panel panel-default">
+						<div class="panel-heading" role="tab" id="headingFour">
+							<h4 class="panel-title">
+								<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseFour">Photos
+								</a>
+							</h4>
+						</div>
+						<div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
+							<div class="panel-b-horizontal">
+								<h4>Slide Title</h4>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
     */ ?>
 	
-	<br style="clear: both" />
+	<!--br style="clear: both" /-->
 	<?php //echo projectimer_trello_status(); 
 
 }

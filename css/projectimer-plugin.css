@@ -540,7 +540,7 @@ span.activity, div#message p {
 }
 #recent-activities:before {
 	content: ".";
-	height: 1026px;
+	height: 1400px; /*monitor do Ivo 1026px;*/
 	width: 630px;
 	background-color: rgba(0,0,0,0.35);
 	display: block;

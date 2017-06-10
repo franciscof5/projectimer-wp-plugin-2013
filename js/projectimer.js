@@ -90,7 +90,7 @@ jQuery( document ).ready(function($) {
 		//
 		recent_activities_add_bootstrap_stripes();    
 		//
-		load_current_task();
+		load_task_by_id();
 		//
 		load_user_settings();
 		//
@@ -561,7 +561,7 @@ function update_recent_activities() {
 				jQuery('#loadtask_modal').modal('show');
 				//alert(id);
 				jQuery('#erase_and_load').click(function(){
-					load_current_task(id);
+					load_task_by_id(id);
 					jQuery('#loadtask_modal').modal('hide');
 				})
 				// data-toggle='modal' data-target='#myModal'
@@ -1241,8 +1241,8 @@ function recent_activities_add_bootstrap_stripes() {
 	});
 }
 
-function load_current_task(id) {
-	console.log("load_current_task()");
+function load_task_by_id(id) {
+	console.log("load_task_by_id()");
 	//update btn group
 	jQuery('#tab-task .btn-group').click(function () {
 		jQuery("#tab-task .btn-group button").removeClass("active");
@@ -1263,6 +1263,7 @@ function load_current_task(id) {
 				load_task_object(task_object_received);
 				//
 				localStorage.setItem('task_object_stored', JSON.stringify(task_object_received));
+				//alertify.log("Error connecting. Task loaded from browser cache.");
 			} else {
 				//alert(jQuery("#title_box").width());
 				if(jQuery("#title_box").width()) {
@@ -1283,6 +1284,7 @@ function load_current_task(id) {
 			var task_object_stored = JSON.parse(localStorage.getItem('task_object_stored'));
 			//
 			load_task_object(task_object_stored);
+			alertify.log("Error connecting. Task loaded from browser cache.");
 		});
 	} else {
 
@@ -1292,6 +1294,7 @@ function load_current_task(id) {
 }
 
 function load_task_object(task_object_received) {
+	jQuery('.nav-tabs a[href="#tab-task"]').tab('show');
 	blink_animation(jQuery("#title_box"), true);
 	jQuery("#title_box").attr("value", task_object_received['title']);
 	//
@@ -1301,11 +1304,12 @@ function load_task_object(task_object_received) {
 	jQuery('#tags_box').html("");
 	
 	tags = task_object_received['tags'];
-
+	//alert(tags);
 	if(tags) {
 		jQuery('#tags_box').append('<optgroup label="In use">');
 		jQuery.each(tags, function(i) {
 			text_variable = tags[i];
+			alert(text_variable);
 			jQuery('#tags_box').append( '<option value="'+text_variable+'" selected=selected>'+text_variable+'</option>' );
 		});
 		jQuery('#tags_box').append('</optgroup>');
