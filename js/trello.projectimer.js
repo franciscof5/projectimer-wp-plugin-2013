@@ -1,7 +1,7 @@
 //created by Francisco Matelli Matulovic: 2017-06-09
 function loadTaskFromTrello(taskName, taskTags, taskDesc) {
 	//alert("parent.name")
-	alert("loadTaskFromTrello:"+taskName+", tags:"+taskTags+", desc:"+taskDesc);
+	alertify.log("Loading "+taskName+" from Trello");
 	var array = taskTags.split(',');
 	var task_object_from_trello_single_task = Array();
 	task_object_from_trello_single_task['title'] = taskName;
@@ -9,7 +9,6 @@ function loadTaskFromTrello(taskName, taskTags, taskDesc) {
 	task_object_from_trello_single_task['desc'] = taskDesc;
 	load_task_object(task_object_from_trello_single_task);
 }
-//var TrelloTasks
 
 //Login
 function checkAlreadyAuthenticatedTrello() {
@@ -68,7 +67,6 @@ function getBoards() {
   		jQuery("#trello-container").html('<div class="panel-group" id="accordion-boards"></div>');
   		//var varAppend;
   		jQuery.each(Boards, function(i) { 
-  			//i_copy = i;
   			varAppend = '';
   			varAppend += '<div class="panel panel-default">';
   			varAppend += '<div class="panel-heading">';
@@ -80,12 +78,7 @@ function getBoards() {
   			varAppend += '<div class="panel-body" id="card_container'+Boards[i].id+'">'+loadBoardListsButton+'</div>';
   			varAppend += '</div>';
   			varAppend += '</div>';
-  			//boards_array.push(Boards[i].id);
   			jQuery("#accordion-boards").append(varAppend);
-  			
-  			//alert("i :"+i+"i_copy"+i_copy);
-  			
-
   		});
   		//varAppend += '</div>';
   		//jQuery("#trello-container").html(varAppend);
@@ -93,7 +86,7 @@ function getBoards() {
 	};
 
 	var error = function(errorMsg) {
-		//asyncOutput(errorMsg);
+		//
 		jQuery("#trello-status").html('<span class="label label-error">Trello status: error getting users boards</span>');
 	};
 
@@ -101,7 +94,7 @@ function getBoards() {
 }
 
 function loadList(boardId) {
-	//alert("boardId"+boardId);
+	//
 	currentBoardIdLoading=boardId;
 	var successList = function(insideList) {
 		jQuery("#trello-status").html('<span class="label label-success">Trello status: Card loaded</span>');
@@ -121,36 +114,27 @@ function loadList(boardId) {
 				listInsideAppend += '<div class="panel-b-horizontal">';
 				//listInsideAppend += '<h4>'+insideList[i].name+'</h4>'
 				listInsideAppend += '<ul id="insideListList'+id+'" class="pbginsideListList"><li>Empty list</li></ul>';
-				
-				//listInsideAppend += '<hr class="hresquema" />';
 				listInsideAppend += '</div>';
-
 				listInsideAppend += '</div></div>';
 				listContainerOfCardsArray.push(id);
-				//alert(insideList[i].cards[0].name);
 				Trello.get('/lists/'+id+'/cards', successListCards, errorListCards);		
 			});
 		listInsideAppend += '</div></div></div></div></div>';
-		//listInsideAppend = "<button class='btn btn-default'>Load "+boards_array[i].name+" Lists and Cards</button>";
-		//alert(listInsideAppend);
-		//alert(boardId);
-		//alert(currentBoardIdLoading);
+		//
 		jQuery("#card_container"+currentBoardIdLoading).html(listInsideAppend);
-		//i_dirty_copy++;
 	};
 
 	var errorList = function(errorMsg) {
 		//
 		alertify.error("Problem reading Trello lists");
 	};
-	
-	//Trello.get('/boards/'+boardId+'/lists', successList, errorList);
+	//
 	Trello.get('/boards/'+boardId+'/lists', successList, errorList);
 }
 
 //LoadList callbacks
 function successListCards(cardsInside) {
-	//alert(cardsInside);
+	//
 	var cardsInsideAppend = "";
 	var idList;
 	var tagList=Array();
@@ -163,40 +147,20 @@ function successListCards(cardsInside) {
 		idList="";//empty return
 
 	//
-
 	if(jQuery("#check-boards").is(':checked'))
 	tagList.push(jQuery("#insideListList"+idList).parent().parent().parent().find(".list-title").text());
 	if(jQuery("#check-lists").is(':checked'))
 	tagList.push(jQuery("#insideListList"+idList).parent().parent().parent().parent().parent().parent().parent().parent().parent().parent().parent().find('.board-title').text());
 	//
-	//tagList+=tagListName+","+tagBoardName+",";
-	
-	//alert(jQuery("#check-boards").is(':checked')+", lists:"+jQuery("#check-lists").is(':checked')+", labels:"+jQuery("#check-labels").is(':checked'));
 	jQuery.each(cardsInside, function(i){
-		//alert(cardsInside[i].name);
-		
-		//
-		
-		//
-		//alert(cardsInside[i]);
-		//alert(cardsInside[i].labels);
-		//if(typeof cardsInside[i].labels != 'undefined') {
-			//if(cardsInside[i].labels != '') {
-				jQuery.each(cardsInside[i].labels, function(ia) {
-					//alert("LAbelNA:"+this.name);
-					//tagList += "\'"+this.name+"\', ";
-					tagList.push(this.name);
-				});	
-			//}
-			
-		//}
-		//alert(this.parent().parent().html());
+		jQuery.each(cardsInside[i].labels, function(ia) {
+			tagList.push(this.name);
+		});	
 		if(cardsInside[i].desc)
 			desc = cardsInside[i].desc.replace(/\n/g,". ");
 		else
 			desc = "";
 		cardsInsideAppend += '<li><a href="#" onclick="loadTaskFromTrello(\''+cardsInside[i].name+'\',\''+tagList+'\',\''+desc+'\')">'+cardsInside[i].name+'</a></li>';
-		//currentListIdCounter++;
 	});
 
 	jQuery("#insideListList"+idList).html(cardsInsideAppend);
