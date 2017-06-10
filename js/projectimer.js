@@ -1309,7 +1309,6 @@ function load_task_object(task_object_received) {
 		jQuery('#tags_box').append('<optgroup label="In use">');
 		jQuery.each(tags, function(i) {
 			text_variable = tags[i];
-			alert(text_variable);
 			jQuery('#tags_box').append( '<option value="'+text_variable+'" selected=selected>'+text_variable+'</option>' );
 		});
 		jQuery('#tags_box').append('</optgroup>');

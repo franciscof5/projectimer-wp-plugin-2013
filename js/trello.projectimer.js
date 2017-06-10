@@ -3,9 +3,15 @@ function loadTaskFromTrello(taskName, taskTags, taskDesc) {
 	//alert("parent.name")
 	alertify.log("Loading "+taskName+" from Trello");
 	var array = taskTags.split(',');
+	var array_unique = Array();
+	//UNIQUENESS
+	jQuery.each(array, function(i, e) {
+	    if (jQuery.inArray(e, array_unique) == -1) array_unique.push(e);
+	});
+	//
 	var task_object_from_trello_single_task = Array();
 	task_object_from_trello_single_task['title'] = taskName;
-	task_object_from_trello_single_task['tags'] = array;
+	task_object_from_trello_single_task['tags'] = array_unique;
 	task_object_from_trello_single_task['desc'] = taskDesc;
 	load_task_object(task_object_from_trello_single_task);
 }
