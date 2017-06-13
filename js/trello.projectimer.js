@@ -162,8 +162,13 @@ function successListCards(cardsInside) {
 		jQuery.each(cardsInside[i].labels, function(ia) {
 			tagList.push(this.name);
 		});	
-		if(cardsInside[i].desc)
+		if(cardsInside[i].desc) {
+			//desc = cardsInside[i].desc.replace(/\'/g,"");
+			//desc = cardsInside[i].desc.replace(/\"/g,"");
 			desc = cardsInside[i].desc.replace(/\n/g,". ");
+			desc = desc.replace(/\"/g,"");
+			desc = desc.replace(/\'/g,"");
+		}
 		else
 			desc = "";
 		cardsInsideAppend += '<li><a href="#" onclick="loadTaskFromTrello(\''+cardsInside[i].name+'\',\''+tagList+'\',\''+desc+'\')">'+cardsInside[i].name+'</a></li>';

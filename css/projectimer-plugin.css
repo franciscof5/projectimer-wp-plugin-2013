@@ -30,19 +30,19 @@
 }
 
 @media (max-width: 590px) {
-	#header-right-buttons {
+	/*#header-right-buttons {
 		background-color: #666;
 		width: 100%;
 	}
 	#header-right-buttons button {
 		min-width:40%;
 		}
-	#default_sidebar {
-		display: none;
-	}
 	.btn {
 		width: 30%;
 		float: left;
+	}*/
+	#default_sidebar {
+		display: none;
 	}
 	#task_form .nav-tabs .glyphicon {
 		display: none;
@@ -91,34 +91,42 @@
 
 #default_sidebar {
 	/*background-color: #DEDEDE;*/
-	background-color: #222;
-	padding: 10px;	
+	padding: 10px !important;	
 	overflow-x: hidden;
 	overflow-y: scroll;
-}
-
-#default_sidebar .widgettitle {
-	font-size: 20px;
-	margin:-5px 0 10px 0;
-	color: #DEDEDE;
-}
-
-#default_sidebar .avatar {
-	margin-right: 10px;
 }
 
 #default_sidebar #members-list-options {
 	display: none;
 }
+.sidebar_inverted {
+	background-color: #222;
+}
+.sidebar_inverted h1, .sidebar_inverted h2, .sidebar_inverted h3, .sidebar_inverted h4 {
+	color: #dedede;
+}
+.sidebar_inverted div {
+	color: #888;
+}
+.sidebar_inverted .widgettitle {
+	font-size: 20px;
+	margin:-5px 0 10px 0;
+	color: #DEDEDE;
+}
 
-#default_sidebar .item-title {
+.sidebar_inverted .avatar {
+	margin-right: 10px;
+}
+
+.sidebar_inverted .item-title {
 	font-size: 16px;
 	font-family: Lobster;
 
 }
-#default_sidebar .item-title a {
+.sidebar_inverted .item-title a {
 	color:#555 !important;
 }
+/**********************/
 #buddypress ul.item-list li .item .item-title {
 	max-height: 46px;
 }
@@ -541,7 +549,7 @@ span.activity, div#message p {
 #recent-activities:before {
 	content: ".";
 	height: 1400px; /*monitor do Ivo 1026px;*/
-	width: 630px;
+	width: 100%;
 	background-color: rgba(0,0,0,0.35);
 	display: block;
 	position: absolute;

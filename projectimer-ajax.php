@@ -479,6 +479,7 @@ function projectimer_update_recent_activities() {
 	if(!ob_start("ob_gzhandler")) ob_start();
 	the_widget("BP_Core_Members_Widget", "Team's Members");
 	$recent_members = ob_get_contents();
+	//$recent_members = bp_core_ajax_widget_members();
 	ob_end_clean();
 	//$response['recent_activity_html'] = "ASDASD";
 	

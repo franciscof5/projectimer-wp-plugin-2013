@@ -70,12 +70,16 @@ function use_f5sites_post_table_to_insert( $data , $postarr ) {
 
 //
 add_action( 'init', 'createPostType' );
+add_action( 'init', 'registerSidebar' );
 add_action( 'admin-init', 'wpcodex_set_capabilities' );
 add_action( 'publish_projectimer_focus', 'publish_projectimer_focus_callback' );
 //add_action( 'trash_projectimer_focus', 'trash_post_callback' );
 //add_action( 'future_to_publish_projectimer_focus', 'publish_projectimer_focus_callback');
 //add_action( 'future_to_publish', 'publish_projectimer_focus_callback');
-add_action( 'wp_logout','logout_redirect');
+//add_action( 'wp_logout','logout_redirect');
+//add_filter( 'logout_url', 'my_logout_page', 10, 2 )
+add_action('wp_logout', 'logout_redirect');;
+
 add_action( 'admin_menu', 'plugin_admin_add_page');
 add_action( 'show_user_profile', 'my_extra_user_fields' );
 add_action( 'edit_user_profile', 'my_extra_user_fields' );
@@ -166,6 +170,10 @@ function projectimer_load_scripts() {
 	//echo  dirname( __FILE__  ) . '/locale';
 	//var_dump(load_plugin_textdomain('plugin-projectimer', false, dirname(plugin_basename(__FILE__). '/locale')));die;
 	//var_dump(load_plugin_textdomain('projectimer', false, dirname( __FILE__ ) . '/locale' ));die;
+}
+
+function logout_redirect(  ) {
+	wp_redirect(home_url( '/saida' ));
 }
 
 function publish_projectimer_focus_callback($post_id){
@@ -371,7 +379,19 @@ function wpcodex_set_capabilities() {
 
 }
 
+function registerSidebar() {
+	for ($i=1; $i<=6; $i++) {
+		register_sidebar( array(
+	        'name' => __( 'TV Colunm '.$i, 'projectimer-plugin' ),
+	        'id' => 'tv-colunm-'.$i,
+	        'before_widget' => '<li id="%1$s" class="widget %2$s">',
+			'after_widget'  => '</li>',
+			'before_title'  => '<h2 class="widgettitle">',
+			'after_title'   => '</h2>',
+	    ) );
+	}
 
+}
 
 function createPostType() {
 	

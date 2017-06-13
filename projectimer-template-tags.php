@@ -329,7 +329,7 @@ function projectimer_tab_task_trello () {
 		}
 	</style>
 	<div class="row">
-		<h3 class="col-md-3">
+		<h3 class="col-md-6">
 			<span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> Trello
 		</h3>
 		<?php /*
@@ -338,22 +338,9 @@ function projectimer_tab_task_trello () {
 			<input type="checkbox" name="title_filter" value="boards">Boards
 			<input type="checkbox" name="title_filter" value="lists">Lists
 		</span> */ ?>
-		<div id="trelloLoadOptions" class="col-md-9"> 
-			<div class="col-md-4" style="padding-top:20px;font-weight:600;text-align: right;">autotag</div>
-			<div class="col-md-8" style="padding-top:14px">
-				<div class="btn-group btn-group-justified" data-toggle="buttons">
-					<!--form id="trello-title-tags"></form-->
-						<label class="btn btn-default active">
-							<input name="auto_tag_trello" value="boards" type="checkbox" checked id="check-boards"> Boards
-						</label>
-						<label class="btn btn-default active">
-							<input name="auto_tag_trello" value="lists" type="checkbox"  checked id="check-lists"> Lists
-						</label>
-						<label class="btn btn-default active">
-							<input name="auto_tag_trello" value="labels" type="checkbox"  checked id="check-labels"> Labels
-						</label>
-				</div>
-			</div>
+		<div id="trelloLoadOptions" class="col-md-6"> 
+			<a href="#tab-trello-settings" class="open_settings_modal" data-toggle="modal" data-target="#projectimer_settingsbox_modal"><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> Trello importing settings</a>
+			<a href="#tab-teams" class="open_settings_modal" data-toggle="modal" data-target="#projectimer_settingsbox_modal"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> <?php _e("Teams", "projectimer-plugin"); ?></a></li>
 		</div>
 	</div>
 
@@ -545,11 +532,13 @@ function projectimer_display_login_modal() { ?>
 	    <div class="modal-content">
 	      <div class="modal-header">
 	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-	        <h4 class="modal-title">Login</h4>
+	        <h3 class="modal-title"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> User Details</h3>
 	      </div>
 	      <div class="modal-body">
-	        	<?php if(is_user_logged_in()) { 
+	        	<?php if(is_user_logged_in()) {  ?>
 					
+					<?php
+					//<h3>Teams</h3>
 					do_action('projectimer_display_teams');
 
 					?>
@@ -647,76 +636,88 @@ function projectimer_display_settings_modal() {
 	      <div class="modal-header">
 	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 	        <!--h4 class="modal-title" id="projectimer_settingsbox_modalLabel">Settings</h4-->
-	         <div>
-			  <!-- Nav tabs -->
-			  <ul class="nav nav-tabs" role="tablist">
-				<li role="presentation">
-					<a href="#tab-settings" data-toggle="tab"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>  <?php _e("Settings", "projectimer-plugin"); ?></a></li>
-				<li role="presentation">
-					<a href="#tab-profile" data-toggle="tab"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>  <?php _e("Profile", "projectimer-plugin"); ?></a></li>  
-				<li role="presentation">
-					<a href="#tab-teams" data-toggle="tab"><span class="glyphicon glyphicon-network" aria-hidden="true"></span> <?php _e("Teams", "projectimer-plugin"); ?></a></li>
-				<li role="presentation">
-					<a href="#tab-notifications" data-toggle="tab"><span class="glyphicon glyphicon-bullhorn" aria-hidden="true"></span> <?php _e("Notifications", "projectimer-plugin"); ?></a></li>
-				<li role="presentation">
-					<a href="#tab-survey" data-toggle="tab"><span class="glyphicon glyphicon-table" aria-hidden="true"></span> <?php _e("Survey", "projectimer-plugin"); ?></a></li>    
-				<li role="presentation">
-					<a href="#tab-help" data-toggle="tab"><span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span> <?php _e("Help", "projectimer-plugin"); ?></a></li>
-			  </ul>
+		        <div>
+				  <!-- Nav tabs -->
+				  <ul class="nav nav-tabs" role="tablist">
+					<li role="presentation">
+						<a href="#tab-settings" data-toggle="tab"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>  <?php _e("Settings", "projectimer-plugin"); ?></a></li>
+					<li role="presentation">
+						<a href="#tab-profile" data-toggle="tab"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>  <?php _e("Profile", "projectimer-plugin"); ?></a></li>  
+					<li role="presentation">
+						<a href="#tab-teams" data-toggle="tab"><span class="glyphicon glyphicon-th" aria-hidden="true"></span> <?php _e("Teams", "projectimer-plugin"); ?></a></li>
+					<li role="presentation">
+						<a href="#tab-notifications" data-toggle="tab"><span class="glyphicon glyphicon-bullhorn" aria-hidden="true"></span> <?php _e("Notifications", "projectimer-plugin"); ?></a></li>
+					<li role="presentation">
+						<a href="#tab-survey" data-toggle="tab"><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> <?php _e("Survey", "projectimer-plugin"); ?></a></li>    
+					<li role="presentation">
+						<a href="#tab-trello-settings" data-toggle="tab"><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> <?php _e("Trello", "projectimer-plugin"); ?></a></li> 
+					<li role="presentation">
+						<a href="#tab-gagenda-settings" data-toggle="tab"><span class="glyphicon glyphicon-calendar" aria-hidden="true"></span> <?php _e("Google Agenda", "projectimer-plugin"); ?></a></li> 
+					<li role="presentation">
+						<a href="#tab-help" data-toggle="tab"><span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span> <?php _e("Help", "projectimer-plugin"); ?></a></li>
+				  </ul>
 
-			  <!-- Tab panes -->
-			  <div class="tab-content">
-				<div role="tabpanel" class="tab-pane" id="tab-settings">
-					<?php projectimer_display_projectimer_settings_form(); ?>
-				</div>
-				<div role="tabpanel" class="tab-pane" id="tab-profile">
-					<h3><?php _e("Profile", "plugin-projectimer"); ?></h3>
-					<?php #bppp_progression_block(); ?>
-					<p><?php
-					wp_enqueue_style( 'wppb_stylesheetCOPY' );
-					echo do_shortcode("[wppb-edit-profile]");
-					?></p>
-				</div>
-				<div role="tabpanel" class="tab-pane" id="tab-teams">
-					<?php do_action('projectimer_display_teams'); ?>
-					<h3>Teams</h3>
-					<p>Convide membros</p>
-					<iframe src="http://projectimer.com/f5sites/members/francisco/invite-anyone/" style="width: 100%; height: 200px;"></iframe>
-					<?php 
-						$wrapperPage = file_get_contents('http://projectimer.com/f5sites/members/francisco/invite-anyone/'); 
-						//@include("http://projectimer.com/f5sites/members/francisco/invite-anyone/");
-						//var_dump($wrapperPage);
-						//echo $wrapperPage;//the_widget('[invite-anyone]');
-						/*if ( function_exists( 'bp_update_option' ) ) {
-							$options = bp_get_option( 'invite_anyone' );
-						} else {
-							$options = get_option( 'invite_anyone' );
-						}apply_filters( 'invite_anyone_options', $options );*/
-					?>
-					<?php 
-						//$ra_network_privacy = new RA_Network_Privacy();
-						//$ra_network_privacy->network_privacy_options_page();
-					?>
-					</p>
-				</div>
-				<div role="tabpanel" class="tab-pane" id="tab-notifications">
-					<h3>Notifications</h3>
-					<p>
-					<?php 
-						echo do_shortcode('[bc_notifications]');
-					?>
-					</p>
-				</div>
+				  <!-- Tab panes -->
+				  <div class="tab-content">
+					<div role="tabpanel" class="tab-pane" id="tab-settings">
+						<?php projectimer_display_projectimer_settings_form(); ?>
+					</div>
+					<div role="tabpanel" class="tab-pane" id="tab-profile">
+						<h3><?php _e("Profile", "plugin-projectimer"); ?></h3>
+						<?php #bppp_progression_block(); ?>
+						<p><?php
+						wp_enqueue_style( 'wppb_stylesheetCOPY' );
+						echo do_shortcode("[wppb-edit-profile]");
+						?></p>
+					</div>
+					<div role="tabpanel" class="tab-pane" id="tab-teams">
+						<?php do_action('projectimer_display_teams'); ?>
+						<h3><span class="glyphicon glyphicon-user" aria-hidden="true"></span>Teams</h3>
+						<p>Convide membros</p>
+						<iframe src="http://projectimer.com/f5sites/members/francisco/invite-anyone/" style="width: 100%; height: 200px;"></iframe>
+						<?php 
+							$wrapperPage = file_get_contents('http://projectimer.com/f5sites/members/francisco/invite-anyone/'); 
+							//@include("http://projectimer.com/f5sites/members/francisco/invite-anyone/");
+							//var_dump($wrapperPage);
+							//echo $wrapperPage;//the_widget('[invite-anyone]');
+							/*if ( function_exists( 'bp_update_option' ) ) {
+								$options = bp_get_option( 'invite_anyone' );
+							} else {
+								$options = get_option( 'invite_anyone' );
+							}apply_filters( 'invite_anyone_options', $options );*/
+						?>
+						<?php 
+							//$ra_network_privacy = new RA_Network_Privacy();
+							//$ra_network_privacy->network_privacy_options_page();
+						?>
+						</p>
+					</div>
+					<div role="tabpanel" class="tab-pane" id="tab-notifications">
+						<h3>Notifications</h3>
+						<p>
+						<?php 
+							echo do_shortcode('[bc_notifications]');
+						?>
+						</p>
+					</div>
 
-				<div role="tabpanel" class="tab-pane" id="tab-survey">
-					<h3>Tell us...</h3>
-					<p>how is your personal experience</p>
-					<p>We are implementing our first surveys... please come back in few hours</p>
-				</div>
+					<div role="tabpanel" class="tab-pane" id="tab-survey">
+						<h3>Tell us...</h3>
+						<p>how is your personal experience</p>
+						<p>We are implementing our first surveys... please come back in few hours</p>
+					</div>
 
-				<div role="tabpanel" class="tab-pane" id="tab-help">
-					<?php projectimer_show_help(); ?></div>
-			  </div>
+					<div role="tabpanel" class="tab-pane" id="tab-trello-settings">
+						<?php projectimer_display_trello_options(); ?>
+					</div>
+					<div role="tabpanel" class="tab-pane" id="tab-gagenda-settings">
+						<?php projectimer_show_help(); ?>
+					</div>
+
+					<div role="tabpanel" class="tab-pane" id="tab-help">
+						<?php projectimer_show_help(); ?>
+					</div>
+				</div>
 
 			</div>
 	      </div>
@@ -841,7 +842,7 @@ function projectimer_display_teams() {
 		$blogs = get_blogs_of_user(get_current_user_id());
 
 		if ( !empty($blogs) ) { ?>
-			<h3><?php _e( 'My Teams' ) ?></h3>
+			<h3><span class="glyphicon glyphicon-th" aria-hidden="true"></span><?php _e( 'My Teams' ) ?></h3>
 			<?php
 				if(count($blogs)<=1) {
 					_e('You are member of no teams, try join one', 'projectimer-root');
@@ -862,10 +863,11 @@ function projectimer_display_teams() {
 				} ?>
 			</ul>
 		<?php } ?>
-		<h3>Joining Teams</h3>
+		<hr />
+		<h3><strong>Joining Teams</strong></h3>
 		<p>To enter in a private team you must have the link or get an invite by email.</p>
 		<p>You can ask to join in <a href="/teams/" alt="See public teams">public teams</a>
-		<h3>Creating Teams</h3>
+		<h3><strong>Creating Teams</strong></h3>
 		<p>Every user can have one free public Team and we also offer a Team PRO plan for private teams. Go on and <a href="/wp-signup.php">create you own team</a>.</p>
 	<?php } else { ?>
 		<?php wp_login_form(); ?>
@@ -875,6 +877,25 @@ function projectimer_display_teams() {
 	<?php }
 }
 
+function projectimer_display_trello_options() { 
+	?>
+	<div class="col-md-4" style="padding-top:20px;font-weight:600;text-align: right;">autotag</div>
+		<div class="col-md-8" style="padding-top:14px">
+			<div class="btn-group btn-group-justified" data-toggle="buttons">
+				<!--form id="trello-title-tags"></form-->
+					<label class="btn btn-default active">
+						<input name="auto_tag_trello" value="boards" type="checkbox" checked id="check-boards"> Boards
+					</label>
+					<label class="btn btn-default active">
+						<input name="auto_tag_trello" value="lists" type="checkbox"  checked id="check-lists"> Lists
+					</label>
+					<label class="btn btn-default active">
+						<input name="auto_tag_trello" value="labels" type="checkbox"  checked id="check-labels"> Labels
+					</label>
+			</div>
+		</div>
+	<?php
+}
 
 function projectimer_show_help() { ?>
 	<h1>Help</h1>
@@ -920,16 +941,19 @@ function projectimer_show_header_navbar() { ?>
 	    <!-- Collect the nav links, forms, and other content for toggling -->
 	    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 	      <ul class="nav navbar-nav">
-	        <li class="active">
+	        <li class="NOactive">
 	        	<a title="<?php _e("Focus", "projectimer-theme"); ?>" href="<?php bloginfo('url'); ?>/focus/" alt="Focalizador">
 					<span id="icone-foc">&nbsp;</span>
 					<?php _e("Focus", "projectimer-theme"); ?>
 				</a>
 	        </li>
-	        <!--li>
-	        	<a href="#">Linka</a>
-	        </li-->
-	        <!--li class="dropdown">
+	        <li>
+	        	<a href="<?php echo get_bloginfo('url'); ?>/calendar"><span class="glyphicon glyphicon-calendar" aria-hidden="true"></span> Calendar</a>
+	        </li>
+	         <li>
+	        	<a href="<?php echo get_bloginfo('url'); ?>/tv"><span class="glyphicon glyphicon-expand" aria-hidden="true"></span> TV</a>
+	        </li>
+	        <!--li class="dropdown">IT ACTUALLY WORKS VERY WELL FOR NEW IMPLEMENTATIONS
 	          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
 	          <ul class="dropdown-menu">
 	            <li><a href="#">Action</a></li>
@@ -950,7 +974,7 @@ function projectimer_show_header_navbar() { ?>
 	      </form-->
 
 	      <ul class="nav navbar-nav navbar-right" id="account-menu">
-	        <li><a href="/teams" alt="Projectimer.com Teams">Teams</a></li>
+	        <li><a href="/teams" alt="Projectimer.com Teams"><span class="glyphicon glyphicon-th" aria-hidden="true"></span> Teams</a></li>
 	        <?php if ( is_user_logged_in() ) { ?> 
 	        <li class="dropdown">
 	          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
@@ -1018,7 +1042,7 @@ function projectimer_main_show_header_buttons() { ?>
 			<a title="<?php _e("Login", "projectimer-plugin"); ?>" id="button_login" tabindex="1" class="btn btn-default" role="button" href="#"><?php _e("Login", "projectimer-plugin"); ?></a>
 		<?php } else { ?> 
 			<a title="<?php _e("Logout", "projectimer-plugin"); ?>" href="<?php echo wp_logout_url(); ?>" class="btn btn-default" role="button"><?php _e("Logout", "projectimer-plugin"); ?></a>
-			<button id="button_login"  class="btn btn-default"><?php global $current_user; wp_get_current_user(); echo $current_user->user_firstname;  ?> Teams</button>
+			<button id="button_login"  class="btn btn-default"><?php global $current_user; wp_get_current_user(); //echo $current_user->user_firstname;  ?> <?php _e("My Teams", "projectimer-plugin"); ?></button>
 			
 		<?php } 
 		//TODO: TOUR IDEIA - VOCE SABIA QUE O POMODOROS.COM.BR É FEITO COM POMODOROS.COM.BR - Aqui todos os colaboradores e fornecedores utilizam o sistema. Nós fazemos o pomodoros usando o pomodoros. Perguntamos para Francisco Matelli, programador do sistema, como era usar a ferramenta. "Do ponto de vista técnico é muito interessante, levando em conta que é uma aplicaćão na nuvem, enquanto estamos programando melhorias para a nova versão, usamos a versão antiga. Depois que a versão na nuvem é atualizada, basta atualizar o navegador e comećamos a trabalhar com a última versão do sistema. O grande segredo, e também grande dificuldade, é fazer essa transićão ser imperceptível para o usuário, não se pode perder nenhuma informaćão durante essas atualizaćões. Por isso que temos sempre duas versões do sistema rolando. Temos até uma terceira versão, porém não posso falar sobre esse projeto nesse momento."
