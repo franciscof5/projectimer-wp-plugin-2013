@@ -465,8 +465,12 @@ function projectimer_update_cycle() {
 	}
 }
 
+
+
 function projectimer_update_recent_activities() {
 	//projectimer_display_recent_activities();
+	//checkCredential();
+	//
 	$site_url = basename(get_bloginfo('url'));
 	$user_actual_page = update_user_meta(get_current_user_id(), $site_url."-user_actual_page", $_POST['user_last_active_page']);
 	$user_last_heartbeat = update_user_meta(get_current_user_id(), $site_url."-user_last_heartbeat", strtotime("now"));
@@ -482,7 +486,7 @@ function projectimer_update_recent_activities() {
 	//$recent_members = bp_core_ajax_widget_members();
 	ob_end_clean();
 	//$response['recent_activity_html'] = "ASDASD";
-	
+	$response['user_credentied'] = checkCredentials();
 	$response['user_actual_page'] = $user_actual_page;
 	$response['user_last_heartbeat'] = $user_last_heartbeat;
 	$response['recent_activity_html'] = $recent_activity_html;

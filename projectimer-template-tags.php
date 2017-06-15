@@ -471,7 +471,9 @@ function projectimer_tab_task_completed_form() {
 	 
 	echo '</ul>';
 }
-
+function checkCredentials() {
+	return is_user_member_of_blog(get_current_user_id());
+}
 // used in ajax either
 function projectimer_display_recent_activities() { 
 	#require("activity/activity-loop.php");
@@ -485,7 +487,7 @@ function projectimer_display_recent_activities() {
 	endif; ?>
 	</ul>
 	<?php */
-
+	//checkCredentials();
 	if (function_exists('bp_has_activities')) { ?>
 	
 	<?php if ( bp_has_activities( bp_ajax_querystring( 'activity' ) ) ) : ?>

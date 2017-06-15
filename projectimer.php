@@ -67,8 +67,78 @@ function use_f5sites_post_table_to_insert( $data , $postarr ) {
 	#	$wpdb->posts="f5sites_posts";
 	#	$wpdb->postmeta="f5sites_postmeta";
 }*/
+add_action( 'bp_directory_blogs_item', 'modify_blog_directory_item_for_projectimer', 10, 2 );
 
-//
+function modify_blog_directory_item_for_projectimer($q) {
+	global $wp_the_query;
+	//revert_database_schema("focalizador");
+	echo "A";
+	//DA PARA LISTAR USUARIOS... tipo 3.... tipo versao do sistema... timezone... idioma
+	//Tempo de trabalho:Descanso: Rendimento:
+	//SITE PUBLICO: Aparece numeros
+	//Plano
+	echo "b_blog_id(): ".bp_get_blog_id()."<br/>";
+
+	switch_to_blog(bp_get_blog_id());
+	$args = array(
+		"post_type"	=> "projectimer_focus",
+		"posts_per_page"		=> -1,
+		'date_query'    => array(
+        	'column'  => 'post_date',
+        	'after'   => '- 30 days'
+    	));
+	$lp = get_posts($args);
+	//var_dump($lp);
+	echo "ciclos de trabalho: ".count($lp);
+	$args = array(
+		"post_type"	=> "projectimer_rest",
+		"posts_per_page"		=> -1,
+		'date_query'    => array(
+        	'column'  => 'post_date',
+        	'after'   => '- 30 days'
+    	));
+	$lr = get_posts($args);
+	echo "ciclos de descanso: ".count($lr);
+	//
+	$users = get_users();
+
+    /*foreach ($users as $user) {
+        update_user_meta($user->ID, 'last_activity', date("Y-m-d H:i:s"));
+    }*/
+	echo "Tamanho do time: ".count($users);
+	$limit=10;
+	$i=0;
+	foreach ($users as $key => $value) {
+		# code...
+		//echo $key.$value;
+		echo "key:".$key;
+		if(function_exists('bp_core_fetch_avatar'))
+			echo bp_core_fetch_avatar(array(
+					"item_id="=>$key,
+					"width"=>16,
+					"height"=>16));
+   		else
+			echo get_avatar(1, 12 );
+			
+		if($i==$limit)
+			return;
+		$i++;
+	}
+	echo " Produtivide per capita: 12";
+	echo "team-type".get_option("projectimer-team-type");
+
+	//echo 
+	//echo " bp_blog_latest_post_title:".bp_blog_latest_post_title();
+	//echo ", bp_total_blog_count";
+	//echo bp_total_blog_count();
+	//var_dump($wp_the_query);*/
+	//bp_blog_name();
+	//restore_current_blog();
+}
+//FOR THEME PROJECTIMER-MAIN
+do_action( 'bp_before_directory_blogs' );
+
+//FOR THEME PROJECTIMER-APP
 add_action( 'init', 'createPostType' );
 add_action( 'init', 'registerSidebar' );
 add_action( 'admin-init', 'wpcodex_set_capabilities' );
@@ -78,7 +148,7 @@ add_action( 'publish_projectimer_focus', 'publish_projectimer_focus_callback' );
 //add_action( 'future_to_publish', 'publish_projectimer_focus_callback');
 //add_action( 'wp_logout','logout_redirect');
 //add_filter( 'logout_url', 'my_logout_page', 10, 2 )
-add_action('wp_logout', 'logout_redirect');;
+//add_action('wp_logout', 'logout_redirect');
 
 add_action( 'admin_menu', 'plugin_admin_add_page');
 add_action( 'show_user_profile', 'my_extra_user_fields' );
@@ -170,10 +240,32 @@ function projectimer_load_scripts() {
 	//echo  dirname( __FILE__  ) . '/locale';
 	//var_dump(load_plugin_textdomain('plugin-projectimer', false, dirname(plugin_basename(__FILE__). '/locale')));die;
 	//var_dump(load_plugin_textdomain('projectimer', false, dirname( __FILE__ ) . '/locale' ));die;
+	
+    
+}
+configureSMTP();
+function configureSMTP() {
+	$swpsmtp_options_default_projectimer = array(
+        'from_email_field' => 'sistema@focalizador.com.br',
+        'from_name_field' => 'Focalizador - Foca no trabalho!',
+        'smtp_settings' => array(
+            'host' => 'smtp.gmail.com',
+            'type_encryption' => 'ssl',
+            'port' => 465,
+            'autentication' => 'yes',
+            'username' => 'fmatelli@gmail.com',
+            'password' => '$167G943O'
+        )
+    );
+	/* install the default plugin options */
+	update_option('swpsmtp_options', $swpsmtp_options_default_projectimer, '', 'yes');
+	//delete_option("swpsmtp_options");
 }
 
-function logout_redirect(  ) {
-	wp_redirect(home_url( '/saida' ));
+add_action( 'wp_logout', 'auto_redirect_external_after_logout');
+function auto_redirect_external_after_logout(){
+		wp_redirect( '/teams' );
+		exit();
 }
 
 function publish_projectimer_focus_callback($post_id){

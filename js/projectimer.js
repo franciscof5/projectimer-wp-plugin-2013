@@ -547,7 +547,10 @@ function update_recent_activities() {
 	//blinkgreen(jQuery("#update_status_icon"));
 	connect_sign();
 	jQuery.post(ajaxurl, data, function(response) {
-		
+		if(response["user_credentied"]==0) {
+			alertify.error("Você foi removido do Time");
+			window.location.href = "/removido";
+		}
 		//lert(response["secondsRemaining"]);
 		//console.log("response[secondsRemaining_from_server]: " + response["secondsRemaining_from_server"]);
 		//if(response!=0)
