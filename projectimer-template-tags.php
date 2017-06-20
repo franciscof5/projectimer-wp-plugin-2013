@@ -582,6 +582,28 @@ function projectimer_display_remove_user_modal() {
 	<?php
 }
 
+function projectimer_display_make_user_admin_modal() {
+	?>
+	<div class="modal fade" tabindex="-1" role="dialog" id="make_user_admin_modal">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	        <h4 class="modal-title">Remove a user from <?php bloginfo('blogname'); ?></h4>
+	      </div>
+	      <div class="modal-body">
+	        <p>You are about to make a user administrator of the team, cannot be undone</p>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-default" data-dismiss="modal">CLOSE</button>
+	        <button type="button" class="btn btn-success" id="button_make_user_admin"><span class="glyphicon glyphicon-star" aria-hidden="true" data-dismiss="modal"><?php _e("MAKE ADMIN", "plugin-projectimer"); ?></button>
+	      </div>
+	    </div><!-- /.modal-content -->
+	  </div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+	<?php
+}
+
 function projectimer_display_recent_activities_load_task_modal() {
 	?>
 	<div class="modal fade" tabindex="-1" role="dialog" id="loadtask_modal">

@@ -206,7 +206,23 @@ function projectimer_remove_user() {
 	return $removed;
 	die;
 }
+function projectimer_make_user_admin() {
+	$target = $_POST['target_user_id'];
+	// NOTE: Of course change 3 to the appropriate user ID
+	//$u = new WP_User( $target );
+	// Remove role
+	//$u->remove_role( 'subscriber' );
+	// Add role
+	//$adminezed = $u->add_role( 'admin' );
+	//$user_id = 3;
+    //$new_role = 'admin';
 
+    //$adminezed = wp_update_user(array('ID'=>$target, 'role'=>$new_role));
+	//$adminezed = remove_user_from_blog($target, get_current_blog_id());
+	//echo $target;
+	return $adminezed;
+	die;
+}
 //
 function projectimer_schedule_cycle() {
 	//

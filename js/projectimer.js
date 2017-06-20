@@ -1242,6 +1242,29 @@ function recent_activities_add_bootstrap_stripes() {
 			jQuery('#remove_user_modal').modal('hide');
 		});
 	});
+	jQuery( ".projectimer_make_user_admin" ).click(function() {
+		console.log("projectimer_make_user_admin()");
+		$targetid = jQuery(this).attr("data-userid");
+
+		//jQuery( "#loginlogbox" ).toggle("slow");
+		jQuery('#make_user_admin_modal').modal('show');
+		jQuery('#button_make_user_admin').click(function() {
+			var data = {
+				action: "projectimer_make_user_admin",
+				target_user_id: $targetid
+			}
+			jQuery.post(ajaxurl, data, function(response) {
+				console.log("response:" + response);
+				if(response && response!=0) {
+					alertify.success("User is now admin");
+				} else {
+					alertify.error("Cannot make user admin");
+				}
+			});
+			
+			jQuery('#make_user_admin_modal').modal('hide');
+		});
+	});
 }
 
 function load_task_by_id(id) {

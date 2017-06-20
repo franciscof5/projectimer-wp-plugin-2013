@@ -77,6 +77,8 @@ function modify_blog_directory_item_for_projectimer($q) {
 	//Tempo de trabalho:Descanso: Rendimento:
 	//SITE PUBLICO: Aparece numeros
 	//Plano
+	//TEAM ADMIN
+	//Total hours:
 	echo "b_blog_id(): ".bp_get_blog_id()."<br/>";
 
 	switch_to_blog(bp_get_blog_id());
@@ -167,7 +169,7 @@ add_action( 'wp_ajax_projectimer_load_currentask_clipboard', 'projectimer_load_c
 
 add_action( 'wp_ajax_projectimer_update_currentask_clipboard', 'projectimer_update_currentask_clipboard');
 add_action( 'wp_ajax_projectimer_remove_user', 'projectimer_remove_user');
-
+add_action( 'wp_ajax_projectimer_make_user_admin', 'projectimer_make_user_admin');
 
 /* TEMPLATE TAGS */
 add_action( 'projectimer_show_clock_simplist', 'projectimer_show_clock_simplist' );
@@ -183,6 +185,7 @@ remove_filter('template_redirect', 'redirect_canonical');
 add_action( 'projectimer_show_header_navbar', 'projectimer_show_header_navbar');
 add_action( 'projectimer_display_login_modal', 'projectimer_display_login_modal' );
 add_action( 'projectimer_display_remove_user_modal', 'projectimer_display_remove_user_modal' );
+add_action( 'projectimer_display_make_user_admin_modal', 'projectimer_display_make_user_admin_modal' );
 add_action( 'projectimer_main_show_header_popups', 'projectimer_main_show_header_popups');
 add_action( 'projectimer_main_show_header_buttons', 'projectimer_main_show_header_buttons' );
 /* INITS */

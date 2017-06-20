@@ -142,13 +142,16 @@ class BP_Core_Members_Widget extends WP_Widget {
 							</div>
 							
 							<?php if(user_can(bp_get_member_user_id(), 'super_administrator')) { ?>
-								<span class="projectimer_team_role" style=<?php if (bp_get_member_user_id()==2) { echo "background-color:#993;color:#FFF;border-radius:5px;font-size:8px;line-height:11px;padding:2px;"; } ?>><?php echo (bp_get_member_user_id()==2) ?  "CEO": "employee"; ?></span>
+								<span class="projectimer_team_role" style=<?php if (bp_get_member_user_id()==2) { echo "background-color:#993;color:#FFF;border-radius:5px;font-size:8px;line-height:11px;padding:2px;"; } ?>><?php echo (bp_get_member_user_id()==2) ?  "CEO": "staff"; ?></span>
 							<?php } elseif(user_can(bp_get_member_user_id(), 'administrator')) { ?>
 								<span class="projectimer_team_role">admin</span>
 							<?php } else { ?>
 								<?php if(current_user_can('administrator')) { ?>
 									<a class="projectimer_remove_user" data-userid="<?php echo bp_get_member_user_id(); ?>">
 										<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+									</a>
+									<a class="projectimer_make_user_admin" data-userid="<?php echo bp_get_member_user_id(); ?>">
+										<span class="glyphicon glyphicon-star" aria-hidden="true"></span>
 									</a>
 									<?php #echo bp_get_member_user_id(); ?>
 									<!--span class="projectimer_team_role">MAKEADMIN</span-->

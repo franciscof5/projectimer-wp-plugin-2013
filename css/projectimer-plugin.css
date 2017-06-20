@@ -159,15 +159,30 @@
 	font-weight: 600;
 	line-height: 10px;
 	border-radius: 5px;
-	
 	height: 18px;
 	background-color: #C33;
 	color: #633;
-
 	/*border: 2px dashed #3A3;border-radius: 5px;*/
+}
+.projectimer_make_user_admin {
+	position: absolute;
+	top: 8px;
+	right: 22px;
+	font-size: 12px;
+	padding: 2px;
+	font-weight: 600;
+	line-height: 10px;
+	border-radius: 5px;
+	height: 18px;
+	background-color: #3a3;
+	color: #060;
 }
 .projectimer_remove_user:hover {
 	background-color: #F33;
+	color: #FFF;
+}
+.projectimer_make_user_admin:hover {
+	background-color: #3a3;
 	color: #FFF;
 }
 .navbar {
