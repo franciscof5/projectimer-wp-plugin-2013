@@ -186,6 +186,7 @@ add_action( 'projectimer_show_header_navbar', 'projectimer_show_header_navbar');
 add_action( 'projectimer_display_login_modal', 'projectimer_display_login_modal' );
 add_action( 'projectimer_display_remove_user_modal', 'projectimer_display_remove_user_modal' );
 add_action( 'projectimer_display_make_user_admin_modal', 'projectimer_display_make_user_admin_modal' );
+add_action( 'projectimer_display_team_settings', 'projectimer_display_team_settings' );
 add_action( 'projectimer_main_show_header_popups', 'projectimer_main_show_header_popups');
 add_action( 'projectimer_main_show_header_buttons', 'projectimer_main_show_header_buttons' );
 /* INITS */

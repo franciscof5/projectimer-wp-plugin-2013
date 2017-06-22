@@ -414,7 +414,7 @@ function projectimer_tab_task_trello () {
 			</div>
 		</div>
 	</div>
-</div>
+	</div>
     */ ?>
 	
 	<!--br style="clear: both" /-->
@@ -545,7 +545,12 @@ function projectimer_display_login_modal() { ?>
 
 					?>
 				<?php } else { ?>
+					<center>
+					<?php do_action( 'wordpress_social_login' ); ?> 
+					
+
 					<?php wp_login_form(); ?>
+					</center>
 					<div style="margin-top:-10px;">
 						<?php do_action( 'bp_after_sidebar_login_form' ); ?>
 					</div>
@@ -557,9 +562,8 @@ function projectimer_display_login_modal() { ?>
 	    </div><!-- /.modal-content -->
 	  </div><!-- /.modal-dialog -->
 	</div><!-- /.modal -->
-<?php } ?>
+<?php } 
 
-<?php
 function projectimer_display_remove_user_modal() {
 	?>
 	<div class="modal fade" tabindex="-1" role="dialog" id="remove_user_modal">
@@ -589,10 +593,10 @@ function projectimer_display_make_user_admin_modal() {
 	    <div class="modal-content">
 	      <div class="modal-header">
 	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-	        <h4 class="modal-title">Remove a user from <?php bloginfo('blogname'); ?></h4>
+	        <h4 class="modal-title">Make a user an Administrator of <?php bloginfo('blogname'); ?></h4>
 	      </div>
 	      <div class="modal-body">
-	        <p>You are about to make a user administrator of the team, cannot be undone</p>
+	        <p>You are about to make a user administrator of the team, caution it cannot be undone</p>
 	      </div>
 	      <div class="modal-footer">
 	        <button type="button" class="btn btn-default" data-dismiss="modal">CLOSE</button>
@@ -802,10 +806,37 @@ function projectimer_display_settings_modal() {
 	}
 }
 
+function projectimer_display_team_settings() {
+	?>
+	<div class="modal fade" tabindex="-1" role="dialog" id="team_settings_modal">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	        <h4 class="modal-title"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Team Settings: <?php bloginfo('blogname'); ?></h4>
+	      </div>
+	      <div class="modal-body">
+	        <p>CHANGE TEAM TYPE AND PLAN</p>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-default" data-dismiss="modal">CLOSE</button>
+	      </div>
+	    </div><!-- /.modal-content -->
+	  </div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+	<?php
+}
 
 // MODAL inners parts 
 function projectimer_display_projectimer_settings_form() { ?>
-	<h3><?php _e("Profile", "plugin-projectimer"); ?></h3>
+	<h3><?php _e("Team Subscription", "plugin-projectimer"); ?></h3>
+	<p>Current subscription: Focalizador - Time Aberto</p>
+	<p>Change the current subscription</p>
+	<select>
+		<option>Time Aberto</option>
+		<option>Team 2</option>
+	</select>
+
 	<?php  #echo "<p>'".bp_profile_field_data( 'field=User Bio' )."'</p>"; ?>
 	<?php
 	$focus_time = get_user_meta(get_current_user_id(), "focus_time", true);
@@ -845,18 +876,19 @@ function projectimer_display_projectimer_settings_form() { ?>
 	</table>
 	<p><?php _e("Time direction", "projectimer-plugin"); ?>:<?php _e("Counterclockwise only for now", "projectimer-plugin"); ?></p>
 	</div>
-	<h3>Version:</h3>
-	<p>For old users and project history porpouses we kept the old versions:</p>
+	<!--h3>Version:</h3>
+	<p>For old users and project history porpouses we kept the old versions:</p!-->
 	
-	<?php echo do_shortcode("[mdc_theme_swicher]"); ?>
+	<?php #echo do_shortcode("[mdc_theme_swicher]"); ?>
 	<h3><?php _e("Language", "projectimer-plugin"); ?></h3>
-
+	<p>Language</p>
 	<h3><?php _e("Download Timesheet (PRO)", "projectimer-plugin"); ?></h3>
 	<p><?php _e("Download a .csv detailed timesheet compatible with LibreOffice Calc and Microsoft Excel (select a template)", "projectimer-plugin"); ?></p>
 	<button id="download_csv" onclick="download_csv()" class="btn btn-primary"><span class="glyphicon glyphicon-download" aria-hidden="true"></span> <?php _e("DOWNLOAD TIMESHEET", "projectimer-plugin"); ?></button>
+	<?php //echo do_shortcode("[wpcsv_export_form]"); ?>
 	<h3><?php _e("Erase site data (PRO)", "projectimer-plugin"); ?></h3>
 	<p><?php _e("Simple and fast way to delete all time and reset site", "projectimer-plugin"); ?></p>
-	<button id="download_csv" onclick="download_csv()" class="btn btn-danger"><span class="glyphicon glyphicon-erase" aria-hidden="true"></span> <?php _e("ERASE SITE DATA", "projectimer-plugin"); ?></button>
+	<button id="erase_site_data" onclick="erase_site_data()" class="btn btn-danger"><span class="glyphicon glyphicon-erase" aria-hidden="true"></span> <?php _e("ERASE SITE DATA", "projectimer-plugin"); ?></button>
 	<?php //_e("Direction", "plugin-projectimer"); Clockwise Counterclockwise ?>
 <?php }
 
@@ -964,6 +996,7 @@ function projectimer_show_header_navbar() { ?>
 
 	    <!-- Collect the nav links, forms, and other content for toggling -->
 	    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+	    <?php if ( is_user_logged_in() ) { ?> 
 	      <ul class="nav navbar-nav">
 	        <li class="NOactive">
 	        	<a title="<?php _e("Focus", "projectimer-theme"); ?>" href="<?php bloginfo('url'); ?>/focus/" alt="Focalizador">
@@ -990,6 +1023,7 @@ function projectimer_show_header_navbar() { ?>
 	          </ul>
 	        </li-->
 	      </ul>
+	      <?php } ?>
 	      <!--form class="navbar-form navbar-left">
 	        <div class="form-group">
 	          <input type="text" class="form-control" placeholder="Search">
@@ -998,7 +1032,11 @@ function projectimer_show_header_navbar() { ?>
 	      </form-->
 
 	      <ul class="nav navbar-nav navbar-right" id="account-menu">
-	        <li><a href="/teams" alt="Projectimer.com Teams"><span class="glyphicon glyphicon-th" aria-hidden="true"></span> Teams</a></li>
+	      
+	        <li><a href="/teams" alt="Team's Ranking"><span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span> Ranking</a></li>
+	        <?php if(current_user_can('administrator')) { ?> 
+	        	<li><a href="#" alt="Team's Settings" id="button_team_settings"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Team Settings</a></li>
+	        <?php } ?>
 	        <?php if ( is_user_logged_in() ) { ?> 
 	        <li class="dropdown">
 	          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
@@ -1029,10 +1067,10 @@ function projectimer_show_header_navbar() { ?>
 	        <?php } else { ?> 
 	        	<li>
 	            	
-	            	<a title="<?php _e("Create an account", "projectimer-plugin"); ?>" href="/register" role="button"><span class="glyphicon glyphicon-bullhorn" aria-hidden="true"></span><?php _e("Sign-up", "projectimer-plugin"); ?></a>
+	            	<a title="<?php _e("Create an account", "projectimer-plugin"); ?>" href="/register" role="button"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> <?php _e("Sign-up", "projectimer-plugin"); ?></a>
 	            <li>
 	            <li>
-	            	<a title="<?php _e("Login", "projectimer-plugin"); ?>" id="button_login" class="open_settings_modal" data-toggle="modal" data-target="#login_modal" tabindex="1" role="button" href="#"><span class="glyphicon glyphicon-bullhorn" aria-hidden="true"></span> <?php _e("Login", "projectimer-plugin"); ?></a>
+	            	<a title="<?php _e("Login", "projectimer-plugin"); ?>" id="button_login" class="open_settings_modal" data-toggle="modal" data-target="#login_modal" tabindex="1" role="button" href="#"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> <?php _e("Login", "projectimer-plugin"); ?></a>
 	            <li>
 	        <?php } ?>
 	      </ul>
@@ -1043,7 +1081,7 @@ function projectimer_show_header_navbar() { ?>
 }
 
 
-// THEME ELEMENTS (focalizador-raiz (main site))
+// THEME ELEMENTS (projectimer-main)
 function projectimer_main_show_header_buttons() { ?>
 	<script type="text/javascript">
 	jQuery().ready(function() {
@@ -1062,7 +1100,7 @@ function projectimer_main_show_header_buttons() { ?>
 	<div id="header-right-buttons">
 		<?php do_action('icl_language_selector'); ?>
 		<?php if ( !is_user_logged_in() ) { ?> 
-			<a title="<?php _e("Create an account", "projectimer-plugin"); ?>" href="/register" class="btn btn-default" role="button"><?php _e("Sign-up", "projectimer-plugin"); ?></a>
+			<a title="<?php _e("Create an account", "projectimer-plugin"); ?>" href="/register" class="btn btn-default" role="button"> <?php _e(" Sign-up", "projectimer-plugin"); ?></a>
 			<a title="<?php _e("Login", "projectimer-plugin"); ?>" id="button_login" tabindex="1" class="btn btn-default" role="button" href="#"><?php _e("Login", "projectimer-plugin"); ?></a>
 		<?php } else { ?> 
 			<a title="<?php _e("Logout", "projectimer-plugin"); ?>" href="<?php echo wp_logout_url(); ?>" class="btn btn-default" role="button"><?php _e("Logout", "projectimer-plugin"); ?></a>
@@ -1150,14 +1188,4 @@ function projectimer_show_clock_futuristic() {
 	<div id="shine"></div>';
 	#echo '<input type="button" value="focus" onclick="action_button()" id="action_button_id" /><div id="div_status" style="background:#FFF;">Teste</div>';
 	wp_enqueue_script("canvas-draw");
-}
-
-/* INTEGRATIONS */
-function projectimer_trello_status() {
-	//wp_enqueue_script('trello-js');
-	/*$key = 'yourkey';
-    $trello = new \Trello\Trello($key);
-    var_dump($trello->boards->get('4d5ea62fd76aa1136000000c'));
-	//wp_enqueue_script('trello-projectimer');
-	echo "You need to authorize Trello API";*/
 }

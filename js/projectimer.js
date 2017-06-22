@@ -149,11 +149,14 @@ function add_click_action_on_interface_buttons() {
 		//FOCUS PÀGE (app)
 		action_button.click(function(){ action_button_press(); })
 	}
+	//HEADER NAVBAR
 	jQuery( "#button_login" ).click(function() {
-		//jQuery( "#loginlogbox" ).toggle("slow");
 		jQuery('#login_modal').modal('show');
 	});
-
+	jQuery('#button_team_settings').click(function() {
+		jQuery('#team_settings_modal').modal('show');
+	});
+	//FOOTER
 	jQuery('#sales_phone').on('click', function(){
 		alertify.log("Finding best Sales number based in your location");
 		blink_animation(jQuery('#sales_phone'));
@@ -264,13 +267,14 @@ function load_user_settings() {
 
 function become_offline() {
 	//if(jQuery("#offline_sign")) {
+	if(!localStorage.getItem('user_last_offline_session')) {
 		alertify.error("You are OFFLINE! Using local storage data for while.");
 		//
 		jQuery("#offline_sign").show();
 		//
 		var data_become_off = new Date();
 		localStorage.setItem('user_last_offline_session', data_become_off);
-	//}
+	}
 }
 
 function after_load_user_settings(userSettingsObject) {
@@ -1428,4 +1432,7 @@ function update_currentask_clipboard () {
 	
 }
 
-//})();
+//EXTRA FUNCTION (settings modal)
+function download_csv() {
+	alertify.log("Função não habilitada");
+}
