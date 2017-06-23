@@ -550,6 +550,7 @@ function projectimer_display_login_modal() { ?>
 					
 
 					<?php wp_login_form(); ?>
+					<a href="<?php echo wp_lostpassword_url( get_bloginfo('url') ); ?>" title="Lost Password">Lost Password</a>
 					</center>
 					<div style="margin-top:-10px;">
 						<?php do_action( 'bp_after_sidebar_login_form' ); ?>
@@ -1100,11 +1101,13 @@ function projectimer_main_show_header_buttons() { ?>
 	<div id="header-right-buttons">
 		<?php do_action('icl_language_selector'); ?>
 		<?php if ( !is_user_logged_in() ) { ?> 
-			<a title="<?php _e("Create an account", "projectimer-plugin"); ?>" href="/register" class="btn btn-default" role="button"> <?php _e(" Sign-up", "projectimer-plugin"); ?></a>
-			<a title="<?php _e("Login", "projectimer-plugin"); ?>" id="button_login" tabindex="1" class="btn btn-default" role="button" href="#"><?php _e("Login", "projectimer-plugin"); ?></a>
+			<a title="<?php _e("Create an account", "projectimer-plugin"); ?>" href="/register" class="btn btn-default" role="button"><!--span class="glyphicon glyphicon-plus" aria-hidden="true"--><?php _e("Sign-up", "projectimer-plugin"); ?></a>
+			
+			<a title="<?php _e("Login", "projectimer-plugin"); ?>" id="button_login" tabindex="1" class="btn btn-default" role="button" href="#"><!--span class="glyphicon glyphicon-log-in" aria-hidden="true"--><?php _e("Login", "projectimer-plugin"); ?></a>
 		<?php } else { ?> 
-			<a title="<?php _e("Logout", "projectimer-plugin"); ?>" href="<?php echo wp_logout_url(); ?>" class="btn btn-default" role="button"><?php _e("Logout", "projectimer-plugin"); ?></a>
-			<button id="button_login"  class="btn btn-default"><?php global $current_user; wp_get_current_user(); //echo $current_user->user_firstname;  ?> <?php _e("My Teams", "projectimer-plugin"); ?></button>
+			<a title="<?php _e("Logout", "projectimer-plugin"); ?>" href="<?php echo wp_logout_url(); ?>" class="btn btn-default" role="button"><!--span class="glyphicon glyphicon-log-out" aria-hidden="true"--><?php _e("Logout", "projectimer-plugin"); ?></a>
+			
+			<button id="button_login"  class="btn btn-default"><?php global $current_user; wp_get_current_user(); //echo $current_user->user_firstname;  ?><!--span class="glyphicon glyphicon-th" aria-hidden="true"--><?php _e("Teams", "projectimer-plugin"); ?></button>
 			
 		<?php } 
 		//TODO: TOUR IDEIA - VOCE SABIA QUE O POMODOROS.COM.BR É FEITO COM POMODOROS.COM.BR - Aqui todos os colaboradores e fornecedores utilizam o sistema. Nós fazemos o pomodoros usando o pomodoros. Perguntamos para Francisco Matelli, programador do sistema, como era usar a ferramenta. "Do ponto de vista técnico é muito interessante, levando em conta que é uma aplicaćão na nuvem, enquanto estamos programando melhorias para a nova versão, usamos a versão antiga. Depois que a versão na nuvem é atualizada, basta atualizar o navegador e comećamos a trabalhar com a última versão do sistema. O grande segredo, e também grande dificuldade, é fazer essa transićão ser imperceptível para o usuário, não se pode perder nenhuma informaćão durante essas atualizaćões. Por isso que temos sempre duas versões do sistema rolando. Temos até uma terceira versão, porém não posso falar sobre esse projeto nesse momento."

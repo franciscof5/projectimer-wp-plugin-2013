@@ -200,11 +200,19 @@ function colunsHeightAlwaysTheSame() {
 	
 		//alertify.log("changed");
 		//hei = jQuery( document ).height()-jQuery(".navbar").height() - jQuery("#footer").height();
-		hei = jQuery("#task_form").height() + jQuery("#clock-container").height() +20; //MARGIN NEGATIVE OF CLOCK-CONTAINER
+		heiElements = jQuery(".navbar").height()+jQuery("#footer").height();
+		heiMin = jQuery("#task_form").height() + jQuery("#clock-container").height()-heiElements;// +20; //MARGIN NEGATIVE OF CLOCK-CONTAINER
+		if(heiMin<800)
+			heiMin=800;
+		heiWieport = jQuery(window).height()-heiElements;
 		//alert(hei);
-		jQuery("#content_column").height(hei);
-		jQuery("#activity_sidebar").height(hei);
-		jQuery("#default_sidebar").height(hei-20);//ELEMENT PADING
+		hei = heiWieport;
+		if(heiWieport<heiMin)
+			hei = heiMin-150;
+		jQuery("#default_sidebar").height(hei);//ELEMENT PADING
+		jQuery("#content_column").height(hei-40);
+		jQuery("#activity_sidebar").height(hei+20);
+		
 }
 
 function load_user_settings() {

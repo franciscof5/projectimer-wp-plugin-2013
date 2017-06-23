@@ -85,6 +85,10 @@
 	padding: 50px;
 }
 
+/*#content_column {
+	min-height: 800px;
+}*/
+
 #content_column, #activity_sidebar, #default_sidebar {
 	padding:0
 }
