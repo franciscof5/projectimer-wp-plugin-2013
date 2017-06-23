@@ -189,6 +189,13 @@ add_action( 'projectimer_display_make_user_admin_modal', 'projectimer_display_ma
 add_action( 'projectimer_display_team_settings', 'projectimer_display_team_settings' );
 add_action( 'projectimer_main_show_header_popups', 'projectimer_main_show_header_popups');
 add_action( 'projectimer_main_show_header_buttons', 'projectimer_main_show_header_buttons' );
+add_action('wp_head', 'myplugin_ajaxurl');
+
+function myplugin_ajaxurl() {
+   echo '<script type="text/javascript">
+           var ajaxurl = "' . admin_url('admin-ajax.php') . '";
+         </script>';
+}
 /* INITS */
 function projectimer_load_scripts() {	
 	//LOADED AFTER CHECK ACTIVIVY

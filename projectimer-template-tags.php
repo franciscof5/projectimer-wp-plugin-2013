@@ -474,22 +474,22 @@ function projectimer_tab_task_completed_form() {
 function checkCredentials() {
 	return is_user_member_of_blog(get_current_user_id());
 }
+
+function projectimer_display_active_projectimers() {
+	?>
+	<ul id="active-projectimers">
+		<li>Francisco - Tarefa 1 (2x), 3/4 ciclo, 22min</li>
+		<li>Mathias - Tarefa 1 (2x), 3/4 ciclo, 22min</li>
+	</ul>
+	<?php
+}
+
 // used in ajax either
 function projectimer_display_recent_activities() { 
-	#require("activity/activity-loop.php");
-	/*?>
-	<ul id="recent-activities">
-	<?php if ( bp_has_activities( bp_ajax_querystring( 'activity' ) ) ) :
-	   while ( bp_activities() ) : bp_the_activity();
-		locate_template( array( 'activity/entry.php' ), true, false ); 
-	 
-	   endwhile;
-	endif; ?>
-	</ul>
-	<?php */
-	//checkCredentials();
+	//
+	projectimer_display_active_projectimers();
+	//
 	if (function_exists('bp_has_activities')) { ?>
-	
 	<?php if ( bp_has_activities( bp_ajax_querystring( 'activity' ) ) ) : ?>
 		<ul id="recent-activities">
 		<?php 
@@ -550,7 +550,7 @@ function projectimer_display_login_modal() { ?>
 					
 
 					<?php wp_login_form(); ?>
-					<a href="<?php echo wp_lostpassword_url( get_bloginfo('url') ); ?>" title="Lost Password">Lost Password</a>
+					<a href="<?php echo wp_lostpassword_url( get_bloginfo('url') ); ?>" title="Lost Password">Recuperar senha</a>
 					</center>
 					<div style="margin-top:-10px;">
 						<?php do_action( 'bp_after_sidebar_login_form' ); ?>
