@@ -127,7 +127,7 @@ function modify_blog_directory_item_for_projectimer($q) {
 		$i++;
 	}
 	echo " Produtivide per capita: 12";
-	echo "team-type".get_option("projectimer-team-type");
+	echo "team-type".get_option("teamType");
 
 	//echo 
 	//echo " bp_blog_latest_post_title:".bp_blog_latest_post_title();

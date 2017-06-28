@@ -206,6 +206,7 @@ function projectimer_remove_user() {
 	return $removed;
 	die;
 }
+
 function projectimer_make_user_admin() {
 	$target = $_POST['target_user_id'];
 	// NOTE: Of course change 3 to the appropriate user ID
@@ -498,6 +499,8 @@ function projectimer_update_recent_activities() {
 	//ob_flush();
 	if(!ob_start("ob_gzhandler")) ob_start();
 	the_widget("BP_Core_Members_Widget", "Team's Members");
+	echo "<hr /><br />&nbsp;<br />";
+	the_widget("InviteAnyoneWidget", "title=Convites&instruction_text=Insira email de colegas");
 	$recent_members = ob_get_contents();
 	//$recent_members = bp_core_ajax_widget_members();
 	ob_end_clean();

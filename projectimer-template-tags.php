@@ -703,9 +703,12 @@ function projectimer_display_settings_modal() {
 						<?php do_action('projectimer_display_teams'); ?>
 						<h3><span class="glyphicon glyphicon-user" aria-hidden="true"></span>Teams</h3>
 						<p>Convide membros</p>
-						<iframe src="http://projectimer.com/f5sites/members/francisco/invite-anyone/" style="width: 100%; height: 200px;"></iframe>
+						
+						
 						<?php 
-							$wrapperPage = file_get_contents('http://projectimer.com/f5sites/members/francisco/invite-anyone/'); 
+							the_widget("InviteAnyoneWidget");
+							//<iframe src="http://projectimer.com/f5sites/members/francisco/invite-anyone/" style="width: 100%; height: 200px;"></iframe>
+							//$wrapperPage = file_get_contents('http://projectimer.com/f5sites/members/francisco/invite-anyone/'); 
 							//@include("http://projectimer.com/f5sites/members/francisco/invite-anyone/");
 							//var_dump($wrapperPage);
 							//echo $wrapperPage;//the_widget('[invite-anyone]');
@@ -817,7 +820,20 @@ function projectimer_display_team_settings() {
 	        <h4 class="modal-title"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Team Settings: <?php bloginfo('blogname'); ?></h4>
 	      </div>
 	      <div class="modal-body">
-	        <p>CHANGE TEAM TYPE AND PLAN</p>
+	        <p><?php 
+				//switch_to_blog(1);
+				//echo get_blog_option(get_current_blog_id(), "teamType");
+				teamTypeSelect(get_blog_option(get_current_blog_id(), "teamType"));
+				echo "<hr />";
+				listSubscriptios(get_blog_option(get_current_blog_id(), "subscription_id"));
+				//echo get_blog_option(get_current_blog_id(), "subscription_name");
+				//echo $curSubs = get_blog_option(get_current_blog_id(), "subscription_id");
+				//echo "<hr />AAAA";
+				//echo get_post_meta($curSubs, "blog_id", true);
+				//restore_current_blog();
+				/*if(function_exists("listSubscriptios")) {
+				listSubscriptios();
+	        }*/ ?></p>
 	      </div>
 	      <div class="modal-footer">
 	        <button type="button" class="btn btn-default" data-dismiss="modal">CLOSE</button>

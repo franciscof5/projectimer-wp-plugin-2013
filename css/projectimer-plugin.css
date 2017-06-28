@@ -833,14 +833,15 @@ ul.item-list li.load-more {
 .my-account .widget {
 	display: none; /*HACK*/
 }
-/*PAGE MEMEBERS*/
+
+/*PAGE MEMBERS
 .activity-comments, .activity-meta {
 	display: none;
 }
 
 .item-list-tabs {
 	display: none;
-}
+}*/
 
 #members-list {
 	padding:0;
