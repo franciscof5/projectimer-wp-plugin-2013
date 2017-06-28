@@ -137,6 +137,13 @@ function modify_blog_directory_item_for_projectimer($q) {
 	//bp_blog_name();
 	//restore_current_blog();
 }
+function redirect_non_admin_user(){
+    if ( !defined( 'DOING_AJAX' ) && !current_user_can('super_admin') ){
+        wp_redirect( site_url() );  exit;
+    } 
+}
+
+add_action( 'admin_init', 'redirect_non_admin_user' );
 //FOR THEME PROJECTIMER-MAIN
 do_action( 'bp_before_directory_blogs' );
 
