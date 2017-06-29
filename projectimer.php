@@ -70,50 +70,37 @@ function use_f5sites_post_table_to_insert( $data , $postarr ) {
 add_action( 'bp_directory_blogs_item', 'modify_blog_directory_item_for_projectimer', 10, 2 );
 
 function modify_blog_directory_item_for_projectimer($q) {
-	global $wp_the_query;
+	//global $wp_the_query;
 	//revert_database_schema("focalizador");
-	echo "A";
 	//DA PARA LISTAR USUARIOS... tipo 3.... tipo versao do sistema... timezone... idioma
 	//Tempo de trabalho:Descanso: Rendimento:
 	//SITE PUBLICO: Aparece numeros
 	//Plano
 	//TEAM ADMIN
 	//Total hours:
-	echo "b_blog_id(): ".bp_get_blog_id()."<br/>";
-
+	//echo "b_blog_id(): ".bp_get_blog_id()."<br/>";
+	$blog_id = bp_get_blog_id();
 	switch_to_blog(bp_get_blog_id());
-	$args = array(
-		"post_type"	=> "projectimer_focus",
-		"posts_per_page"		=> -1,
-		'date_query'    => array(
-        	'column'  => 'post_date',
-        	'after'   => '- 30 days'
-    	));
-	$lp = get_posts($args);
-	//var_dump($lp);
-	echo "ciclos de trabalho: ".count($lp);
-	$args = array(
-		"post_type"	=> "projectimer_rest",
-		"posts_per_page"		=> -1,
-		'date_query'    => array(
-        	'column'  => 'post_date',
-        	'after'   => '- 30 days'
-    	));
-	$lr = get_posts($args);
-	echo "ciclos de descanso: ".count($lr);
+	$blod_date_registered = get_blog_details( bp_get_blog_id())->registered;
+	$phpdate = strtotime( $blod_date_registered );
+	//
+	echo "Type: ".get_option("teamType")." | ";
+	//echo "Registrado: ".$blod_date_registered." | ";
+	echo "Registrado: ".human_time_diff( date("U", $phpdate), current_time('timestamp') )." | ";
+	
+	//
+	//echo "Assinatura: ".get_option("subscription_id")." | ";
 	//
 	$users = get_users();
+	echo "Tamanho do time: ".$team_size=count($users)."  ";
 
-    /*foreach ($users as $user) {
-        update_user_meta($user->ID, 'last_activity', date("Y-m-d H:i:s"));
-    }*/
-	echo "Tamanho do time: ".count($users);
+	/*
+	//Display 10 users
 	$limit=10;
 	$i=0;
-	foreach ($users as $key => $value) {
+	foreach ($users as $key) {
 		# code...
-		//echo $key.$value;
-		echo "key:".$key;
+		echo "key:".$key->ID;
 		if(function_exists('bp_core_fetch_avatar'))
 			echo bp_core_fetch_avatar(array(
 					"item_id="=>$key,
@@ -125,9 +112,46 @@ function modify_blog_directory_item_for_projectimer($q) {
 		if($i==$limit)
 			return;
 		$i++;
-	}
-	echo " Produtivide per capita: 12";
-	echo "team-type".get_option("teamType");
+	}*/
+	//SHARED POSTS PLUGIN BROKE THAT
+	/*global $wpdb;
+	$wpdb->posts="focalizador_20_posts";
+	$wpdb->postmeta="focalizador_20_postmeta";
+	//
+	$args = array(
+		"post_type"	=> "projectimer_focus",
+		"posts_per_page"		=> -1,
+		//'date_query'    => array(
+        //	'column'  => 'post_date',
+        //	'after'   => '- 30 days'
+    	//)
+    	);
+	$lp = get_posts($args);
+	//var_dump($lp);
+	//
+	$args = array(
+		"post_type"	=> "projectimer_rest",
+		"posts_per_page"		=> -1,
+		'date_query'    => array(
+        	'column'  => 'post_date',
+        	'after'   => '- 30 days'
+    	));
+	$lr = get_posts($args);*/
+	//game_date between '2012-03-11 00:00:00' and '2012-05-11 23:59:00' 
+	//DATE(dErstellt) > (NOW() - INTERVAL 7 DAY)
+	global $wpdb;
+	//$team_focus = $wpdb->get_results( "SELECT ID,post_type FROM focalizador_".$blog_id."_posts WHERE post_type='projectimer_focus'" );
+	$team_rest = $wpdb->get_results( "SELECT ID,post_type FROM focalizador_".$blog_id."_posts WHERE post_type='projectimer_rest'" );
+
+	$team_focus = $wpdb->get_results( "SELECT ID,post_type,post_date FROM focalizador_".$blog_id."_posts WHERE post_type='projectimer_focus' AND DATE(post_date) > (NOW() - INTERVAL 7 DAY) " );
+
+	//
+	echo "<br />";
+	echo "Ciclos de trabalho: ".$total_work_cycles=count($team_focus);
+	echo ", descanso: ".$total_rest_cycles=count($lr);
+	//
+	$productivity_per_capita = number_format((float)($total_work_cycles/$team_size/7), 2, '.', '');
+	echo " | Produtivide per capita:".$productivity_per_capita." (7 dias)";
 
 	//echo 
 	//echo " bp_blog_latest_post_title:".bp_blog_latest_post_title();

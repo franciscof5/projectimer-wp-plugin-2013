@@ -498,7 +498,16 @@ function projectimer_update_recent_activities() {
 	ob_end_clean();
 	//ob_flush();
 	if(!ob_start("ob_gzhandler")) ob_start();
-	the_widget("BP_Core_Members_Widget", "Team's Members");
+	/*$argsm = array(
+      'title'        => __( 'Memberssss', 'buddypress' ),
+      'max_members'    => 15,
+      'member_default' => 'active',
+      'link_title'    => false
+    );*/
+    the_widget("BP_Core_Members_Widget", "title=Membros&max_members=99");
+	//the_widget("BP_Core_Members_Widget", "Team's Members");
+	
+	//
 	echo "<hr /><br />&nbsp;<br />";
 	the_widget("InviteAnyoneWidget", "title=Convites&instruction_text=Insira email de colegas");
 	$recent_members = ob_get_contents();

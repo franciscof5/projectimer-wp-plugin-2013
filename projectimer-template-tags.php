@@ -9,7 +9,9 @@ function projectimer_show_clock_simplist() {
 		<div id="offline_sign_triangle" class="triangle"></div>
 		<span id="offline_sign_icon" class="glyphicon glyphicon-ban-circle" aria-hidden="true"  data-toggle="popover" data-title="No server connection..." data-content="<?php _e("You have no internet connection or are working offline, local data and cache will be used untill next time online syncronization.", "plugin-projectimer"); ?>" data-placement="bottom"></span>
 	</div>
-
+	<!--div id="lights">
+		<button class="btn btn-default"><span class="glyphicon glyphicon-adjust" aria-hidden="true"></span></button>
+	</div-->
 	<div id="clock-container">
 		<button id="action_button" tabindex="1" disabled="disabled" /></button>
 	
@@ -422,8 +424,6 @@ function projectimer_tab_task_trello () {
 
 }
 
-
-
 function projectimer_tab_task_completed_form() {
 	?>
 	<h3>Completed Models</h3>
@@ -471,6 +471,7 @@ function projectimer_tab_task_completed_form() {
 	 
 	echo '</ul>';
 }
+
 function checkCredentials() {
 	return is_user_member_of_blog(get_current_user_id());
 }
@@ -826,6 +827,9 @@ function projectimer_display_team_settings() {
 				teamTypeSelect(get_blog_option(get_current_blog_id(), "teamType"));
 				echo "<hr />";
 				listSubscriptios(get_blog_option(get_current_blog_id(), "subscription_id"));
+				echo "<hr />";
+				echo "Timezone: GMT -3";
+				echo " | Privacidade: Fechado";
 				//echo get_blog_option(get_current_blog_id(), "subscription_name");
 				//echo $curSubs = get_blog_option(get_current_blog_id(), "subscription_id");
 				//echo "<hr />AAAA";
@@ -1050,7 +1054,7 @@ function projectimer_show_header_navbar() { ?>
 
 	      <ul class="nav navbar-nav navbar-right" id="account-menu">
 	      
-	        <li><a href="/teams" alt="Team's Ranking"><span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span> Ranking</a></li>
+	        <li><a href="/teams" alt="Team's Ranking"><span class="glyphicon glyphicon-stats" aria-hidden="true"></span> Ranking</a></li>
 	        <?php if(current_user_can('administrator')) { ?> 
 	        	<li><a href="#" alt="Team's Settings" id="button_team_settings"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Team Settings</a></li>
 	        <?php } ?>
