@@ -50,8 +50,7 @@ var tags_list;
 	};
 }			
 
-var Foo = function()
-{
+/*var Foo = function() {
 
     var privateStaticMethod = function() {};
     var privateStaticVariable = "foo";
@@ -65,7 +64,7 @@ var Foo = function()
     constructor.publicStaticMethod = function() {};
 
     return constructor;
-}();
+}();*/
 
 //LOADING USER DATA
 jQuery( document ).ready(function($) {
@@ -74,21 +73,13 @@ jQuery( document ).ready(function($) {
 	//
 	action_button = jQuery("#action_button");
 	//
-	if(action_button) {
-
-		//alert(data_off<data_loaded_timer);
-		//alert(last);
-		//alert(data_loaded_timer);
-		//.getTime()
-		//if(last<)
-		//
-		jQuery('[data-toggle="popover"]').popover({"trigger":"hover"});
-		//
-		colunsHeightAlwaysTheSame();jQuery( window ).resize(function() {colunsHeightAlwaysTheSame()});
-		//
+	if(action_button) {//PAGE FOCUS
+		//INTERFACE
+		colunsHeightAlwaysTheSame();
+		jQuery( window ).resize(function() {colunsHeightAlwaysTheSame()});
 		add_click_action_on_interface_buttons();//removed from html
-		//
-		recent_activities_add_bootstrap_stripes();    
+		recent_activities_add_bootstrap_stripes();//improve beuaty
+		jQuery('[data-toggle="popover"]').popover({"trigger":"hover"});//pop info icons
 		//
 		load_task_by_id();
 		//
@@ -211,8 +202,7 @@ function colunsHeightAlwaysTheSame() {
 			hei = heiMin-150;
 		jQuery("#default_sidebar").height(hei);//ELEMENT PADING
 		jQuery("#content_column").height(hei-40);
-		jQuery("#activity_sidebar").height(hei+20);
-		
+		jQuery("#activity_sidebar").height(hei+20);	
 }
 
 function load_user_settings() {

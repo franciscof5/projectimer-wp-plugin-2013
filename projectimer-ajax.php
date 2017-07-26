@@ -248,7 +248,7 @@ function projectimer_schedule_cycle() {
 		'tags_input' => $_POST['post_tags'],
 		//'post_category' => array(0),
 		'post_date_gmt' => $postdate,
-		'post_date' => $postdate,
+		//'post_date' => $postdate,
 		'post_status' => 'future',
 	);
 	

@@ -477,11 +477,25 @@ function checkCredentials() {
 }
 
 function projectimer_display_active_projectimers() {
+	$args = array(
+		"post_type"=>"projectimer_focus",
+		"post_status"=>"future");
+	$act_cycles = get_posts($args);
+	foreach ($act_cycles as $cycle) {
+		echo get_the_author_meta("display_name", $cycle->post_author);
+		echo ", ";
+		echo $cycle->post_name;
+		echo ", ";
+		$phpdate = strtotime( $cycle->post_date_gmt );
+		echo human_time_diff( date("U", $phpdate), current_time('timestamp') );
+		echo ", Itapetininga, PC";
+	}
+	//var_dump($act_cycles);
 	?>
-	<ul id="active-projectimers">
+	<!--ul id="active-projectimers">
 		<li>Francisco - Tarefa 1 (2x), 3/4 ciclo, 22min</li>
 		<li>Mathias - Tarefa 1 (2x), 3/4 ciclo, 22min</li>
-	</ul>
+	</ul-->
 	<?php
 }
 
