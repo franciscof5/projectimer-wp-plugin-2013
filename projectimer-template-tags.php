@@ -933,7 +933,7 @@ function projectimer_display_projectimer_settings_form() { ?>
 function projectimer_display_teams() {
 	if(is_user_logged_in()) { ?>
 		<?php
-		$blogs = get_blogs_of_user(get_current_user_id());
+		$blogs = get_sites(get_current_user_id());#updated 4.7 get_blogs_of_user
 
 		if ( !empty($blogs) ) { ?>
 			<h3><span class="glyphicon glyphicon-th" aria-hidden="true"></span><?php _e( 'My Teams' ) ?></h3>

@@ -67,7 +67,6 @@ function use_f5sites_post_table_to_insert( $data , $postarr ) {
 	#	$wpdb->posts="f5sites_posts";
 	#	$wpdb->postmeta="f5sites_postmeta";
 }*/
-add_action( 'bp_directory_blogs_item', 'modify_blog_directory_item_for_projectimer', 10, 2 );
 
 function modify_blog_directory_item_for_projectimer($q) {
 	//global $wp_the_query;
@@ -182,12 +181,14 @@ add_action( 'publish_projectimer_focus', 'publish_projectimer_focus_callback' );
 //add_action( 'wp_logout','logout_redirect');
 //add_filter( 'logout_url', 'my_logout_page', 10, 2 )
 //add_action('wp_logout', 'logout_redirect');
-
+add_action( 'wp_logout', 'auto_redirect_external_after_logout');
 add_action( 'admin_menu', 'plugin_admin_add_page');
 add_action( 'show_user_profile', 'my_extra_user_fields' );
 add_action( 'edit_user_profile', 'my_extra_user_fields' );
 add_action( 'personal_options_update', 'save_my_extra_user_fields' );
 add_action( 'edit_user_profile_update', 'save_my_extra_user_fields' );
+add_action( 'bp_directory_blogs_item', 'modify_blog_directory_item_for_projectimer', 10, 2 );
+
 //AJAX
 add_action( 'wp_ajax_projectimer_update_user_meta', 'projectimer_update_user_meta');
 add_action( 'wp_ajax_projectimer_load_user_settings', 'projectimer_load_user_settings');
@@ -285,7 +286,7 @@ function projectimer_load_scripts() {
 	
     
 }
-configureSMTP();
+#configureSMTP();
 function configureSMTP() {
 	$swpsmtp_options_default_projectimer = array(
         'from_email_field' => 'sistema@focalizador.com.br',
@@ -304,7 +305,7 @@ function configureSMTP() {
 	//delete_option("swpsmtp_options");
 }
 
-add_action( 'wp_logout', 'auto_redirect_external_after_logout');
+
 function auto_redirect_external_after_logout(){
 		wp_redirect( '/teams' );
 		exit();
