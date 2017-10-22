@@ -838,7 +838,10 @@ function projectimer_display_team_settings() {
 	        <p><?php 
 				//switch_to_blog(1);
 				//echo get_blog_option(get_current_blog_id(), "teamType");
-				teamTypeSelect(get_blog_option(get_current_blog_id(), "teamType"));
+	        	if(function_exists("teamTypeSelect"))
+					teamTypeSelect(get_blog_option(get_current_blog_id(), "teamType"));
+				else
+					echo " please active f5sites-woocommerce-wpmu-subscriptio-check plugin";
 				echo "<hr />";
 				listSubscriptios(get_blog_option(get_current_blog_id(), "subscription_id"));
 				echo "<hr />";
