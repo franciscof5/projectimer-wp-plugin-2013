@@ -973,3 +973,29 @@ ul.item-list li.load-more {
 .triangle:after {
 	transform: rotate(135deg) skewY(-45deg) scale(.707,1.414) translate(50%);
 }
+
+/**/
+.collapse.width {
+    height: auto;
+    -webkit-transition: width 0.35s ease;
+    -moz-transition: width 0.35s ease;
+    -o-transition: width 0.35s ease;
+    transition: width 0.35s ease;
+}
+
+/* arrow collpase */
+.collapse_button {
+    border: 0 none;
+    position: absolute;
+    top: 50%;
+    z-index: 999;
+}
+.collapse_button:hover {
+	color: #FFF;
+}
+.coll_left {
+	right: -5px;
+}
+.coll_righ {
+	left: -5px;
+}

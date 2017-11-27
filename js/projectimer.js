@@ -556,7 +556,7 @@ function update_recent_activities() {
 		//lert(response["secondsRemaining"]);
 		//console.log("response[secondsRemaining_from_server]: " + response["secondsRemaining_from_server"]);
 		//if(response!=0)
-		jQuery("#default_sidebar").html(response["recent_members_html"]);
+		jQuery("#default_sidebar_in").html(response["recent_members_html"]);
 		//
 		jQuery("#recent-activities").parent().html(response["recent_activity_html"]);
 		jQuery(".addclick").parent().parent().click(function() {
