@@ -95,8 +95,10 @@ jQuery( document ).ready(function($) {
 				preferFlash: false,
 				onready: function() {
 					soundmanag = true;
-					active_sound = soundManager.createSound({id: 'active_sound',url: pluginDir+'/sounds/crank-2.mp3',});
-					end_sound = soundManager.createSound({id:'end_sound',url: pluginDir+'/sounds/telephone-ring-1.mp3',});
+					active_sound = soundManager.createSound({id: 'active_sound',url: pluginDir+'/sounds/'+userSettingsObject["active_sound"],});
+					interrupt = soundManager.createSound({id:'interrupt',url: pluginDir+'/sounds/'+userSettingsObject["interrupt"],});
+					end_sound_rest = soundManager.createSound({id:'end_sound_rest',url: pluginDir+'/sounds/'+userSettingsObject["end_sound_rest"],});
+					end_sound_focus = soundManager.createSound({id:'end_sound_focus',url: pluginDir+'/sounds/'+userSettingsObject["end_sound_focus"],});
 					// Ready to use; soundManager.createSound() etc. can now be called.
 				}
 			});
@@ -687,6 +689,9 @@ function focus_set() {
 	secondsRemaining = user_focus_time;
 	//update_user_meta("secondsRemaining", user_focus_time);
 	stop_count();
+	if(soundmanag)
+	end_sound_rest.play();
+	//
 	update_status_message("ready to focus?");
 	is_rest = false;
 	paint_site("#4b8394", 3500);//337ab7
@@ -695,6 +700,9 @@ function focus_set() {
 function rest_set() {
 	console.log("rest_set()");
 	stop_count();
+	if(soundmanag)
+	end_sound_focus.play();
+	//
 	secondsRemaining = user_rest_time;
 	update_status_message("get some rest");
 	update_action_button_label(convertSeconds(secondsRemaining));
@@ -710,8 +718,8 @@ function stop_count() {
 	console.log("stop_count()");
 	original_document_title=original_document_title;
 	
-	if(soundmanag)
-	end_sound.play();
+	//if(soundmanag)
+	//end_sound.play();
 	
 	clearInterval(is_countdown_active);
 	is_countdown_active=false;
@@ -727,7 +735,9 @@ function interrupt_count() {
 	//pomodoro_completed_sound.play();
 	//update_status_message(txt_interrupt_counted_countdowns);
 	stop_count();
-
+	if(soundmanag)
+	interrupt.play();
+	//
 	//convertSeconds(0);
 	//flip_number();
 	//change_button(textPomodoro, "#063");

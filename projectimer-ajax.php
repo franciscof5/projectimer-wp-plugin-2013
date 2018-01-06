@@ -159,6 +159,10 @@ function projectimer_load_user_settings() {
 		$user['tipe'] =  get_post_type($id);
 		$user['tags_list'] = get_projectimer_tags(NULL);
 		$user['extra'] = $current_user_scheduled_cycle;
+		$user['active_sound'] = "crank-2.mp3";
+		$user['interrupt'] = "telephone-ring-1.mp3";
+		$user['end_sound_rest'] = "telephone-ring-1.mp3";
+		$user['end_sound_focus'] = "telephone-ring-1.mp3";
 		//
 		file_put_contents('php://stderr', print_r($user, TRUE));
 		header('Content-type: application/json');//CRUCIAL
