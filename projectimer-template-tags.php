@@ -1045,7 +1045,10 @@ function projectimer_show_header_navbar() { ?>
 	        <li>
 	        	<a href="<?php echo get_bloginfo('url'); ?>/calendar"><span class="glyphicon glyphicon-calendar" aria-hidden="true"></span> Calendar</a>
 	        </li>
-	         <li>
+	        <li>
+	        	<a href="<?php echo get_bloginfo('url'); ?>/ranking"><span class="glyphicon glyphicon-stats" aria-hidden="true"></span> Ranking</a>
+	        </li>
+	        <li>
 	        	<a href="<?php echo get_bloginfo('url'); ?>/tv"><span class="glyphicon glyphicon-expand" aria-hidden="true"></span> TV</a>
 	        </li>
 	        <!--li class="dropdown">IT ACTUALLY WORKS VERY WELL FOR NEW IMPLEMENTATIONS
@@ -1071,7 +1074,7 @@ function projectimer_show_header_navbar() { ?>
 
 	      <ul class="nav navbar-nav navbar-right" id="account-menu">
 	      
-	        <li><a href="/teams" alt="Team's Ranking"><span class="glyphicon glyphicon-stats" aria-hidden="true"></span> Ranking</a></li>
+	        <!--li><a href="/teams" alt="Team's Ranking"><span class="glyphicon glyphicon-stats" aria-hidden="true"></span> Ranking</a></li-->
 	        <?php if(current_user_can('administrator')) { ?> 
 	        	<li><a href="#" alt="Team's Settings" id="button_team_settings"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Team Settings</a></li>
 	        <?php } ?>

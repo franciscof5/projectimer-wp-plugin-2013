@@ -989,13 +989,15 @@ ul.item-list li.load-more {
     position: absolute;
     top: 50%;
     z-index: 999;
+    background: #E6E6E6;
 }
 .collapse_button:hover {
 	color: #FFF;
+	background: #333;
 }
-.coll_left {
+.collapse_left {
 	right: -5px;
 }
-.coll_righ {
+.collapse_righ {
 	left: -5px;
 }
