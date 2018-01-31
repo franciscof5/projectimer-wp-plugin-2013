@@ -89,9 +89,7 @@ function projectimer_tab_task_form () {
 					<span class="glyphicon glyphicon-info-sign glyinfo" aria-hidden="true" data-toggle="popover" data-title="<?php _e("Project Tags (PRO)", "plugin-projectimer"); ?>" data-content="<?php _e("Use you creativity, tags can be used to track time for clients, projects, milestones, study, and whetever you need. All tags are shared with team members.", "plugin-projectimer"); ?>" data-placement="right"></span>
 				</label>
 				<div class="col-sm-8">
-					<select id="tags_box" class="js-example-tags form-control" multiple="multiple" placeholder="Does not work, use data-placeholder with js trick"  data-placeholder="project1, project2...">
-					
-					</select>
+					<select id="tags_box" class="js-example-tags form-control" multiple="multiple" placeholder="Does not work, use data-placeholder with js trick"  data-placeholder="project1, project2..."></select>
 				</div>
 			</div>
 
@@ -933,7 +931,7 @@ function projectimer_display_projectimer_settings_form() { ?>
 function projectimer_display_teams() {
 	if(is_user_logged_in()) { ?>
 		<?php
-		$blogs = get_sites(get_current_user_id());#updated 4.7 get_blogs_of_user
+		$blogs = get_blogs_of_user(get_current_user_id());#updated 4.7 get_blogs_of_user #get_sites
 
 		if ( !empty($blogs) ) { ?>
 			<h3><span class="glyphicon glyphicon-th" aria-hidden="true"></span><?php _e( 'My Teams' ) ?></h3>

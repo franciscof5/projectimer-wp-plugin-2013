@@ -1,4 +1,13 @@
 <?php
+/**/
+function checkLogin() {
+	if(!get_current_user_id()) {
+		header('Content-type: application/json');//CRUCIAL
+		echo json_encode("NOTIN");
+		die();
+	}
+}
+
 /* AJAX FUNCTIONS */
 function get_current_postid_for_user($userid) {
 	$args = array(

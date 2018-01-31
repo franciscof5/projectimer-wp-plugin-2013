@@ -1280,13 +1280,15 @@ function recent_activities_add_bootstrap_stripes() {
 }
 
 function load_task_by_id(id) {
+
 	console.log("load_task_by_id()");
 	//update btn group
 	jQuery('#tab-task .btn-group').click(function () {
 		jQuery("#tab-task .btn-group button").removeClass("active");
 		jQuery(this).find("input").attr("checked", false);
 	});
-	jQuery('name[task_form_current_task]').change(function() {
+	jQuery('form :input').change(function() {
+		//alert("change");
 		update_currentask_clipboard();
 	});
 	var data = {
