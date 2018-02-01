@@ -196,7 +196,10 @@ add_action( 'wp_ajax_projectimer_add_activie', 'projectimer_add_activie');
 add_action( 'wp_ajax_projectimer_update_cycle', 'projectimer_update_cycle');
 add_action( 'wp_ajax_projectimer_schedule_cycle', 'projectimer_schedule_cycle');
 add_action( 'wp_ajax_projectimer_update_cycle_status', 'projectimer_update_cycle_status');
+
 add_action( 'wp_ajax_projectimer_update_recent_activities', 'projectimer_update_recent_activities');
+add_action( 'wp_ajax_nopriv_projectimer_update_recent_activities', 'projectimer_update_recent_activities');
+
 add_action( 'wp_ajax_projectimer_load_currentask_clipboard', 'projectimer_load_currentask_clipboard');
 
 add_action( 'wp_ajax_projectimer_update_currentask_clipboard', 'projectimer_update_currentask_clipboard');

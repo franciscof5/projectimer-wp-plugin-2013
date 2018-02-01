@@ -79,7 +79,7 @@ function get_community_data_object() {
 }
 
 function projectimer_load_user_settings() {
-	
+	checkLogin();
 	$site_url = basename(get_bloginfo('url'));
 	
 	//DONT AJAX ONLY WORKS WITH LOGGED IN USERS?
@@ -239,6 +239,7 @@ function projectimer_make_user_admin() {
 }
 //
 function projectimer_schedule_cycle() {
+	checkLogin();
 	//
 	$site_url = basename(get_bloginfo('url'));
 	//date_default_timezone_set('America/Sao_Paulo');
@@ -316,6 +317,7 @@ function projectimer_make_lost_time () {
 }
 
 function projectimer_update_cycle_status() {
+	checkLogin();
 	//echo $_POST["cycle_id"];
 	$id = get_current_postid_for_user(get_current_user_id());
 	//echo $_POST["newstatus"];
@@ -471,6 +473,7 @@ function projectimer_add_activie($post_desc, $act_type, $userid) {
 /**/
 
 function projectimer_update_cycle() {
+	checkLogin();
 	if(isset($_POST['post_para_deletar'])) {
 		wp_delete_post($_POST['post_para_deletar']);
 	} else {
@@ -495,9 +498,8 @@ function projectimer_update_cycle() {
 	}
 }
 
-
-
 function projectimer_update_recent_activities() {
+	checkLogin();
 	//projectimer_display_recent_activities();
 	//checkCredential();
 	//
@@ -506,6 +508,7 @@ function projectimer_update_recent_activities() {
 	$user_last_heartbeat = update_user_meta(get_current_user_id(), $site_url."-user_last_heartbeat", strtotime("now"));
 
 	if(!ob_start("ob_gzhandler")) ob_start();
+
 	projectimer_display_recent_activities();
 	$recent_activity_html = ob_get_contents();
 	ob_end_clean();
@@ -666,6 +669,7 @@ function projectimer_load_currentask_clipboard() {
 }
 
 function projectimer_update_currentask_clipboard() {
+	checkLogin();
 	header("Content-type: application/json");
 	$currentaskid = get_task_id("draft");
 	$my_post = array(

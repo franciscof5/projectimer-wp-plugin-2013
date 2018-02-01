@@ -47,6 +47,10 @@ var tags_list;
 		user_last_name : "User",
 		user_focus_time : 25*60,
 		secondsRemaining : 25*60,
+		active_sound : "crank-2.mp3",
+		interrupt : "telephone-ring-1.mp3",
+		end_sound_rest : "23193__kaponja__10trump-tel.mp3",
+		end_sound_focus : "23193__kaponja__10trump-tel.mp3"
 	};
 }			
 
@@ -77,8 +81,11 @@ jQuery( document ).ready(function($) {
 		//INTERFACE
 		colunsHeightAlwaysTheSame();
 		jQuery( window ).resize(function() {colunsHeightAlwaysTheSame()});
+
 		add_click_action_on_interface_buttons();//removed from html
+
 		recent_activities_add_bootstrap_stripes();//improve beuaty
+
 		jQuery('[data-toggle="popover"]').popover({"trigger":"hover"});//pop info icons
 		//
 		load_task_by_id();
@@ -88,6 +95,8 @@ jQuery( document ).ready(function($) {
 		// Ready to use; soundManager.createSound() etc. can now be called.
 		jQuery.getScript(pluginDir+"/js/soundmanager2.js", function(){
 			console.log("soundManager.setup()");
+			if(!userSettingsObject)
+				userSettingsObject = userSettingsObject_default;
 			soundManager.setup({			
 				url: pluginDir+'/js/',
 				flashVersion: 9, // optional: shiny features (default = 8)
@@ -134,7 +143,6 @@ jQuery( document ).ready(function($) {
 			jQuery("#user_location").html(response.city + ", " + response.region + ", " + response.country);*
 		});	*/
 	}
-	
 });
 
 function add_click_action_on_interface_buttons() {
@@ -267,6 +275,7 @@ function load_user_settings() {
 
 function become_offline() {
 	//if(jQuery("#offline_sign")) {
+	console.log("become_offline()");
 	if(!localStorage.getItem('user_last_offline_session')) {
 		alertify.error("You are OFFLINE! Using local storage data for while.");
 		//
@@ -551,6 +560,8 @@ function update_recent_activities() {
 	//blinkgreen(jQuery("#update_status_icon"));
 	connect_sign();
 	jQuery.post(ajaxurl, data, function(response) {
+		if(response=="NOTIN")window.location.href = "/";
+
 		if(response["user_credentied"]==0) {
 			alertify.error("Você foi removido do Time");
 			window.location.href = "/removido";
@@ -833,6 +844,7 @@ function update_cycle_status (posttype, status) {
 		};
 		
 		jQuery.post(ajaxurl, data, function(response) {
+		if(response=="NOTIN")window.location.href = "/";
 			console.log(response);
 			//if(response==1) {
 				//alertify.log("Activity published!");
@@ -886,6 +898,7 @@ function delete_model(postid) {
 		post_para_deletar: postid
 	};
 	jQuery.post(ajaxurl, data, function(response) {
+		if(response=="NOTIN")window.location.href = "/";
 		if(response) {
 			update_status_message(txt_deleting_model_sucess);
 			$("#modelo-carregado-"+qualmodelo).remove();
@@ -914,6 +927,7 @@ function save_model (posttype) {
 	data['action'] = 'projectimer_update_cycle_status';
 	//console.log("data: " + data);
 	jQuery.post(ajaxurl, data, function(response) {
+		if(response=="NOTIN")window.location.href = "/";
 		//console.log("save responde: " + response);
 		if(response) {
 			if(response==0) {
@@ -1426,6 +1440,7 @@ function update_currentask_clipboard () {
 	localStorage.setItem('task_object_stored', JSON.stringify(data));
 	data['action'] = 'projectimer_update_currentask_clipboard';
 	jQuery.post(ajaxurl, data, function(response) {
+		if(response=="NOTIN")window.location.href = "/";
 		console.log("update_pomodoro_clipboard() response: " + response);
 		if(response['response']=="curretask_updated" || response['response']=="curretask_updated_BUT_no_post_meta") {
 			alertify.log("Current task updated");

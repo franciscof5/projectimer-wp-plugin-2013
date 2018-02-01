@@ -934,7 +934,7 @@ function projectimer_display_teams() {
 		$blogs = get_blogs_of_user(get_current_user_id());#updated 4.7 get_blogs_of_user #get_sites
 
 		if ( !empty($blogs) ) { ?>
-			<h3><span class="glyphicon glyphicon-th" aria-hidden="true"></span><?php _e( 'My Teams' ) ?></h3>
+			<p><strong><span class="glyphicon glyphicon-th" aria-hidden="true"></span><?php _e( 'My Teams' ) ?></strong></p>
 			<?php
 				if(count($blogs)<=1) {
 					_e('You are member of no teams, try join one', 'projectimer-root');
