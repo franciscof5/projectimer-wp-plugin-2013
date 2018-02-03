@@ -54,6 +54,12 @@ var tags_list;
 	};
 }			
 
+function startTest() {
+	user_focus_time = 25;
+	user_rest_time = 5;
+	intervalMiliseconds = 10;
+}
+
 /*var Foo = function() {
 
     var privateStaticMethod = function() {};
@@ -270,19 +276,23 @@ function load_user_settings() {
 		//
 		after_load_user_settings(userSettingsObject);
 	});
-	
 }
 
 function become_offline() {
 	//if(jQuery("#offline_sign")) {
 	console.log("become_offline()");
+	alertify.error("You became OFFLINE, using local data storage");
+	jQuery("#offline_sign").show();
+	var data_become_off = new Date();
+	localStorage.setItem('user_last_offline_session', data_become_off);
+	//
 	if(!localStorage.getItem('user_last_offline_session')) {
-		alertify.error("You are OFFLINE! Using local storage data for while.");
-		//
-		jQuery("#offline_sign").show();
-		//
-		var data_become_off = new Date();
-		localStorage.setItem('user_last_offline_session', data_become_off);
+		console.log("no data found");
+		//	
+	} else {
+		//We found previous data, we will preserv it
+		console.debug(localStorage);
+		alert(localStorage);
 	}
 }
 

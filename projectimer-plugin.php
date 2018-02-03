@@ -390,6 +390,7 @@ function terms_clauses($clauses, $taxonomy, $args) {
     }
     return $clauses;
 }
+
 add_filter('terms_clauses', 'terms_clauses', 10, 3);
 
 function lo(){wp_redirect( network_home_url( "/teams") );exit();}

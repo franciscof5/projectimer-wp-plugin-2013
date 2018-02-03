@@ -480,7 +480,7 @@ function projectimer_update_cycle() {
 		//date_default_timezone_set("Brazil/East");
 		$tagsinput = explode(",", $_POST['post_tags']);	
 		$my_post = array(
-			'post_type' => "projectimer_cycle",
+			'post_type' => "projectimer_focus",
 			'post_title' => $_POST['post_titulo'],
 			'post_content' => $_POST['post_descri'],
 			'post_status' => "pending",
@@ -506,6 +506,9 @@ function projectimer_update_recent_activities() {
 	$site_url = basename(get_bloginfo('url'));
 	$user_actual_page = update_user_meta(get_current_user_id(), $site_url."-user_actual_page", $_POST['user_last_active_page']);
 	$user_last_heartbeat = update_user_meta(get_current_user_id(), $site_url."-user_last_heartbeat", strtotime("now"));
+
+	if(!$user_actual_page)
+	$user_actual_page = add_user_meta(get_current_user_id(), $site_url."-user_actual_page", $_POST['user_last_active_page']);
 
 	if(!ob_start("ob_gzhandler")) ob_start();
 
