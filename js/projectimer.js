@@ -123,14 +123,14 @@ jQuery( document ).ready(function($) {
 			jQuery("#user_device").html((platform.manufacturer || '') + platform.description);
 		});
 		//
-		/*
-		jQuery.get("http://ipinfo.io", function (response) {
+		
+		jQuery.get("https://ipinfo.io?token=e7e9316dfdc5fa", function (response) {
 		    console.log("IP: " + response.ip);
 			console.log("Location: " + response.city + ", " + response.region);
 			console.log(JSON.stringify(response, null, 4));
 			jQuery("#user_location").html(response.city + ", " + response.region + ", " + response.country);
 		}, "jsonp");
-		*/
+		
 		//
 		/*
 		jQuery.get("https://www.gstatic.com/firebasejs/3.6.0/firebase.js", function (response) {
