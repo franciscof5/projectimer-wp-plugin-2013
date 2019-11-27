@@ -244,7 +244,8 @@ function projectimer_schedule_cycle() {
 	$site_url = basename(get_bloginfo('url'));
 	//date_default_timezone_set('America/Sao_Paulo');
 	$user_focus_time = get_user_meta(get_current_user_id(), $site_url."-focus_time", true);
-	if($user_focus_time==0 || $user_focus_time==NULL || $user_focus_time=="") $user_focus_time=25;
+	if($user_focus_time==0 || $user_focus_time==NULL || $user_focus_time=="") 
+		$user_focus_time=25;
 	//$user_focus_time*=60;
 	$postdate = date("Y-m-d H:i:s", strtotime("now +$user_focus_time minutes"));
 	//$postdate = date("Y-m-d H:i:s", strtotime("now + 30 seconds"));
@@ -288,7 +289,7 @@ function projectimer_schedule_cycle() {
 		} else {
 			$data['response'] = "post_inserted_BUT_no_meta";
 		}
-		
+		$data["post"] = $post;
 		//header('Content-type: application/json');//CRUCIAL
 		echo json_encode($data);
 	} else {
