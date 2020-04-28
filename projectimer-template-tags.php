@@ -934,33 +934,36 @@ function projectimer_display_teams() {
 		$blogs = get_blogs_of_user(get_current_user_id());#updated 4.7 get_blogs_of_user #get_sites
 
 		if ( !empty($blogs) ) { ?>
-			<p><strong><span class="glyphicon glyphicon-th" aria-hidden="true"></span><?php _e( 'My Teams' ) ?></strong></p>
+			<h3><span class="glyphicon glyphicon-th" aria-hidden="true"></span><?php _e( 'My Teams' ) ?></h3>
 			<?php
 				if(count($blogs)<=1) {
-					_e('You are member of no teams, try join one', 'projectimer-root');
-				} else {
-					_e('You are member of:', 'projectimer-root');
+					#_e('You are member of no teams, try join one', 'projectimer-root');
+					?>
+					<h3>Joining Teams</h3>
+					<p>To enter in a private team you must have the link or get an invite by email.</p>
+					<!--p>You can ask to join in <a href="/teams/" alt="See public teams">public teams</a-->
+					<h3>Creating Teams</h3>
+					<!--p>Every user can have one free public Team and we also offer a Team PRO plan for private teams. Go on and <a href="/wp-signup.php">create you own team</a>.</p-->
+					<p>Please contact our team</p>
+				<?php } else { ?>
+					<ul>
+						<?php 
+						//
+						foreach ( $blogs as $blog ) {
+							//var_dump($blog);
+							$home_url = get_home_url( $blog->userblog_id );
+							//
+							if($blog->userblog_id>1) {
+								echo '<li><a href="' . esc_url( $home_url ) . '">' . $blog->blogname . '</a></li>';
+							}
+						} ?>
+					</ul>
+					<?php #_e('You are member of:', 'projectimer-root');
 				}
 			?>
-			<ul>
-				<?php 
-				//
-				foreach ( $blogs as $blog ) {
-					//var_dump($blog);
-					$home_url = get_home_url( $blog->userblog_id );
-					//
-					if($blog->userblog_id>1) {
-						echo '<li><a href="' . esc_url( $home_url ) . '">' . $blog->blogname . '</a></li>';
-					}
-				} ?>
-			</ul>
 		<?php } ?>
-		<hr />
-		<h3><strong>Joining Teams</strong></h3>
-		<p>To enter in a private team you must have the link or get an invite by email.</p>
-		<p>You can ask to join in <a href="/teams/" alt="See public teams">public teams</a>
-		<h3><strong>Creating Teams</strong></h3>
-		<p>Every user can have one free public Team and we also offer a Team PRO plan for private teams. Go on and <a href="/wp-signup.php">create you own team</a>.</p>
+		<!--hr /-->
+		
 	<?php } else { ?>
 		<?php wp_login_form(); ?>
 		<div style="margin-top:-10px;">

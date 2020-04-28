@@ -570,7 +570,7 @@ function createPostType() {
 
 		register_post_type("projectimer_focus", $postTypeFocusParams);
 	}
-	if ( ! post_type_exists( "projectimer_cycle" ) ) {
+	if ( ! post_type_exists( "projectimer_rest" ) ) {
 		$labelsRest = array(
 			'name'  => __( 'Rest',' projectimer-plugin' ), 
 			'singular_name' => __( 'Rest',    ' projectimer-plugin' ),
